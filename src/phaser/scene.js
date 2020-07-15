@@ -1,5 +1,4 @@
 import Phaser from 'phaser'
-import logoImg from '../assets/logo.png'
 
 let player
 let platforms
@@ -12,6 +11,7 @@ export const collectStar = (player, star) => {
   star.disableBody(true, true)
   score += 10
   scoreText.setText('Score: ' + score)
+  console.log(score)
 }
 
 export class playGame extends Phaser.Scene {
