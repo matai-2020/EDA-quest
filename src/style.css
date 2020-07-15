@@ -1,0 +1,10 @@
+body {
+  font-family: 'Josefin Sans', sans-serif;
+  background-color: #ff5f40;
+  color: #0a4644;
+}
+
+#phaser {
+  display: flex;
+  justify-content: center;
+}
