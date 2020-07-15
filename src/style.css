@@ -1,6 +1,6 @@
 body {
   font-family: 'Josefin Sans', sans-serif;
-  background-color: #ff5f40;
+  background-color: white;
   color: #0a4644;
 }
 
@@ -8,3 +8,7 @@ body {
   display: flex;
   justify-content: center;
 }
+
+/* .logo {
+  margin: 0;
+} */
