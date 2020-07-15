@@ -15,9 +15,6 @@ export const collectStar = (player, star) => {
 }
 
 export class playGame extends Phaser.Scene {
-  constructor() {
-    super('PlayGame')
-  }
   preload() {
     this.load.image('sky', 'src/assets/sky.png')
     this.load.image('ground', 'src/assets/platform.png')
