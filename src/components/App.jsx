@@ -5,7 +5,7 @@ export default class App extends React.Component {
   render () {
     return (
       <div style={{ textAlign: 'center' }}>
-        <h1>Hello World</h1>
+        <h1 id='submit-test' onClick={this.submitName}>Hello World</h1>
         <HighScore />
       </div>
     )
