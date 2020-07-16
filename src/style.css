@@ -8,3 +8,9 @@ body {
   display: flex;
   justify-content: center;
 }
+
+#logo {
+  padding: 50px 10px; /* Some padding */
+  top: 0;
+  transition: 0.2s;
+}
