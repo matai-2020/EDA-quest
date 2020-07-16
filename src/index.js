@@ -2,7 +2,8 @@ import Phaser from 'phaser'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './components/App.jsx'
-import { playGame } from './phaser/scene'
+import title from './phaser/scenes/title'
+import levelOne from './phaser/scenes/levelOne'
 
 let config = {
   parent: 'phaser',
@@ -16,23 +17,25 @@ let config = {
       debug: false
     }
   },
-  scene: playGame
-}
-
-window.onscroll = function () { scrollFunction() }
-
-function scrollFunction () {
-  if (document.body.scrollTop > 10 || document.documentElement.scrollTop > 10) {
-    document.getElementById('logo').style.width = '200px'
-    document.getElementById('logo').style.marginBottom = '10px'
-
-  } else {
-    document.getElementById('logo').style.width = '800px'
-    document.getElementById('logo').style.marginBottom = '200px'
-  }
+  scene: [ title, levelOne ]
 }
 
 const game = new Phaser.Game(config)
+
+// Game Logo disappears on scroll
+
+window.onscroll = function () { scrollFunction() }
+function scrollFunction () {
+  if (document.body.scrollTop >= 1 || document.documentElement.scrollTop >= 1) {
+    document.getElementById('logo').style.width = '10px'
+    document.getElementById('logo').style.visibility = 'hidden'
+  } else {
+    document.getElementById('logo').style.visibility = 'visible'
+    document.getElementById('logo').style.width = '900px'
+    document.getElementById('logo').style.marginTop = '150px'
+    document.getElementById('logo').style.marginBottom = '230px'
+  }
+}
 
 ReactDOM.render(
   <App />,

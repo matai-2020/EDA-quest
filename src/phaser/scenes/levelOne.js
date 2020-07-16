@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { scoreChanged } from './score'
+import { scoreChanged } from '../score'
 
 let player
 let platforms
@@ -15,8 +15,17 @@ export const collectStar = (player, star) => {
   scoreChanged(score)
 }
 
-export class playGame extends Phaser.Scene {
-  preload () {
+var levelOne = new Phaser.Class({
+
+  Extends: Phaser.Scene,
+
+  initialize:
+
+  function SceneA () {
+    Phaser.Scene.call(this, { key: 'levelOne' })
+  },
+
+  preload: function () {
     this.load.image('sky', 'src/assets/sky.png')
     this.load.image('ground', 'src/assets/platform.png')
     this.load.image('star', 'src/assets/star.png')
@@ -25,9 +34,9 @@ export class playGame extends Phaser.Scene {
       frameWidth: 32,
       frameHeight: 48
     })
-  }
+  },
 
-  create () {
+  create: function () {
     this.add.image(400, 300, 'sky')
 
     platforms = this.physics.add.staticGroup()
@@ -83,9 +92,9 @@ export class playGame extends Phaser.Scene {
       fontSize: '32px',
       fill: '#000'
     })
-  }
+  },
 
-  update () {
+  update: function () {
     if (cursors.left.isDown) {
       player.setVelocityX(-160)
 
@@ -104,4 +113,6 @@ export class playGame extends Phaser.Scene {
       player.setVelocityY(-330)
     }
   }
-}
+})
+
+export default levelOne

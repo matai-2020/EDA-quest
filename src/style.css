@@ -7,10 +7,10 @@ body {
 #phaser {
   display: flex;
   justify-content: center;
+  margin-bottom: 80px;
 }
 
 #logo {
-  padding: 50px 10px; /* Some padding */
-  top: 0;
+  padding: 40px 10px;
   transition: 0.2s;
 }
