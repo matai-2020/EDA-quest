@@ -24,7 +24,7 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
 
 const collectScore = (player, react) => {
   react.disableBody(true, true)
-  score += 1
+  score += 120
   scoreText.setText('Score: ' + score)
   scoreChanged(score)
 }
@@ -35,8 +35,6 @@ const loseHp = () => {
   if (health === 0) {
     isAlive = false
     gameOver(isAlive)
-    alert('you died')
-    // this.playerDeath()
   } console.log(health)
 }
 
