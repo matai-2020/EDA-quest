@@ -61,17 +61,22 @@ export class HighScore extends React.Component {
 
   render () {
     return (
-      <div>
-        <ul>
+      <div className='score-container'>
+        <ol className='score-list'>
+          <img className='game-over' src="/assets/Game/game-over.png" alt="Quest Logo" />
+          <p className='statement'>Submit Your Score!</p>
+          <input type='text' onChange={this.nameChange} className='name-input' placeholder='Your Name'></input>
+          <button onClick={() => this.clickHandler()} className='submit-button'>Submit</button>
           {this.state.highScores.map(player => {
             let indexKey = this.state.highScores.indexOf(player)
-            return (
-              <li key={indexKey}>{player.name}: {player.score}</li>
-            )
+            if (indexKey < 10) {
+              return (
+                <li key={indexKey} className='rank'>{player.name}: {player.score}</li>
+              )
+            }
           })}
-        </ul>
-        <input onChange={this.nameChange}></input>
-        <button onClick={() => this.clickHandler()}>Submit Score</button>
+        </ol>
+
       </div>
     )
   }
