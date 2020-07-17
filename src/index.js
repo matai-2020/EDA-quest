@@ -5,8 +5,24 @@ import App from './components/App.jsx'
 
 import parallax from './phaser/scenes/ParallaxScene'
 import title from './phaser/scenes/TitleScene'
+import { playGame } from './phaser/scene'
+import * as firebase from 'firebase'
 
-export const config = {
+var firebaseConfig = {
+  apiKey: 'AIzaSyD5DEUiq_fXMfIJpiPH4HUvbXbPGPDP2-0',
+  authDomain: 'eda-quest.firebaseapp.com',
+  databaseURL: 'https://eda-quest.firebaseio.com',
+  projectId: 'eda-quest',
+  storageBucket: 'eda-quest.appspot.com',
+  messagingSenderId: '574152578233',
+  appId: '1:574152578233:web:c375548e8908c8aaf93768',
+  measurementId: 'G-XS0WPPZRYR'
+}
+
+firebase.initializeApp(firebaseConfig)
+
+let config = {
+  parent: 'phaser',
   type: Phaser.AUTO,
   parent: 'phaser',
   width: window.innerWidth,
@@ -30,6 +46,8 @@ function scrollFunction () {
     document.getElementById('logo').style.marginBottom = '230px'
   }
 }
+
+// const game = new Phaser.Game(config)
 
 ReactDOM.render(
   <App />,
