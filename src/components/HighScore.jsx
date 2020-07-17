@@ -6,57 +6,72 @@ export class HighScore extends React.Component {
   state = {
     score: 0,
     name: '',
-    highScores: {
-      name: 'Loading',
-      score: 'Loading'
-    }
+    highScores: []
   }
   componentDidMount () {
-    this.getData()
-    console.log(this.state.highScores)
+    this.updateData()
+    this.getHighScores()
     subscribe((score) => {
       this.setState({
-        name: 'Isaac',
         score
       })
-      this.updateData()
     })
   }
 
   updateData () {
-    const rootRef = firebase.database().ref('game').child(`${this.state.name}s_game`)
-    rootRef.set({
+    const queryData = firebase.database().ref('currentPlayer')
+    queryData.set({
       name: this.state.name,
       score: this.state.score
     })
   }
 
-  getData () {
-    firebase.database().ref('game/').child('Isaacs_game').once('value').then(function (snapshot) {
-      const name = snapshot.val().name
-      const playerScore = snapshot.val().score
-      let dataObj = { name, playerScore }
-      return dataObj
+  getHighScores () {
+    firebase.database().ref('highScores/').once('value').then(function (snapshot) {
+      const scoreHistory = snapshot.val()
+      scoreHistory.sort((a, b) => (b.score - a.score))
+      return scoreHistory
     })
-      .then(data => {
-        // console.log(data)
+      .then(scoreData => {
         this.setState({
-          highScores: {
-            name: data.name,
-            score: data.playerScore
-          }
-
+          highScores: scoreData
         })
-        // console.log(this.state.highScores.name, this.state.highScores.score)
       })
   }
 
+  clickHandler () {
+    let childName = this.state.highScores.length
+    const queryData = firebase.database().ref('highScores/').child(childName)
+    if (this.state.name.length > 0) {
+      queryData.set({
+        name: this.state.name,
+        score: this.state.score
+      })
+      this.updateData()
+      this.getHighScores()
+    } else alert('Please enter your Name before submitting your Score!')
+  }
+
+  nameChange = (e) => {
+    const { value } = e.target
+    this.setState({
+      name: value
+    })
+  }
+
   render () {
-    console.log(this.state.highScores)
     return (
       <div>
-        Score: {this.state.score}
-        <p>HighScore: {this.state.highScores.score} Set By: {this.state.highScores.name}</p>
+        <ul>
+          {this.state.highScores.map(player => {
+            let indexKey = this.state.highScores.indexOf(player)
+            return (
+              <li key={indexKey}>{player.name}: {player.score}</li>
+            )
+          })}
+        </ul>
+        <input onChange={this.nameChange}></input>
+        <button onClick={() => this.clickHandler()}>Submit Score</button>
       </div>
     )
   }

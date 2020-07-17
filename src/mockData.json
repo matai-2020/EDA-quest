@@ -1,4 +1,9 @@
-[
+{
+  "currentPlayer": {
+    "name": "",
+    "score": 0
+  },
+  "highScores": [
 {
  "name": "Jake",
  "score": 130
@@ -16,3 +21,4 @@
   "score": 160
  }
 ]
+}

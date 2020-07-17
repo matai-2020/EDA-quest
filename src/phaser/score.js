@@ -7,5 +7,3 @@ export function scoreChanged (newScore) {
 export function subscribe (fn) {
   subscriber = fn
 }
-
-
