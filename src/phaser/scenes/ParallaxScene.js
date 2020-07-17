@@ -21,10 +21,10 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   }
 }
 
-const collectKey = (player, react) => {
+const collectScore = (player, react) => {
   react.disableBody(true, true)
-  keyAmount += 1
-  keyText.setText('Trello: ' + keyAmount)
+  score += 1
+  scoreText.setText('Score: ' + score)
   // if (keyAmount === 1) {
   //   askQuestion()
   // }
@@ -58,6 +58,7 @@ export default class ParallaxScene extends Phaser.Scene {
     this.load.image('mountain', '/assets/Jungle/mountains.png')
     this.load.image('plateau', '/assets/Jungle/plateau.png')
     this.load.image('ground', '/assets/Jungle/ground.png')
+    this.load.image('platform', '/assets/airpack/PNG/Environment/ground_grass.png')
     this.load.image('plants', '/assets/Jungle/plant.png')
     this.load.image('arrow-keys', '/assets/Jungle/arrow-keys.png')
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
@@ -96,6 +97,25 @@ export default class ParallaxScene extends Phaser.Scene {
     createAligned(this, totalWidth, 'plateau', 0.5)
     createAligned(this, totalWidth, 'ground', 1)
     createAligned(this, totalWidth, 'plants', 1.25)
+    // this.add.image(width * 0.5, height * 1, 'platform')
+    //   .setScrollFactor(0)
+
+
+    // // CREATE PLAFORM GROUP
+    // const platforms = this.physics.add.staticGroup()
+
+    // // How many platforms
+    // for (let i = 0; i < 5; ++i) {
+    //   const x = Phaser.Math.Between(80, 400)
+    //   const y = 150 * i
+
+    //   const platform = platforms.create(x, y, 'platform')
+    //   platform.scale = 0.5
+
+    //   const body = platform.body
+    //   body.updateFromGameObject()
+    // }
+    
 
     // Collider floor & platforms
 
@@ -159,13 +179,13 @@ export default class ParallaxScene extends Phaser.Scene {
     react = this.physics.add.sprite(550, 600, 'react')
     react.setScale(0.2)
 
-    this.physics.add.overlap(player, react, collectKey, null, this)
+    this.physics.add.overlap(player, react, collectScore, null, this)
 
     // text
     this.cameras.main.setBounds(0, 0, 3000, 0)
     this.cameras.main.startFollow(player)
 
-    scoreText = this.add.text(16, 16, 'score: 0', {
+    scoreText = this.add.text(16, 16, 'Score: 0', {
       fontSize: '32px',
       fill: '#000'
     })
@@ -178,6 +198,7 @@ export default class ParallaxScene extends Phaser.Scene {
     // colliders
     this.physics.add.collider(floor, [player, react])
     this.physics.add.collider(player, [platforms])
+
   }
 
   update () {
