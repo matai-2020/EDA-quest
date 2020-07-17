@@ -5,7 +5,7 @@ import App from './components/App.jsx'
 
 import parallax from './phaser/scenes/ParallaxScene'
 import title from './phaser/scenes/TitleScene'
-import { playGame } from './phaser/scene'
+import tutLevel from './phaser/scenes/TutLevel'
 import * as firebase from 'firebase'
 
 var firebaseConfig = {
@@ -33,7 +33,7 @@ let config = {
       debug: false,
     },
   },
-  scene: [title, parallax],
+  scene: [title, tutLevel],
 }
 
 const game = new Phaser.Game(config)
