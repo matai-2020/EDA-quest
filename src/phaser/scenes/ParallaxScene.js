@@ -21,10 +21,10 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   }
 }
 
-const collectKey = (player, react) => {
+const collectScore = (player, react) => {
   react.disableBody(true, true)
-  keyAmount += 1
-  keyText.setText('Trello: ' + keyAmount)
+  score += 1
+  scoreText.setText('Score: ' + score)
   // if (keyAmount === 1) {
   //   askQuestion()
   // }
@@ -157,13 +157,13 @@ export default class ParallaxScene extends Phaser.Scene {
     react = this.physics.add.sprite(550, 600, 'react')
     react.setScale(0.2)
 
-    this.physics.add.overlap(player, react, collectKey, null, this)
+    this.physics.add.overlap(player, react, collectScore, null, this)
 
     // text
     this.cameras.main.setBounds(0, 0, 3000, 0)
     this.cameras.main.startFollow(player)
 
-    scoreText = this.add.text(16, 16, 'score: 0', {
+    scoreText = this.add.text(16, 16, 'Score: 0', {
       fontSize: '32px',
       fill: '#000',
     })
