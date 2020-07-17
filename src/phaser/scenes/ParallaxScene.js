@@ -46,11 +46,11 @@ let keyText
 let keyAmount = 0
 
 export default class ParallaxScene extends Phaser.Scene {
-  constructor () {
+  constructor() {
     super('parallax-scene')
   }
 
-  preload () {
+  preload() {
     this.load.image('react', '/assets/react.svg')
     this.load.image('platform', '/assets/Jungle/platform.png')
     this.load.image('block', '/assets/man/base.png')
@@ -58,44 +58,47 @@ export default class ParallaxScene extends Phaser.Scene {
     this.load.image('mountain', '/assets/Jungle/mountains.png')
     this.load.image('plateau', '/assets/Jungle/plateau.png')
     this.load.image('ground', '/assets/Jungle/ground.png')
-    this.load.image('platform', '/assets/airpack/PNG/Environment/ground_grass.png')
+    this.load.image(
+      'platform',
+      '/assets/airpack/PNG/Environment/ground_grass.png'
+    )
     this.load.image('plants', '/assets/Jungle/plant.png')
     this.load.image('arrow-keys', '/assets/Jungle/arrow-keys.png')
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
       frameWidth: 20,
-      frameHeight: 35
+      frameHeight: 35,
     })
     this.load.spritesheet('jumpLeft', '/assets/man/jumpLeft.png', {
       frameWidth: 20,
-      frameHeight: 35
+      frameHeight: 35,
     })
     this.load.spritesheet('runLeft', '/assets/man/runLeft.png', {
       frameWidth: 21,
-      frameHeight: 33
+      frameHeight: 33,
     })
     this.load.spritesheet('runRight', '/assets/man/runRight.png', {
       frameWidth: 21,
-      frameHeight: 33
+      frameHeight: 33,
     })
     this.load.spritesheet('idle', '/assets/man/idle.png', {
       frameWidth: 19,
-      frameHeight: 34
+      frameHeight: 34,
     })
 
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create () {
+  create() {
     const width = this.scale.width
     const height = this.scale.height
     const totalWidth = width * 10
 
     this.add.image(width * 0.5, height * 0.5, 'sky').setScrollFactor(0)
 
-    createAligned(this, totalWidth, 'mountain', 0.15)
-    createAligned(this, totalWidth, 'plateau', 0.5)
+    // createAligned(this, totalWidth, 'mountain', 0.15)
+    // createAligned(this, totalWidth, 'plateau', 0.5)
     createAligned(this, totalWidth, 'ground', 1)
-    createAligned(this, totalWidth, 'plants', 1.25)
+    // createAligned(this, totalWidth, 'plants', 1.25)
     // this.add.image(width * 0.5, height * 1, 'platform')
     //   .setScrollFactor(0)
 
@@ -144,34 +147,34 @@ export default class ParallaxScene extends Phaser.Scene {
       key: 'left',
       frames: this.anims.generateFrameNumbers('runLeft', {
         start: 7,
-        end: 0
+        end: 0,
       }),
       frameRate: 10,
-      repeat: -1
+      repeat: -1,
     })
 
     this.anims.create({
       key: 'turn',
       frames: this.anims.generateFrameNumbers('idle', { start: 0, end: 11 }),
       frameRate: 10,
-      repeat: -1
+      repeat: -1,
     })
 
     this.anims.create({
       key: 'jump',
       frames: this.anims.generateFrameNumbers('jumpLeft', { start: 0, end: 2 }),
       frameRate: 5,
-      repeat: -1
+      repeat: -1,
     })
 
     this.anims.create({
       key: 'right',
       frames: this.anims.generateFrameNumbers('runRight', {
         start: 0,
-        end: 7
+        end: 7,
       }),
       frameRate: 10,
-      repeat: -1
+      repeat: -1,
     })
 
     // coin and collection
@@ -187,12 +190,12 @@ export default class ParallaxScene extends Phaser.Scene {
 
     scoreText = this.add.text(16, 16, 'Score: 0', {
       fontSize: '32px',
-      fill: '#000'
+      fill: '#000',
     })
 
     keyText = this.add.text(950, 16, 'Trello: 0', {
       fontSize: '32px',
-      fill: '#000'
+      fill: '#000',
     })
 
     // colliders
@@ -200,7 +203,7 @@ export default class ParallaxScene extends Phaser.Scene {
     this.physics.add.collider(player, [platforms])
   }
 
-  update () {
+  update() {
     const cam = this.cameras.main
     const speed = 15
     if (this.cursors.left.isDown) {
