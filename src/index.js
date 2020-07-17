@@ -24,7 +24,6 @@ firebase.initializeApp(firebaseConfig)
 let config = {
   parent: 'phaser',
   type: Phaser.AUTO,
-  parent: 'phaser',
   width: window.innerWidth,
   height: 800,
   scene: [title, parallax]
