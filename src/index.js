@@ -13,7 +13,14 @@ export const config = {
   parent: 'phaser',
   width: window.innerWidth,
   height: 800,
-  scene: ParallaxScene
+  physics: {
+    default: 'arcade',
+    arcade: {
+      gravity: { y: 300 },
+      debug: false,
+    },
+  },
+  scene: ParallaxScene,
 }
 
 const game = new Phaser.Game(config)
