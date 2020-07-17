@@ -21,6 +21,9 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   }
 }
 
+let score = 0
+let scoreText
+
 const collectScore = (player, react) => {
   react.disableBody(true, true)
   score += 1
@@ -29,6 +32,11 @@ const collectScore = (player, react) => {
     canAsk = true
   }
 }
+
+let canAsk = false
+let popUp = 0
+let notYet
+let noQuestion
 
 const askQuestion = () => {
   if (canAsk) {
@@ -40,24 +48,21 @@ const askQuestion = () => {
   }
 }
 
+let facing = ''
+
 let react
 let tutor
 let player
 let platforms
 let platform
 let cursors
-let score = 0
-let scoreText
+
 let ground
 let block
 let floor
 let trigger
-let noQuestion
-let game
 
-let canAsk = false
-let popUp = 0
-let notYet
+let game
 
 let keyText
 let keyAmount = 0
@@ -68,9 +73,10 @@ export default class TutLevel extends Phaser.Scene {
   }
 
   preload() {
-    // invis walls
-    this.load.image('triggerBlock', 'assets/triggerBlockC.png')
-    this.load.image('block', '/assets/man/base.png')
+    // invis walls/triggers
+    this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlockC.png')
+    this.load.image('block', '/assets/blocksTriggers/base.png')
+    this.load.image('wallBlock', '/assets/blocksTriggers/wallBlockC.png')
 
     // assets
     this.load.image('react', '/assets/react.svg')
@@ -84,6 +90,8 @@ export default class TutLevel extends Phaser.Scene {
       '/assets/airpack/PNG/Environment/ground_grass.png'
     )
     this.load.image('plants', '/assets/Jungle/plant.png')
+
+    // player assets
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
       frameWidth: 20,
       frameHeight: 35,
@@ -104,21 +112,32 @@ export default class TutLevel extends Phaser.Scene {
       frameWidth: 19,
       frameHeight: 34,
     })
+    this.load.spritesheet('idleLeft', '/assets/man/idleLeft.png', {
+      frameWidth: 19,
+      frameHeight: 34,
+    })
 
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
   create() {
+    this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
+      facing = 'left'
+    })
+    this.input.keyboard.on('keydown-' + 'RIGHT', function (event) {
+      facing = 'right'
+    })
+
     const width = this.scale.width
     const height = this.scale.height
     const totalWidth = width * 10
 
     this.add.image(width * 0.5, height * 0.5, 'sky').setScrollFactor(0)
 
-    createAligned(this, totalWidth, 'mountain', 0.15)
-    createAligned(this, totalWidth, 'plateau', 0.5)
+    // createAligned(this, totalWidth, 'mountain', 0.15)
+    // createAligned(this, totalWidth, 'plateau', 0.5)
     createAligned(this, totalWidth, 'ground', 1)
-    createAligned(this, totalWidth, 'plants', 1.25)
+    // createAligned(this, totalWidth, 'plants', 1.25)
     // this.add.image(width * 0.5, height * 1, 'platform')
     //   .setScrollFactor(0)
 
@@ -162,7 +181,7 @@ export default class TutLevel extends Phaser.Scene {
     player.setScale(3)
     player.body.setGravityY(-100)
 
-    player.setBounce(0.2)
+    // player.setBounce(0.05)
     player.setCollideWorldBounds(true)
 
     this.anims.create({
@@ -176,26 +195,46 @@ export default class TutLevel extends Phaser.Scene {
     })
 
     this.anims.create({
-      key: 'turn',
-      frames: this.anims.generateFrameNumbers('idle', { start: 0, end: 11 }),
-      frameRate: 10,
-      repeat: -1,
-    })
-
-    this.anims.create({
-      key: 'jump',
-      frames: this.anims.generateFrameNumbers('jumpLeft', { start: 0, end: 2 }),
-      frameRate: 5,
-      repeat: -1,
-    })
-
-    this.anims.create({
       key: 'right',
       frames: this.anims.generateFrameNumbers('runRight', {
         start: 0,
         end: 7,
       }),
       frameRate: 10,
+      repeat: -1,
+    })
+
+    this.anims.create({
+      key: 'idle',
+      frames: this.anims.generateFrameNumbers('idle', { start: 0, end: 11 }),
+      frameRate: 10,
+      repeat: -1,
+    })
+
+    this.anims.create({
+      key: 'idleLeft',
+      frames: this.anims.generateFrameNumbers('idleLeft', {
+        start: 0,
+        end: 11,
+      }),
+      frameRate: 10,
+      repeat: -1,
+    })
+
+    this.anims.create({
+      key: 'jumpLeft',
+      frames: this.anims.generateFrameNumbers('jumpLeft', { start: 0, end: 2 }),
+      frameRate: 5,
+      repeat: -1,
+    })
+
+    this.anims.create({
+      key: 'jumpRight',
+      frames: this.anims.generateFrameNumbers('jumpRight', {
+        start: 0,
+        end: 2,
+      }),
+      frameRate: 5,
       repeat: -1,
     })
 
@@ -234,35 +273,41 @@ export default class TutLevel extends Phaser.Scene {
   update() {
     const cam = this.cameras.main
     const speed = 15
-    if (this.cursors.left.isDown) {
-      player.setVelocityX(-300)
-      player.anims.play('left', true)
-      // move left
-      cam.scrollX -= speed
-    } else if (this.cursors.right.isDown) {
-      player.setVelocityX(300)
-      player.anims.play('right', true)
-      // move right
-      cam.scrollX += speed
-    }
 
-    // if (this.cursors.down.isDown)
-    // {
-    //   cam.scrollY += speed
-    // }
-    // if (this.cursors.up.isDown)
-    // {
-    //   cam.scrollY -= speed
-    // }
-    else if (!player.body.touching.down) {
-      player.anims.play('jump', true)
+    if (this.cursors.left.isDown) {
+      // facing = 'left'
+      player.setVelocityX(-300)
+      cam.scrollX -= speed
+      if (!player.body.touching.down) {
+        player.anims.play('jumpLeft', true)
+      } else {
+        player.anims.play('left', true)
+      }
+    } else if (this.cursors.right.isDown) {
+      // facing = 'right'
+      player.setVelocityX(300)
+      cam.scrollX += speed
+      if (!player.body.touching.down) {
+        player.anims.play('jumpRight', true)
+      } else {
+        player.anims.play('right', true)
+      }
+    } else if (!player.body.touching.down && facing === 'left') {
+      player.anims.play('jumpLeft', true)
+    } else if (!player.body.touching.down && facing === 'right') {
+      player.anims.play('jumpRight', true)
+    } else if (facing === 'left') {
+      player.setVelocityX(0)
+      player.anims.play('idleLeft', true)
     } else {
       player.setVelocityX(0)
-      player.anims.play('turn', true)
+      player.anims.play('idle', true)
     }
     if (this.cursors.up.isDown && player.body.touching.down) {
       player.setVelocityY(-300)
-      player.anims.play('jump', true)
+      if (facing === 'left') {
+        player.anims.play('jumpLeft', true)
+      } else player.anims.play('jumpRight', true)
     }
   }
 }
