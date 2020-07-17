@@ -30,6 +30,7 @@ export default class ParallaxScene extends Phaser.Scene {
     this.load.image('mountain', '/assets/Jungle/mountains.png')
     this.load.image('plateau', '/assets/Jungle/plateau.png')
     this.load.image('ground', '/assets/Jungle/ground.png')
+    this.load.image('platform', '/assets/airpack/PNG/Environment/ground_grass.png')
     this.load.image('plants', '/assets/Jungle/plant.png')
 
     this.cursors = this.input.keyboard.createCursorKeys()
@@ -47,7 +48,23 @@ export default class ParallaxScene extends Phaser.Scene {
     createAligned(this, totalWidth, 'plateau', 0.5)
     createAligned(this, totalWidth, 'ground', 1)
     createAligned(this, totalWidth, 'plants', 1.25)
+    // this.add.image(width * 0.5, height * 1, 'platform')
+    //   .setScrollFactor(0)
 
+    // // CREATE PLAFORM GROUP
+    // const platforms = this.physics.add.staticGroup()
+
+    // // How many platforms
+    // for (let i = 0; i < 5; ++i) {
+    //   const x = Phaser.Math.Between(80, 400)
+    //   const y = 150 * i
+
+    //   const platform = platforms.create(x, y, 'platform')
+    //   platform.scale = 0.5
+
+    //   const body = platform.body
+    //   body.updateFromGameObject()
+    // }
     this.cameras.main.setBounds(0, 0, width * 10, height * 10)
   }
 
@@ -59,15 +76,12 @@ export default class ParallaxScene extends Phaser.Scene {
       cam.scrollX -= speed
     }
 
-    // if (this.cursors.down.isDown)
-    // {
-    //   cam.scrollY += speed
-    // }
-    // if (this.cursors.up.isDown)
-    // {
-    //   cam.scrollY -= speed
-    // }
-    else if (this.cursors.right.isDown) {
+    if (this.cursors.down.isDown) {
+      cam.scrollY += speed
+    }
+    if (this.cursors.up.isDown) {
+      cam.scrollY -= speed
+    } else if (this.cursors.right.isDown) {
       // move right
       cam.scrollX += speed
     }
