@@ -1,0 +1,19 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+#phaser {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
+}
+
+body {
+  background-color: #16303c;
+}
+
+#logo {
+  padding: 40px 10px;
+  transition: 0.2s;
+}
