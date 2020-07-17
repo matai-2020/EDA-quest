@@ -41,7 +41,6 @@ export default class ParallaxScene extends Phaser.Scene {
   }
 
   preload() {
-    // this.load.image('collider', '/assets/man/collider.png')
     this.load.image('block', '/assets/man/base.png')
     this.load.image('sky', '/assets/Jungle/sky.png')
     this.load.image('mountain', '/assets/Jungle/mountains.png')
@@ -164,6 +163,9 @@ export default class ParallaxScene extends Phaser.Scene {
       player.anims.play('left', true)
       // move left
       cam.scrollX -= speed
+    } else if (this.cursors.right.isDown) {
+      // move right
+      cam.scrollX += speed
     }
 
     // if (this.cursors.down.isDown)

@@ -1,0 +1,24 @@
+{
+  "currentPlayer": {
+    "name": "",
+    "score": 0
+  },
+  "highScores": [
+{
+ "name": "Jake",
+ "score": 130
+},
+{
+  "name": "Louis",
+  "score": 150
+ },
+ {
+  "name": "Isaac",
+  "score": 140
+ },
+ {
+  "name": "Keenen",
+  "score": 160
+ }
+]
+}
