@@ -91,7 +91,6 @@ export default class ParallaxScene extends Phaser.Scene {
     const totalWidth = width * 10
 
     this.add.image(width * 0.5, height * 0.5, 'sky').setScrollFactor(0)
-    this.add.image(140, 130, 'arrow-keys').setScale(0.2)
 
     createAligned(this, totalWidth, 'mountain', 0.15)
     createAligned(this, totalWidth, 'plateau', 0.5)
@@ -99,7 +98,6 @@ export default class ParallaxScene extends Phaser.Scene {
     createAligned(this, totalWidth, 'plants', 1.25)
     // this.add.image(width * 0.5, height * 1, 'platform')
     //   .setScrollFactor(0)
-
 
     // // CREATE PLAFORM GROUP
     // const platforms = this.physics.add.staticGroup()
@@ -115,7 +113,6 @@ export default class ParallaxScene extends Phaser.Scene {
     //   const body = platform.body
     //   body.updateFromGameObject()
     // }
-    
 
     // Collider floor & platforms
 
@@ -130,6 +127,9 @@ export default class ParallaxScene extends Phaser.Scene {
     // tutor = this.physics.add.sprite(1100, 535, 'idle')
     // tutor.setScale(3)
     // tutor.setCollideWorldBounds(true)
+
+    // Arrow Keys Instructions
+    this.add.image(300, 580, 'arrow-keys').setScale(0.2)
 
     // Player sprite
 
@@ -198,7 +198,6 @@ export default class ParallaxScene extends Phaser.Scene {
     // colliders
     this.physics.add.collider(floor, [player, react])
     this.physics.add.collider(player, [platforms])
-
   }
 
   update () {
@@ -214,6 +213,15 @@ export default class ParallaxScene extends Phaser.Scene {
       player.anims.play('right', true)
       // move right
       cam.scrollX += speed
+    } else if (!player.body.touching.down) {
+      player.anims.play('jump', true)
+    } else {
+      player.setVelocityX(0)
+      player.anims.play('turn', true)
+    }
+    if (this.cursors.up.isDown && player.body.touching.down) {
+      player.setVelocityY(-300)
+      player.anims.play('jump', true)
     }
 
     // if (this.cursors.down.isDown)
@@ -224,15 +232,5 @@ export default class ParallaxScene extends Phaser.Scene {
     // {
     //   cam.scrollY -= speed
     // }
-    else if (!player.body.touching.down) {
-      player.anims.play('jump', true)
-    } else {
-      player.setVelocityX(0)
-      player.anims.play('turn', true)
-    }
-    if (this.cursors.up.isDown && player.body.touching.down) {
-      player.setVelocityY(-300)
-      player.anims.play('jump', true)
-    }
   }
 }
