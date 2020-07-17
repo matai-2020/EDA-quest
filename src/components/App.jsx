@@ -7,6 +7,7 @@ export default class App extends React.Component {
       <div style={{ textAlign: 'center' }}>
         {/* <h1>Hello World</h1> */}
         <img id="logo" src="/assets/Game/quest-logo.png" alt="Quest Logo" />
+        <HighScore />
       </div>
     )
   }

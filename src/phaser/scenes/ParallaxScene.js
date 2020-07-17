@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import { scoreChanged, gameOver } from '../score'
 
 /**
  *
@@ -25,22 +26,34 @@ const collectScore = (player, react) => {
   react.disableBody(true, true)
   score += 1
   scoreText.setText('Score: ' + score)
-  // if (keyAmount === 1) {
-  //   askQuestion()
-  // }
+  scoreChanged(score)
+}
+
+const loseHp = () => {
+  badReact.disableBody(true, true)
+  health = health - 1
+  if (health === 0) {
+    isAlive = false
+    gameOver(isAlive)
+    alert('you died')
+    // this.playerDeath()
+  } console.log(health)
 }
 
 let react
+let badReact
 let tutor
 let player
 let platforms
 let platform
 let cursors
 let score = 0
+let health = 1
 let scoreText
 let ground
 let block
 let floor
+let isAlive = true
 
 let keyText
 let keyAmount = 0
@@ -179,7 +192,11 @@ export default class ParallaxScene extends Phaser.Scene {
     react = this.physics.add.sprite(550, 600, 'react')
     react.setScale(0.2)
 
+    badReact = this.physics.add.sprite(700, 600, 'react')
+    badReact.setScale(0.2)
+
     this.physics.add.overlap(player, react, collectScore, null, this)
+    this.physics.add.overlap(player, badReact, loseHp, null, this)
 
     // text
     this.cameras.main.setBounds(0, 0, 3000, 0)
@@ -196,7 +213,7 @@ export default class ParallaxScene extends Phaser.Scene {
     })
 
     // colliders
-    this.physics.add.collider(floor, [player, react])
+    this.physics.add.collider(floor, [player, react, badReact])
     this.physics.add.collider(player, [platforms])
   }
 
