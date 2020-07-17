@@ -57,6 +57,9 @@ export default class ParallaxScene extends Phaser.Scene {
     if (this.cursors.left.isDown) {
       // move left
       cam.scrollX -= speed
+    } else if (this.cursors.right.isDown) {
+      // move right
+      cam.scrollX += speed
     }
 
     // if (this.cursors.down.isDown)
@@ -67,9 +70,5 @@ export default class ParallaxScene extends Phaser.Scene {
     // {
     //   cam.scrollY -= speed
     // }
-    else if (this.cursors.right.isDown) {
-      // move right
-      cam.scrollX += speed
-    }
   }
 }
