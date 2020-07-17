@@ -5,7 +5,7 @@ export default class App extends React.Component {
     return (
       <div style={{ textAlign: 'center' }}>
         {/* <h1>Hello World</h1> */}
-        <img id="logo" src="src/assets/Game/quest-logo.png" alt="Quest Logo" />
+        <img id="logo" src="/assets/Game/quest-logo.png" alt="Quest Logo" />
       </div>
     )
   }

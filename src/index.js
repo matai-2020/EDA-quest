@@ -3,7 +3,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './components/App.jsx'
 
-// import ParallaxScene from './phaser/scenes/ParallaxScene'
+import parallax from './phaser/scenes/ParallaxScene'
 import title from './phaser/scenes/TitleScene'
 
 export const config = {
@@ -11,7 +11,7 @@ export const config = {
   parent: 'phaser',
   width: window.innerWidth,
   height: 800,
-  scene: title
+  scene: [title, parallax]
 }
 
 const game = new Phaser.Game(config)
