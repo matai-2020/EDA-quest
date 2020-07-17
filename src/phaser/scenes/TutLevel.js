@@ -33,8 +33,10 @@ const collectScore = (player, react) => {
 const askQuestion = () => {
   if (canAsk) {
     console.log('yes')
+    popUp = 2
   } else {
     console.log('no')
+    noQuestion.setText('Please come back with a complete trello card')
   }
 }
 
@@ -50,8 +52,11 @@ let ground
 let block
 let floor
 let trigger
+let noQuestion
 
 let canAsk = false
+let popUp = 0
+let notYet
 
 let keyText
 let keyAmount = 0
@@ -148,7 +153,7 @@ export default class TutLevel extends Phaser.Scene {
 
     // Tutor trigger
 
-    trigger = this.physics.add.sprite(1090, 535)
+    trigger = this.physics.add.sprite(1100, 535, 'triggerBlock')
 
     // Player sprite
 
@@ -201,10 +206,11 @@ export default class TutLevel extends Phaser.Scene {
     this.physics.add.overlap(player, react, collectScore, null, this)
     this.physics.add.overlap(player, trigger, askQuestion, null, this)
 
-    // text
+    // camera follow
     this.cameras.main.setBounds(0, 0, 3000, 0)
     this.cameras.main.startFollow(player)
 
+    // text
     scoreText = this.add.text(16, 16, 'Score: 0', {
       fontSize: '32px',
       fill: '#000',
@@ -212,6 +218,10 @@ export default class TutLevel extends Phaser.Scene {
 
     keyText = this.add.text(950, 16, 'Trello: 0', {
       fontSize: '32px',
+      fill: '#000',
+    })
+    noQuestion = this.add.text(1000, 470, '', {
+      fontSize: '18px',
       fill: '#000',
     })
 
