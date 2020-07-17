@@ -24,7 +24,7 @@ firebase.initializeApp(firebaseConfig)
 let config = {
   parent: 'phaser',
   type: Phaser.AUTO,
-  width: window.innerWidth,
+  width: window.innerWidth - 100,
   height: 800,
   physics: {
     default: 'arcade',

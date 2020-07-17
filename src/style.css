@@ -1,6 +1,12 @@
-*{
+* {
   margin: 0;
   padding: 0;
+}
+
+#phaser {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
 }
 
 body {

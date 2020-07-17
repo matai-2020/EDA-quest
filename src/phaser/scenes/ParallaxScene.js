@@ -21,16 +21,26 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   }
 }
 
-let coin
+const collectKey = (player, react) => {
+  react.disableBody(true, true)
+  keyAmount += 1
+  keyText.setText('Trello: ' + keyAmount)
+  // if (keyAmount === 1) {
+  //   askQuestion()
+  // }
+}
+
+let react
 let tutor
 let player
 let platforms
+let platform
 let cursors
-let stars
 let score = 0
 let scoreText
 let ground
 let block
+let floor
 
 let keyText
 let keyAmount = 0
@@ -41,6 +51,8 @@ export default class ParallaxScene extends Phaser.Scene {
   }
 
   preload() {
+    this.load.image('react', '/assets/react.svg')
+    this.load.image('platform', '/assets/Jungle/platform.png')
     this.load.image('block', '/assets/man/base.png')
     this.load.image('sky', '/assets/Jungle/sky.png')
     this.load.image('mountain', '/assets/Jungle/mountains.png')
@@ -83,11 +95,13 @@ export default class ParallaxScene extends Phaser.Scene {
     createAligned(this, totalWidth, 'ground', 1)
     createAligned(this, totalWidth, 'plants', 1.25)
 
-    // Collider floor
+    // Collider floor & platforms
+
+    floor = this.physics.add.staticGroup()
+    floor.create(2010, 648, 'block')
 
     platforms = this.physics.add.staticGroup()
-
-    platforms.create(2010, 648, 'block').setScale()
+    platforms.create(800, 450, 'platform').setScale(0.4).refreshBody()
 
     // Character sprites
 
@@ -99,12 +113,10 @@ export default class ParallaxScene extends Phaser.Scene {
 
     player = this.physics.add.sprite(100, 500, 'idle')
     player.setScale(3)
-    player.body.setGravityY(100)
+    player.body.setGravityY(-100)
 
     player.setBounce(0.2)
     player.setCollideWorldBounds(true)
-
-    this.physics.add.collider(platforms, player)
 
     this.anims.create({
       key: 'left',
@@ -140,6 +152,13 @@ export default class ParallaxScene extends Phaser.Scene {
       repeat: -1,
     })
 
+    // coin and collection
+
+    react = this.physics.add.sprite(550, 600, 'react')
+    react.setScale(0.2)
+
+    this.physics.add.overlap(player, react, collectKey, null, this)
+
     // text
     this.cameras.main.setBounds(0, 0, 3000, 0)
     this.cameras.main.startFollow(player)
@@ -153,17 +172,23 @@ export default class ParallaxScene extends Phaser.Scene {
       fontSize: '32px',
       fill: '#000',
     })
+
+    // colliders
+    this.physics.add.collider(floor, [player, react])
+    this.physics.add.collider(player, [platforms])
   }
 
   update() {
     const cam = this.cameras.main
     const speed = 15
     if (this.cursors.left.isDown) {
-      player.setVelocityX(-180)
+      player.setVelocityX(-300)
       player.anims.play('left', true)
       // move left
       cam.scrollX -= speed
     } else if (this.cursors.right.isDown) {
+      player.setVelocityX(300)
+      player.anims.play('right', true)
       // move right
       cam.scrollX += speed
     }
@@ -176,12 +201,7 @@ export default class ParallaxScene extends Phaser.Scene {
     // {
     //   cam.scrollY -= speed
     // }
-    else if (this.cursors.right.isDown) {
-      player.setVelocityX(180)
-      player.anims.play('right', true)
-      // move right
-      cam.scrollX += speed
-    } else if (!player.body.touching.down) {
+    else if (!player.body.touching.down) {
       player.anims.play('jump', true)
     } else {
       player.setVelocityX(0)
