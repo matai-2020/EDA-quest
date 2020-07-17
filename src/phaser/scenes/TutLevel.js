@@ -53,6 +53,7 @@ let block
 let floor
 let trigger
 let noQuestion
+let game
 
 let canAsk = false
 let popUp = 0
