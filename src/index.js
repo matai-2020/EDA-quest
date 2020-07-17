@@ -11,7 +11,7 @@ import ParallaxScene from './phaser/scenes/ParallaxScene'
 export const config = {
   type: Phaser.AUTO,
   parent: 'phaser',
-  width: 800,
+  width: window.innerWidth,
   height: 800,
   scene: ParallaxScene
 }
