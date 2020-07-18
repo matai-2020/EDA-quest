@@ -34,15 +34,19 @@ const loseHp = () => {
   health = health + 1
   healthBar.anims.play(`health${health}`, true)
   if (health === 4) {
-    isAlive = false
-    healthBar.anims.play(`health${health}`, true)
-    explode.anims.play('death', true)
-    setTimeout(() => {
-      player.disableBody(true, true)
-      healthBar.disableBody(true, true)
-    }, 100)
-    setTimeout(() => { gameOver(isAlive) }, 2000)
+    death()
   }
+}
+
+const death = () => {
+  isAlive = false
+  healthBar.anims.play(`health${health}`, true)
+  explode.anims.play('death', true)
+  setTimeout(() => {
+    player.disableBody(true, true)
+    healthBar.disableBody(true, true)
+  }, 100)
+  setTimeout(() => { gameOver(isAlive) }, 2000)
 }
 
 let react
@@ -133,7 +137,6 @@ export default class ParallaxScene extends Phaser.Scene {
 
     platforms = this.physics.add.staticGroup()
     platforms.create(800, 450, 'platform').setScale(0.4).refreshBody()
-
 
     // Arrow Keys Instructions
     this.add.image(300, 580, 'arrow-keys').setScale(0.2)
