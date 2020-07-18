@@ -1,12 +1,16 @@
+// Libraries
 import Phaser from 'phaser'
 import React from 'react'
 import ReactDOM from 'react-dom'
+import * as firebase from 'firebase'
+
+// React Component
 import App from './components/App.jsx'
 
-import parallax from './phaser/scenes/ParallaxScene'
+// Phaser Scenes
+import dusk from './phaser/scenes/DuskScene'
 import title from './phaser/scenes/TitleScene'
-import tutLevel from './phaser/scenes/TutLevel'
-import * as firebase from 'firebase'
+import jumpLevel from './phaser/scenes/JumpLevel'
 
 var firebaseConfig = {
   apiKey: 'AIzaSyD5DEUiq_fXMfIJpiPH4HUvbXbPGPDP2-0',
@@ -16,7 +20,7 @@ var firebaseConfig = {
   storageBucket: 'eda-quest.appspot.com',
   messagingSenderId: '574152578233',
   appId: '1:574152578233:web:c375548e8908c8aaf93768',
-  measurementId: 'G-XS0WPPZRYR',
+  measurementId: 'G-XS0WPPZRYR'
 }
 
 firebase.initializeApp(firebaseConfig)
@@ -30,30 +34,31 @@ let config = {
     default: 'arcade',
     arcade: {
       gravity: { y: 420 },
-      debug: false,
-    },
+      debug: false
+    }
   },
-  scene: [tutLevel],
+  scene: [title, dusk, jumpLevel]
 }
 
 const game = new Phaser.Game(config)
 
 // Game Logo disappears on scroll
 
-// window.onscroll = function () {
-//   scrollFunction()
-// }
-// function scrollFunction() {
-//   if (document.body.scrollTop >= 1 || document.documentElement.scrollTop >= 1) {
-//     document.getElementById('logo').style.width = '10px'
-//     document.getElementById('logo').style.visibility = 'hidden'
-//   } else {
-//     document.getElementById('logo').style.visibility = 'visible'
-//     document.getElementById('logo').style.width = '900px'
-//     document.getElementById('logo').style.marginTop = '150px'
-//     document.getElementById('logo').style.marginBottom = '230px'
-//   }
-// }
+window.onscroll = function () {
+  scrollFunction()
+}
+
+function scrollFunction () {
+  if (document.body.scrollTop >= 1 || document.documentElement.scrollTop >= 1) {
+    document.getElementById('logo').style.width = '10px'
+    document.getElementById('logo').style.visibility = 'hidden'
+  } else {
+    document.getElementById('logo').style.visibility = 'visible'
+    document.getElementById('logo').style.width = '900px'
+    document.getElementById('logo').style.marginTop = '150px'
+    document.getElementById('logo').style.marginBottom = '230px'
+  }
+}
 
 // const game = new Phaser.Game(config)
 
