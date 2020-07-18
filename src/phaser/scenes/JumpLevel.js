@@ -20,28 +20,31 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
     x += m.width
   }
 }
-
-let scoreTut = 0
+let jumpUp = false
+let score = 0
 let scoreText
 
-let checkText
-let checkAmount = 0
-let checksToPass = '1'
+const airUp = () => {
+  if (!jumpUp) {
+    jumpUp = true
+  }
+}
 
-const collectScore = (player, type) => {
-  if (type.texture.key === 'react') {
-    type.disableBody(true, true)
-    scoreTut += 10
-    scoreText.setText('Score: ' + scoreTut)
-  } else {
-    type.disableBody(true, true)
-    scoreTut += 20
-    checkAmount += 1
-    scoreText.setText('Score: ' + scoreTut)
-    checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
-    if (checkAmount === 1) {
-      canAsk = true
-    }
+const airDown = () => {
+  jumpUp = false
+}
+
+const bounce = (player, spring) => {
+  airUp()
+  setTimeout(airDown, 500)
+}
+
+const collectScore = (player, react) => {
+  react.disableBody(true, true)
+  score += 1
+  scoreText.setText('Score: ' + score)
+  if (score === 1) {
+    canAsk = true
   }
 }
 
@@ -80,13 +83,13 @@ let bump
 
 let game
 
-let tutLevelComplete = false
-
+let keyText
+let keyAmount = 0
 let worldWidth = 2000
 
-export default class TutLevel extends Phaser.Scene {
+export default class JumpLevel extends Phaser.Scene {
   constructor() {
-    super('tut-level')
+    super('jump-scene')
   }
 
   preload() {
@@ -321,8 +324,8 @@ export default class TutLevel extends Phaser.Scene {
     })
 
     // colliders
-    this.physics.add.collider([floor, bump], [player, react, tutor, trigger])
-    this.physics.add.collider(player, [platforms, wall, bump])
+    this.physics.add.collider(floor, [player, react, tutor, trigger, spring])
+    this.physics.add.collider(player, [platforms, wall, spring])
   }
 
   update() {
@@ -364,8 +367,11 @@ export default class TutLevel extends Phaser.Scene {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
     }
-    if (tutLevelComplete) {
-      this.scene.start('title-scene', scoreTut)
+    if (jumpUp) {
+      player.setVelocityY(-400)
+      if (facing === 'left') {
+        player.anims.play('jumpLeft', true)
+      } else player.anims.play('jumpRight', true)
     }
   }
 }

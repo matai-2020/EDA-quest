@@ -28,7 +28,8 @@ export default class TitleScene extends Phaser.Scene {
       'pointerdown',
       function () {
         // console.log('From Title to Level 1')
-        this.scene.start('tut-level')
+        this.scene.start('dusk-scene')
+        // this.scene.start('jump-scene')
       },
       this
     )
