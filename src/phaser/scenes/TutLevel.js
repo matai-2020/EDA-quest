@@ -170,6 +170,7 @@ export default class TutLevel extends Phaser.Scene {
     // player.setBounce(0.05)
     player.setCollideWorldBounds(false)
     player.onWorldBounds = true
+    player.body.checkCollision.up = false
 
     this.anims.create({
       key: 'left',
@@ -246,7 +247,7 @@ export default class TutLevel extends Phaser.Scene {
       .setScrollFactor(0)
 
     keyText = this.add
-      .text(950, 16, 'Trello: 0', {
+      .text(width - 200, 16, 'Trello: 0', {
         fontSize: '32px',
         fill: '#000',
       })
