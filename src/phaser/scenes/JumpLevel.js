@@ -101,11 +101,11 @@ let keyAmount = 0
 let worldWidth = 2000
 
 export default class JumpLevel extends Phaser.Scene {
-  constructor() {
+  constructor () {
     super('jump-scene')
   }
 
-  preload() {
+  preload () {
     // invis walls/triggers
     this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
     this.load.image('base', '/assets/blocksTriggers/base.png')
@@ -134,33 +134,33 @@ export default class JumpLevel extends Phaser.Scene {
     // player assets
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
       frameWidth: 20,
-      frameHeight: 35,
+      frameHeight: 35
     })
     this.load.spritesheet('jumpLeft', '/assets/man/jumpLeft.png', {
       frameWidth: 20,
-      frameHeight: 35,
+      frameHeight: 35
     })
     this.load.spritesheet('runLeft', '/assets/man/runLeft.png', {
       frameWidth: 21,
-      frameHeight: 33,
+      frameHeight: 33
     })
     this.load.spritesheet('runRight', '/assets/man/runRight.png', {
       frameWidth: 21,
-      frameHeight: 33,
+      frameHeight: 33
     })
     this.load.spritesheet('idleRight', '/assets/man/idleRight.png', {
       frameWidth: 19,
-      frameHeight: 34,
+      frameHeight: 34
     })
     this.load.spritesheet('idleLeft', '/assets/man/idleLeft.png', {
       frameWidth: 19,
-      frameHeight: 34,
+      frameHeight: 34
     })
 
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create() {
+  create () {
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -225,57 +225,57 @@ export default class JumpLevel extends Phaser.Scene {
       key: 'left',
       frames: this.anims.generateFrameNumbers('runLeft', {
         start: 7,
-        end: 0,
+        end: 0
       }),
       frameRate: 10,
-      repeat: -1,
+      repeat: -1
     })
 
     this.anims.create({
       key: 'right',
       frames: this.anims.generateFrameNumbers('runRight', {
         start: 0,
-        end: 7,
+        end: 7
       }),
       frameRate: 10,
-      repeat: -1,
+      repeat: -1
     })
 
     this.anims.create({
       key: 'idleRight',
       frames: this.anims.generateFrameNumbers('idleRight', {
         start: 0,
-        end: 11,
+        end: 11
       }),
       frameRate: 10,
-      repeat: -1,
+      repeat: -1
     })
 
     this.anims.create({
       key: 'idleLeft',
       frames: this.anims.generateFrameNumbers('idleLeft', {
         start: 0,
-        end: 11,
+        end: 11
       }),
       frameRate: 10,
-      repeat: -1,
+      repeat: -1
     })
 
     this.anims.create({
       key: 'jumpLeft',
       frames: this.anims.generateFrameNumbers('jumpLeft', { start: 0, end: 2 }),
       frameRate: 5,
-      repeat: -1,
+      repeat: -1
     })
 
     this.anims.create({
       key: 'jumpRight',
       frames: this.anims.generateFrameNumbers('jumpRight', {
         start: 0,
-        end: 2,
+        end: 2
       }),
       frameRate: 5,
-      repeat: -1,
+      repeat: -1
     })
 
     // Interactive Sprites
@@ -313,7 +313,7 @@ export default class JumpLevel extends Phaser.Scene {
       .text(16, 16, 'Score: 0', {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
-        fill: '#000',
+        fill: '#000'
       })
       .setScrollFactor(0)
 
@@ -321,13 +321,13 @@ export default class JumpLevel extends Phaser.Scene {
       .text(width - 300, 16, 'Trello: 0 / ' + checksToPass, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
-        fill: '#000',
+        fill: '#000'
       })
       .setScrollFactor(0)
     noQuestion = this.add.text(spot.x - 250, spot.y - 10, '', {
       fontFamily: "'Press Start 2P', cursive",
       fontSize: '12px',
-      fill: '#000',
+      fill: '#000'
     })
 
     // colliders
@@ -335,7 +335,7 @@ export default class JumpLevel extends Phaser.Scene {
     this.physics.add.collider(player, [platforms, wall, spring])
   }
 
-  update() {
+  update () {
     const cam = this.cameras.main
     const speed = 15
 
