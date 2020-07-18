@@ -3,7 +3,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './components/App.jsx'
 
-import parallax from './phaser/scenes/ParallaxScene'
+import dusk from './phaser/scenes/DuskScene'
 import title from './phaser/scenes/TitleScene'
 import { playGame } from './phaser/scene'
 import * as firebase from 'firebase'
@@ -16,7 +16,7 @@ var firebaseConfig = {
   storageBucket: 'eda-quest.appspot.com',
   messagingSenderId: '574152578233',
   appId: '1:574152578233:web:c375548e8908c8aaf93768',
-  measurementId: 'G-XS0WPPZRYR',
+  measurementId: 'G-XS0WPPZRYR'
 }
 
 firebase.initializeApp(firebaseConfig)
@@ -30,10 +30,10 @@ let config = {
     default: 'arcade',
     arcade: {
       gravity: { y: 300 },
-      debug: false,
-    },
+      debug: false
+    }
   },
-  scene: [parallax],
+  scene: [dusk]
 }
 
 const game = new Phaser.Game(config)

@@ -25,7 +25,7 @@ export default class TitleScene extends Phaser.Scene {
 
     this.input.once('pointerdown', function () {
       // console.log('From Title to Level 1')
-      this.scene.start('parallax-scene')
+      this.scene.start('dusk-scene')
     }, this)
   }
 }
