@@ -152,8 +152,13 @@ export default class TutLevel extends Phaser.Scene {
     floor.create(2010, 648, 'base').setScrollFactor(0)
 
     platforms = this.physics.add.staticGroup()
-    platforms.create(800, 450, 'platform').setScale(0.4).refreshBody()
+    platforms.create(800, 500, 'platform').setScale(0.4).refreshBody()
 
+    platforms.children.entries.forEach(platform => {
+      ;(platform.body.checkCollision.left = false),
+        (platform.body.checkCollision.right = false),
+        (platform.body.checkCollision.down = false)
+    })
     // background images
 
     this.add.image(300, 580, 'arrow-keys').setScale(0.2)
@@ -173,11 +178,8 @@ export default class TutLevel extends Phaser.Scene {
     player = this.physics.add.sprite(100, 500, 'idle')
     player.setScale(3)
     player.body.setGravityY(60)
-
-    // player.setBounce(0.05)
     player.setCollideWorldBounds(false)
     player.onWorldBounds = true
-    player.body.checkCollision.up = false
 
     this.anims.create({
       key: 'left',
