@@ -176,6 +176,7 @@ export default class JumpLevel extends Phaser.Scene {
 
     createAligned(this, totalWidth, 'mountain', 0.15)
     createAligned(this, totalWidth, 'plateau', 0.5)
+    bump = this.physics.add.staticImage(1400, 620, 'bump')
     createAligned(this, totalWidth, 'ground', 1)
     createAligned(this, totalWidth, 'plants', 1.25)
     // this.add.image(width * 0.5, height * 1, 'platform').setScrollFactor(0)
@@ -188,8 +189,6 @@ export default class JumpLevel extends Phaser.Scene {
 
     floor = this.physics.add.staticGroup()
     floor.create(2010, 648, 'base').setScrollFactor(0)
-
-    bump = this.physics.add.staticImage(1400, 620, 'bump')
 
     // platforms = this.physics.add.staticGroup()
     // platforms.create(800, 500, 'platform').setScale(0.4).refreshBody()
