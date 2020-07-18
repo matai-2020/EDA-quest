@@ -37,8 +37,9 @@ const loseHp = () => {
     isAlive = false
     healthBar.anims.play(`health${health}`, true)
     explode.anims.play('death', true)
-    gameOver(isAlive)
-  } console.log(health)
+    setTimeout(() => { player.setScale(0) }, 100)
+    setTimeout(() => { gameOver(isAlive) }, 2000)
+  }
 }
 
 let react
@@ -57,8 +58,6 @@ let block
 let floor
 let isAlive = true
 let explode
-let playerX
-let playerY
 
 let keyText
 let keyAmount = 0
@@ -311,7 +310,7 @@ export default class ParallaxScene extends Phaser.Scene {
 
     // DEATH ANIMATION
 
-    explode = this.add.sprite(player.body.position.x, player.body.position.y, 'explode')
+    explode = this.add.sprite(player.body.position.x + 50, player.body.position.y + 45, 'explode')
     explode.setScale(1.4)
 
     this.anims.create({
