@@ -14,7 +14,6 @@ export default class TitleScene extends Phaser.Scene {
   }
 
   preload () {
-    // this.load.image('sky', '/assets/Jungle/sky.png')
     this.load.image('dark-forest', '/assets/Game/dark-forest.png')
     this.load.image('start', '/assets/Game/start.png')
   }
@@ -26,6 +25,7 @@ export default class TitleScene extends Phaser.Scene {
     this.input.once('pointerdown', function () {
       // console.log('From Title to Level 1')
       this.scene.start('dusk-scene')
+      // this.scene.start('jump-scene')
     }, this)
   }
 }

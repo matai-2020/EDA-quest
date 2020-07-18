@@ -84,7 +84,7 @@ let worldWidth = 2000
 
 export default class JumpLevel extends Phaser.Scene {
   constructor () {
-    super('parallax-scene')
+    super('jump-scene')
   }
 
   preload () {
@@ -257,7 +257,7 @@ export default class JumpLevel extends Phaser.Scene {
     spring.body.checkCollision.left = false
     spring.body.checkCollision.right = false
     this.physics.add.overlap(spring, player, bounce, null, this)
-    console.log(spring)
+    // console.log(spring)
 
     // coin and collection
 

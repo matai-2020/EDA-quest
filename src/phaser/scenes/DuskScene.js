@@ -66,9 +66,6 @@ let game
 
 let keyText
 let keyAmount = 0
-let worldWidth = 2000
-
-let worldWidth = 1800
 
 let worldWidth = 3000
 

@@ -11,6 +11,7 @@ import App from './components/App.jsx'
 import dusk from './phaser/scenes/DuskScene'
 import title from './phaser/scenes/TitleScene'
 import jumpLevel from './phaser/scenes/JumpLevel'
+import parralax from './phaser/scenes/ParallaxScene'
 
 var firebaseConfig = {
   apiKey: 'AIzaSyD5DEUiq_fXMfIJpiPH4HUvbXbPGPDP2-0',
@@ -37,7 +38,7 @@ let config = {
       debug: false
     }
   },
-  scene: [title, dusk, jumpLevel]
+  scene: [title, dusk, jumpLevel, parralax]
 }
 
 const game = new Phaser.Game(config)
