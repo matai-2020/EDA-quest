@@ -67,7 +67,7 @@ let isAlive = true
 let explode
 
 let keyText
-let keyAmount = 0
+const keyAmount = 0
 
 export default class ParallaxScene extends Phaser.Scene {
   constructor () {

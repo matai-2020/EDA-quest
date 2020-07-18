@@ -65,16 +65,16 @@ let trigger
 let game
 
 let keyText
-let keyAmount = 0
+const keyAmount = 0
 
-let worldWidth = 3000
+const worldWidth = 3000
 
 export default class TutLevel extends Phaser.Scene {
-  constructor() {
+  constructor () {
     super('dusk-scene')
   }
 
-  preload() {
+  preload () {
     // invis walls/triggers
     this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
     this.load.image('base', '/assets/blocksTriggers/base.png')
@@ -104,33 +104,33 @@ export default class TutLevel extends Phaser.Scene {
     // player assets
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
       frameWidth: 20,
-      frameHeight: 35,
+      frameHeight: 35
     })
     this.load.spritesheet('jumpLeft', '/assets/man/jumpLeft.png', {
       frameWidth: 20,
-      frameHeight: 35,
+      frameHeight: 35
     })
     this.load.spritesheet('runLeft', '/assets/man/runLeft.png', {
       frameWidth: 21,
-      frameHeight: 33,
+      frameHeight: 33
     })
     this.load.spritesheet('runRight', '/assets/man/runRight.png', {
       frameWidth: 21,
-      frameHeight: 33,
+      frameHeight: 33
     })
     this.load.spritesheet('idle', '/assets/man/idle.png', {
       frameWidth: 19,
-      frameHeight: 34,
+      frameHeight: 34
     })
     this.load.spritesheet('idleLeft', '/assets/man/idleLeft.png', {
       frameWidth: 19,
-      frameHeight: 34,
+      frameHeight: 34
     })
 
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create() {
+  create () {
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -168,7 +168,7 @@ export default class TutLevel extends Phaser.Scene {
 
     // Platforms
 
-    let platforms = this.physics.add.staticGroup()
+    const platforms = this.physics.add.staticGroup()
     platforms.create(500, 510, 'platform').setScale(0.4).refreshBody()
     platforms.create(600, 600, 'platform').setScale(0.4).refreshBody()
 
@@ -184,8 +184,8 @@ export default class TutLevel extends Phaser.Scene {
     // Character sprites
 
     // Tutor
-    let tutorAxisX = 2900
-    let tutorAxisY = 535
+    const tutorAxisX = 2900
+    const tutorAxisY = 535
 
     tutor = this.physics.add.sprite(tutorAxisX, tutorAxisY, 'idleLeft')
     tutor.setScale(3)
@@ -209,54 +209,54 @@ export default class TutLevel extends Phaser.Scene {
       key: 'left',
       frames: this.anims.generateFrameNumbers('runLeft', {
         start: 7,
-        end: 0,
+        end: 0
       }),
       frameRate: 10,
-      repeat: -1,
+      repeat: -1
     })
 
     this.anims.create({
       key: 'right',
       frames: this.anims.generateFrameNumbers('runRight', {
         start: 0,
-        end: 7,
+        end: 7
       }),
       frameRate: 10,
-      repeat: -1,
+      repeat: -1
     })
 
     this.anims.create({
       key: 'idle',
       frames: this.anims.generateFrameNumbers('idle', { start: 0, end: 11 }),
       frameRate: 10,
-      repeat: -1,
+      repeat: -1
     })
 
     this.anims.create({
       key: 'idleLeft',
       frames: this.anims.generateFrameNumbers('idleLeft', {
         start: 0,
-        end: 11,
+        end: 11
       }),
       frameRate: 10,
-      repeat: -1,
+      repeat: -1
     })
 
     this.anims.create({
       key: 'jumpLeft',
       frames: this.anims.generateFrameNumbers('jumpLeft', { start: 0, end: 2 }),
       frameRate: 5,
-      repeat: -1,
+      repeat: -1
     })
 
     this.anims.create({
       key: 'jumpRight',
       frames: this.anims.generateFrameNumbers('jumpRight', {
         start: 0,
-        end: 2,
+        end: 2
       }),
       frameRate: 5,
-      repeat: -1,
+      repeat: -1
     })
 
     // coin and collection
@@ -275,20 +275,20 @@ export default class TutLevel extends Phaser.Scene {
     scoreText = this.add
       .text(16, 16, 'Score: 0', {
         fontSize: '32px',
-        fill: '#000',
+        fill: '#000'
       })
       .setScrollFactor(0)
 
     keyText = this.add
       .text(width - 200, 16, 'Trello: 0', {
         fontSize: '32px',
-        fill: '#000',
+        fill: '#000'
       })
       .setScrollFactor(0)
 
     noQuestion = this.add.text(tutorAxisX - 480, tutorAxisY - 250, '', {
       fontSize: '18px',
-      fill: '#000',
+      fill: '#000'
     })
 
     this.add.image(1500, 400, 'near-trees').setScale(5.5).setScrollFactor(2.5)
@@ -301,7 +301,7 @@ export default class TutLevel extends Phaser.Scene {
     this.physics.add.collider(player, [platforms, wall])
   }
 
-  update() {
+  update () {
     const cam = this.cameras.main
     const speed = 15
 

@@ -1,12 +1,13 @@
 import Phaser from 'phaser'
 
 export class yourLevelNameHere extends Phaser.Scene {
-  constructor() {
+  constructor () {
     super('PlayGame')
   }
-  preload() {}
 
-  create() {}
+  preload () {}
 
-  update() {}
+  create () {}
+
+  update () {}
 }
