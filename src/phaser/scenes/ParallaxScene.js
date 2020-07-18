@@ -30,6 +30,8 @@ const collectScore = (player, react) => {
   // }
 }
 
+let spring
+let backPack
 let react
 let tutor
 let player
@@ -44,6 +46,7 @@ let floor
 
 let keyText
 let keyAmount = 0
+let worldWidth = 2000
 
 export default class ParallaxScene extends Phaser.Scene {
   constructor() {
@@ -85,6 +88,7 @@ export default class ParallaxScene extends Phaser.Scene {
       frameHeight: 34,
     })
 
+   
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
@@ -133,12 +137,13 @@ export default class ParallaxScene extends Phaser.Scene {
 
     // Arrow Keys Instructions
     this.add.image(300, 580, 'arrow-keys').setScale(0.2)
-
+    
+    
     // Player sprite
 
     player = this.physics.add.sprite(100, 500, 'idle')
     player.setScale(3)
-    player.body.setGravityY(-100)
+    player.body.setGravityY(80)
 
     player.setBounce(0.2)
     player.setCollideWorldBounds(true)

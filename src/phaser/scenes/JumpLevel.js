@@ -20,9 +20,24 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
     x += m.width
   }
 }
-
+let jumpUp = false
 let score = 0
 let scoreText
+
+const airUp = () => {
+  if (!jumpUp) {
+    jumpUp = true
+  }
+}
+
+const airDown = () => {
+  jumpUp = false
+}
+
+const bounce = (player, spring) => {
+  airUp()
+  setTimeout(airDown, 500)
+}
 
 const collectScore = (player, react) => {
   react.disableBody(true, true)
@@ -47,14 +62,14 @@ const askQuestion = () => {
 }
 
 let facing = ''
-
+let backPack
 let react
 let tutor
 let player
 let platforms
 let platform
 let cursors
-
+let spring
 let ground
 let base
 let floor
@@ -67,14 +82,12 @@ let keyText
 let keyAmount = 0
 let worldWidth = 2000
 
-let worldWidth = 1800
-
-export default class TutLevel extends Phaser.Scene {
-  constructor() {
+export default class JumpLevel extends Phaser.Scene {
+  constructor () {
     super('parallax-scene')
   }
 
-  preload() {
+  preload () {
     // invis walls/triggers
     this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
     this.load.image('base', '/assets/blocksTriggers/base.png')
@@ -93,37 +106,38 @@ export default class TutLevel extends Phaser.Scene {
       '/assets/airpack/PNG/Environment/ground_grass.png'
     )
     this.load.image('plants', '/assets/Jungle/plant.png')
+    this.load.image('spring', '/assets/airpack/PNG/Items/spring.png')
 
     // player assets
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
       frameWidth: 20,
-      frameHeight: 35,
+      frameHeight: 35
     })
     this.load.spritesheet('jumpLeft', '/assets/man/jumpLeft.png', {
       frameWidth: 20,
-      frameHeight: 35,
+      frameHeight: 35
     })
     this.load.spritesheet('runLeft', '/assets/man/runLeft.png', {
       frameWidth: 21,
-      frameHeight: 33,
+      frameHeight: 33
     })
     this.load.spritesheet('runRight', '/assets/man/runRight.png', {
       frameWidth: 21,
-      frameHeight: 33,
+      frameHeight: 33
     })
     this.load.spritesheet('idle', '/assets/man/idle.png', {
       frameWidth: 19,
-      frameHeight: 34,
+      frameHeight: 34
     })
     this.load.spritesheet('idleLeft', '/assets/man/idleLeft.png', {
       frameWidth: 19,
-      frameHeight: 34,
+      frameHeight: 34
     })
 
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create() {
+  create () {
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -177,62 +191,73 @@ export default class TutLevel extends Phaser.Scene {
 
     // player.setBounce(0.05)
     player.setCollideWorldBounds(false)
-    player.onWorldBounds = true
+    // player.onWorldBounds = true
     player.body.checkCollision.up = false
 
     this.anims.create({
       key: 'left',
       frames: this.anims.generateFrameNumbers('runLeft', {
         start: 7,
-        end: 0,
+        end: 0
       }),
       frameRate: 10,
-      repeat: -1,
+      repeat: -1
     })
 
     this.anims.create({
       key: 'right',
       frames: this.anims.generateFrameNumbers('runRight', {
         start: 0,
-        end: 7,
+        end: 7
       }),
       frameRate: 10,
-      repeat: -1,
+      repeat: -1
     })
 
     this.anims.create({
       key: 'idle',
       frames: this.anims.generateFrameNumbers('idle', { start: 0, end: 11 }),
       frameRate: 10,
-      repeat: -1,
+      repeat: -1
     })
 
     this.anims.create({
       key: 'idleLeft',
       frames: this.anims.generateFrameNumbers('idleLeft', {
         start: 0,
-        end: 11,
+        end: 11
       }),
       frameRate: 10,
-      repeat: -1,
+      repeat: -1
     })
 
     this.anims.create({
       key: 'jumpLeft',
       frames: this.anims.generateFrameNumbers('jumpLeft', { start: 0, end: 2 }),
       frameRate: 5,
-      repeat: -1,
+      repeat: -1
     })
 
     this.anims.create({
       key: 'jumpRight',
       frames: this.anims.generateFrameNumbers('jumpRight', {
         start: 0,
-        end: 2,
+        end: 2
       }),
       frameRate: 5,
-      repeat: -1,
+      repeat: -1
     })
+
+    // Interactive Sprites
+
+    // Spring
+    spring = this.physics.add.staticImage(550, 600, 'spring')
+    spring.setScale(1)
+    spring.body.checkCollision.up = false
+    spring.body.checkCollision.left = false
+    spring.body.checkCollision.right = false
+    this.physics.add.overlap(spring, player, bounce, null, this)
+    console.log(spring)
 
     // coin and collection
 
@@ -250,27 +275,27 @@ export default class TutLevel extends Phaser.Scene {
     scoreText = this.add
       .text(16, 16, 'Score: 0', {
         fontSize: '32px',
-        fill: '#000',
+        fill: '#000'
       })
       .setScrollFactor(0)
 
     keyText = this.add
       .text(width - 200, 16, 'Trello: 0', {
         fontSize: '32px',
-        fill: '#000',
+        fill: '#000'
       })
       .setScrollFactor(0)
     noQuestion = this.add.text(1000, 470, '', {
       fontSize: '18px',
-      fill: '#000',
+      fill: '#000'
     })
 
     // colliders
-    this.physics.add.collider(floor, [player, react, tutor, trigger])
-    this.physics.add.collider(player, [platforms, wall])
+    this.physics.add.collider(floor, [player, react, tutor, trigger, spring])
+    this.physics.add.collider(player, [platforms, wall, spring])
   }
 
-  update() {
+  update () {
     const cam = this.cameras.main
     const speed = 15
 
@@ -305,6 +330,12 @@ export default class TutLevel extends Phaser.Scene {
     }
     if (this.cursors.up.isDown && player.body.touching.down) {
       player.setVelocityY(-300)
+      if (facing === 'left') {
+        player.anims.play('jumpLeft', true)
+      } else player.anims.play('jumpRight', true)
+    }
+    if (jumpUp) {
+      player.setVelocityY(-400)
       if (facing === 'left') {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
