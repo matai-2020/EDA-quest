@@ -80,7 +80,8 @@ let game
 
 let keyText
 let keyAmount = 0
-let worldWidth = 2000
+let worldWidth = 20000
+let worldHeight = 20000
 
 export default class JumpLevel extends Phaser.Scene {
   constructor () {
@@ -252,7 +253,7 @@ export default class JumpLevel extends Phaser.Scene {
 
     // Spring
     spring = this.physics.add.staticImage(550, 600, 'spring')
-    spring.setScale(1)
+    spring.setScale(0.9)
     spring.body.checkCollision.up = false
     spring.body.checkCollision.left = false
     spring.body.checkCollision.right = false
@@ -292,10 +293,13 @@ export default class JumpLevel extends Phaser.Scene {
 
     // colliders
     this.physics.add.collider(floor, [player, react, tutor, trigger, spring])
+
     this.physics.add.collider(player, [platforms, wall, spring])
   }
 
   update () {
+    const gps = player.body.position
+    // console.log(gps)
     const cam = this.cameras.main
     const speed = 15
 
