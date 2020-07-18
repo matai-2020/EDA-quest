@@ -31,9 +31,11 @@ const collectScore = (player, react) => {
 
 const loseHp = () => {
   badReact.disableBody(true, true)
-  health = health - 1
-  if (health === 0) {
+  health = health + 1
+  healthBar.anims.play(`health${health}`, true)
+  if (health === 4) {
     isAlive = false
+    healthBar.anims.play(`health${health}`, true)
     gameOver(isAlive)
   } console.log(health)
 }
@@ -46,7 +48,8 @@ let platforms
 let platform
 let cursors
 let score = 0
-let health = 1
+let healthBar
+let health = 3
 let scoreText
 let ground
 let block
@@ -91,6 +94,11 @@ export default class ParallaxScene extends Phaser.Scene {
     this.load.spritesheet('idle', '/assets/man/idle.png', {
       frameWidth: 19,
       frameHeight: 34
+    })
+
+    this.load.spritesheet('heart', '/assets/Game/Hearts/PNG/animated/border/heart_animated_2.png', {
+      frameHeight: 17,
+      frameWidth: 17
     })
 
     this.cursors = this.input.keyboard.createCursorKeys()
@@ -185,6 +193,58 @@ export default class ParallaxScene extends Phaser.Scene {
       repeat: -1
     })
 
+    // HEALTH BAR
+
+    healthBar = this.add.sprite(275, 40, 'heart')
+    healthBar.setScale(3)
+
+    this.anims.create({
+      key: 'health1',
+      frames: this.anims.generateFrameNumbers('heart', {
+        start: 0,
+        end: 1
+      }),
+      frameRate: 10
+
+    })
+
+    this.anims.create({
+      key: 'health2',
+      frames: this.anims.generateFrameNumbers('heart', {
+        start: 1,
+        end: 2
+      }),
+      frameRate: 10
+
+    })
+    this.anims.create({
+      key: 'health3',
+      frames: this.anims.generateFrameNumbers('heart', {
+        start: 2,
+        end: 3
+      }),
+      frameRate: 10
+
+    })
+    this.anims.create({
+      key: 'health4',
+      frames: this.anims.generateFrameNumbers('heart', {
+        start: 3,
+        end: 4
+      }),
+      frameRate: 10
+
+    })
+    this.anims.create({
+      key: 'health5',
+      frames: this.anims.generateFrameNumbers('heart', {
+        start: 4,
+        end: 5
+      }),
+      frameRate: 10
+
+    })
+
     // coin and collection
 
     react = this.physics.add.sprite(550, 600, 'react')
@@ -238,14 +298,14 @@ export default class ParallaxScene extends Phaser.Scene {
       player.setVelocityY(-300)
       player.anims.play('jump', true)
     }
-
-    // if (this.cursors.down.isDown)
-    // {
-    //   cam.scrollY += speed
-    // }
-    // if (this.cursors.up.isDown)
-    // {
-    //   cam.scrollY -= speed
-    // }
   }
+
+  // if (this.cursors.down.isDown)
+  // {
+  //   cam.scrollY += speed
+  // }
+  // if (this.cursors.up.isDown)
+  // {
+  //   cam.scrollY -= speed
+  // }
 }
