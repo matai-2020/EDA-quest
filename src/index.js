@@ -1,11 +1,16 @@
+// Libraries
 import Phaser from 'phaser'
 import React from 'react'
 import ReactDOM from 'react-dom'
+import * as firebase from 'firebase'
+
+// React Component
 import App from './components/App.jsx'
 
+// Phaser Scenes
 import dusk from './phaser/scenes/DuskScene'
 import title from './phaser/scenes/TitleScene'
-import * as firebase from 'firebase'
+import jumpLevel from './phaser/scenes/JumpLevel'
 
 var firebaseConfig = {
   apiKey: 'AIzaSyD5DEUiq_fXMfIJpiPH4HUvbXbPGPDP2-0',
@@ -32,7 +37,7 @@ let config = {
       debug: false
     }
   },
-  scene: [ title, dusk ]
+  scene: [title, dusk, jumpLevel]
 }
 
 const game = new Phaser.Game(config)
