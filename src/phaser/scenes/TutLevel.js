@@ -40,10 +40,8 @@ let noQuestion
 
 const askQuestion = () => {
   if (canAsk) {
-    console.log('yes')
     popUp = 2
   } else {
-    console.log('no')
     noQuestion.setText('Please come back with a complete trello card')
   }
 }
@@ -58,8 +56,9 @@ let platform
 let cursors
 
 let ground
-let block
+let base
 let floor
+let wall
 let trigger
 
 let game
@@ -74,9 +73,9 @@ export default class TutLevel extends Phaser.Scene {
 
   preload() {
     // invis walls/triggers
-    this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlockC.png')
-    this.load.image('block', '/assets/blocksTriggers/base.png')
-    this.load.image('wallBlock', '/assets/blocksTriggers/wallBlockC.png')
+    this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
+    this.load.image('base', '/assets/blocksTriggers/base.png')
+    this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
 
     // assets
     this.load.image('react', '/assets/react.svg')
@@ -134,32 +133,20 @@ export default class TutLevel extends Phaser.Scene {
 
     this.add.image(width * 0.5, height * 0.5, 'sky').setScrollFactor(0)
 
-    // createAligned(this, totalWidth, 'mountain', 0.15)
-    // createAligned(this, totalWidth, 'plateau', 0.5)
+    createAligned(this, totalWidth, 'mountain', 0.15)
+    createAligned(this, totalWidth, 'plateau', 0.5)
     createAligned(this, totalWidth, 'ground', 1)
-    // createAligned(this, totalWidth, 'plants', 1.25)
-    // this.add.image(width * 0.5, height * 1, 'platform')
-    //   .setScrollFactor(0)
-
-    // // CREATE PLAFORM GROUP
-    // const platforms = this.physics.add.staticGroup()
-
-    // // How many platforms
-    // for (let i = 0; i < 5; ++i) {
-    //   const x = Phaser.Math.Between(80, 400)
-    //   const y = 150 * i
-
-    //   const platform = platforms.create(x, y, 'platform')
-    //   platform.scale = 0.5
-
-    //   const body = platform.body
-    //   body.updateFromGameObject()
-    // }
+    createAligned(this, totalWidth, 'plants', 1.25)
+    // this.add.image(width * 0.5, height * 1, 'platform').setScrollFactor(0)
 
     // Collider floor & platforms
 
+    wall = this.physics.add.staticGroup()
+    wall.create(-10, 0, 'wallBlock')
+    wall.create(2000, 0, 'wallBlock')
+
     floor = this.physics.add.staticGroup()
-    floor.create(2010, 648, 'block')
+    floor.create(2010, 648, 'base').setScrollFactor(0)
 
     platforms = this.physics.add.staticGroup()
     platforms.create(800, 450, 'platform').setScale(0.4).refreshBody()
@@ -169,7 +156,6 @@ export default class TutLevel extends Phaser.Scene {
     // Tutor
     tutor = this.physics.add.sprite(1100, 535, 'idle')
     tutor.setScale(3)
-    tutor.setCollideWorldBounds(true)
 
     // Tutor trigger
 
@@ -182,7 +168,8 @@ export default class TutLevel extends Phaser.Scene {
     player.body.setGravityY(-100)
 
     // player.setBounce(0.05)
-    player.setCollideWorldBounds(true)
+    player.setCollideWorldBounds(false)
+    player.onWorldBounds = true
 
     this.anims.create({
       key: 'left',
@@ -247,19 +234,23 @@ export default class TutLevel extends Phaser.Scene {
     this.physics.add.overlap(player, trigger, askQuestion, null, this)
 
     // camera follow
-    this.cameras.main.setBounds(0, 0, 3000, 0)
+    this.cameras.main.setBounds(0, 0, 2000, 0)
     this.cameras.main.startFollow(player)
 
     // text
-    scoreText = this.add.text(16, 16, 'Score: 0', {
-      fontSize: '32px',
-      fill: '#000',
-    })
+    scoreText = this.add
+      .text(16, 16, 'Score: 0', {
+        fontSize: '32px',
+        fill: '#000',
+      })
+      .setScrollFactor(0)
 
-    keyText = this.add.text(950, 16, 'Trello: 0', {
-      fontSize: '32px',
-      fill: '#000',
-    })
+    keyText = this.add
+      .text(950, 16, 'Trello: 0', {
+        fontSize: '32px',
+        fill: '#000',
+      })
+      .setScrollFactor(0)
     noQuestion = this.add.text(1000, 470, '', {
       fontSize: '18px',
       fill: '#000',
@@ -267,7 +258,7 @@ export default class TutLevel extends Phaser.Scene {
 
     // colliders
     this.physics.add.collider(floor, [player, react, tutor, trigger])
-    this.physics.add.collider(player, [platforms])
+    this.physics.add.collider(player, [platforms, wall])
   }
 
   update() {
