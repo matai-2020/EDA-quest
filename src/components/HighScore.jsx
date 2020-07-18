@@ -85,7 +85,7 @@ export class HighScore extends React.Component {
               }
             })}
           </ol>
-
+          <img src='/assets/Jungle/jungleHighscore.png' className='jungle-background'/>
         </div>
       )
     } else return <></>
