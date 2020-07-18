@@ -37,7 +37,10 @@ const loseHp = () => {
     isAlive = false
     healthBar.anims.play(`health${health}`, true)
     explode.anims.play('death', true)
-    setTimeout(() => { player.disableBody(true, true) }, 100)
+    setTimeout(() => {
+      player.disableBody(true, true)
+      healthBar.disableBody(true, true)
+    }, 100)
     setTimeout(() => { gameOver(isAlive) }, 2000)
   }
 }
@@ -163,7 +166,7 @@ export default class ParallaxScene extends Phaser.Scene {
     player.setScale(3)
     player.body.setGravityY(-100)
 
-    console.log(player.body)
+    // console.log(player.body)
 
     player.setBounce(0.2)
     player.setCollideWorldBounds(true)
@@ -203,9 +206,10 @@ export default class ParallaxScene extends Phaser.Scene {
     })
 
     // HEALTH BAR
+    healthBar = this.physics.add.sprite(player.body.position.x + 15, player.body.position.y - 40, 'heart')
+    healthBar.setScale(2)
 
-    healthBar = this.add.sprite(275, 40, 'heart')
-    healthBar.setScale(3)
+    console.log(healthBar)
 
     this.anims.create({
       key: 'health1',
@@ -307,6 +311,11 @@ export default class ParallaxScene extends Phaser.Scene {
       player.setVelocityY(-300)
       player.anims.play('jump', true)
     }
+
+    // HEALTHBAR ABOVE PLAYER
+
+    healthBar.body.position.x = player.body.position.x + 15
+    healthBar.body.position.y = player.body.position.y - 40
 
     // DEATH ANIMATION
 
