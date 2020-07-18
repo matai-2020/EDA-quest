@@ -84,6 +84,7 @@ export default class TutLevel extends Phaser.Scene {
     this.load.image('mountain', '/assets/Jungle/mountains.png')
     this.load.image('plateau', '/assets/Jungle/plateau.png')
     this.load.image('ground', '/assets/Jungle/ground.png')
+    this.load.image('arrow-keys', '/assets/Jungle/arrow-keys.png')
     this.load.image(
       'platform',
       '/assets/airpack/PNG/Environment/ground_grass.png'
@@ -150,6 +151,10 @@ export default class TutLevel extends Phaser.Scene {
 
     platforms = this.physics.add.staticGroup()
     platforms.create(800, 450, 'platform').setScale(0.4).refreshBody()
+
+    // background images
+
+    this.add.image(300, 580, 'arrow-keys').setScale(0.2)
 
     // Character sprites
 
