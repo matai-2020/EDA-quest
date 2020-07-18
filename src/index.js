@@ -7,6 +7,7 @@ import parallax from './phaser/scenes/ParallaxScene'
 import title from './phaser/scenes/TitleScene'
 import tutLevel from './phaser/scenes/TutLevel'
 import * as firebase from 'firebase'
+import JumpLevel from './phaser/scenes/JumpLevel'
 
 var firebaseConfig = {
   apiKey: 'AIzaSyD5DEUiq_fXMfIJpiPH4HUvbXbPGPDP2-0',
@@ -29,11 +30,11 @@ let config = {
   physics: {
     default: 'arcade',
     arcade: {
-      gravity: { y: 300 },
+      gravity: { y: 420 },
       debug: false,
     },
   },
-  scene: [tutLevel],
+  scene: [JumpLevel],
 }
 
 const game = new Phaser.Game(config)
