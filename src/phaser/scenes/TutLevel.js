@@ -66,6 +66,8 @@ let game
 let keyText
 let keyAmount = 0
 
+let worldWidth = 1800
+
 export default class TutLevel extends Phaser.Scene {
   constructor() {
     super('parallax-scene')
@@ -144,7 +146,7 @@ export default class TutLevel extends Phaser.Scene {
 
     wall = this.physics.add.staticGroup()
     wall.create(-10, 0, 'wallBlock')
-    wall.create(2000, 0, 'wallBlock')
+    wall.create(worldWidth, 0, 'wallBlock')
 
     floor = this.physics.add.staticGroup()
     floor.create(2010, 648, 'base').setScrollFactor(0)
@@ -170,7 +172,7 @@ export default class TutLevel extends Phaser.Scene {
 
     player = this.physics.add.sprite(100, 500, 'idle')
     player.setScale(3)
-    player.body.setGravityY(-100)
+    player.body.setGravityY(60)
 
     // player.setBounce(0.05)
     player.setCollideWorldBounds(false)
@@ -240,7 +242,7 @@ export default class TutLevel extends Phaser.Scene {
     this.physics.add.overlap(player, trigger, askQuestion, null, this)
 
     // camera follow
-    this.cameras.main.setBounds(0, 0, 2000, 0)
+    this.cameras.main.setBounds(0, 0, worldWidth, 0)
     this.cameras.main.startFollow(player)
 
     // text
