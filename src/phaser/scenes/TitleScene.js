@@ -9,18 +9,18 @@ import Phaser from 'phaser'
  */
 
 export default class TitleScene extends Phaser.Scene {
-  constructor() {
+  constructor () {
     super('title-scene')
   }
 
-  preload() {
+  preload () {
     // this.load.image('sky', '/assets/Jungle/sky.png')
     this.load.image('dark-forest', '/assets/Game/dark-forest.png')
     this.load.image('start', '/assets/Game/start.png')
   }
 
-  create(score) {
-    console.log(score)
+  create (score) {
+    // console.log(score)
     this.add.image(500, 300, 'dark-forest').setScale(2.5)
     this.add.image(window.innerWidth / 2, 400, 'start').setScale(0.5)
 
