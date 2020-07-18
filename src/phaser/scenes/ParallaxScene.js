@@ -36,6 +36,7 @@ const loseHp = () => {
   if (health === 4) {
     isAlive = false
     healthBar.anims.play(`health${health}`, true)
+    explode.anims.play('death', true)
     gameOver(isAlive)
   } console.log(health)
 }
@@ -55,6 +56,9 @@ let ground
 let block
 let floor
 let isAlive = true
+let explode
+let playerX
+let playerY
 
 let keyText
 let keyAmount = 0
@@ -101,6 +105,10 @@ export default class ParallaxScene extends Phaser.Scene {
       frameWidth: 17
     })
 
+    this.load.spritesheet('explode', '/assets/Game/explosion.png', {
+      frameWidth: 125.4,
+      frameHeight: 107
+    })
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
@@ -155,6 +163,8 @@ export default class ParallaxScene extends Phaser.Scene {
     player = this.physics.add.sprite(100, 500, 'idle')
     player.setScale(3)
     player.body.setGravityY(-100)
+
+    console.log(player.body)
 
     player.setBounce(0.2)
     player.setCollideWorldBounds(true)
@@ -298,6 +308,21 @@ export default class ParallaxScene extends Phaser.Scene {
       player.setVelocityY(-300)
       player.anims.play('jump', true)
     }
+
+    // DEATH ANIMATION
+
+    explode = this.add.sprite(player.body.position.x, player.body.position.y, 'explode')
+    explode.setScale(1.4)
+
+    this.anims.create({
+      key: 'death',
+      frames: this.anims.generateFrameNumbers('explode', {
+        start: 0,
+        end: 15
+      }),
+      frameRate: 24
+
+    })
   }
 
   // if (this.cursors.down.isDown)
