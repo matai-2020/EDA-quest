@@ -20,24 +20,9 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
     x += m.width
   }
 }
-let jumpUp = false
-let scoreJumpScene = 0
+
+let scoreTut = 0
 let scoreText
-
-const airUp = () => {
-  if (!jumpUp) {
-    jumpUp = true
-  }
-}
-
-const airDown = () => {
-  jumpUp = false
-}
-
-const bounce = (player, spring) => {
-  airUp()
-  setTimeout(airDown, 500)
-}
 
 let checkText
 let checkAmount = 0
@@ -46,13 +31,13 @@ let checksToPass = '1'
 const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
     type.disableBody(true, true)
-    scoreJumpScene += 10
-    scoreText.setText('Score: ' + scoreJumpScene)
+    scoreTut += 10
+    scoreText.setText('Score: ' + scoreTut)
   } else {
     type.disableBody(true, true)
-    scoreJumpScene += 20
+    scoreTut += 20
     checkAmount += 1
-    scoreText.setText('Score: ' + scoreJumpScene)
+    scoreText.setText('Score: ' + scoreTut)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
     if (checkAmount == checksToPass) {
       canAsk = true
@@ -64,13 +49,12 @@ let canAsk = false
 let popUp = 0
 let notYet
 let noQuestion
-let jumpSceneComplete = false
 
 const askQuestion = () => {
   if (canAsk) {
     noQuestion.setText('Congrats, you have completed your trello card!')
     setTimeout(() => {
-      jumpSceneComplete = true
+      tutLevelComplete = true
     }, 1000)
   } else {
     noQuestion.setText('Please come back with a complete trello card')
@@ -96,13 +80,13 @@ let bump
 
 let game
 
-let keyText
-let keyAmount = 0
+let tutLevelComplete = false
+
 let worldWidth = 2000
 
-export default class JumpLevel extends Phaser.Scene {
+export default class TutLevel extends Phaser.Scene {
   constructor() {
-    super('jump-scene')
+    super('tut-level')
   }
 
   preload() {
@@ -201,6 +185,11 @@ export default class JumpLevel extends Phaser.Scene {
     // })
     // background images
 
+    this.add.image(150, 475, 'arrow-keys').setScale(0.2)
+    this.add.image(700, 450, 'reactText').setScale(0.6)
+    this.add.image(1400, 400, 'checkText').setScale(0.6)
+    this.add.image(1150, 475, 'up-key').setScale(0.2)
+
     // Character sprites
 
     // Tutor
@@ -282,12 +271,12 @@ export default class JumpLevel extends Phaser.Scene {
     // Interactive Sprites
 
     // Spring
-    spring = this.physics.add.staticImage(550, 600, 'spring')
-    spring.setScale(1)
-    spring.body.checkCollision.up = false
-    spring.body.checkCollision.left = false
-    spring.body.checkCollision.right = false
-    this.physics.add.overlap(spring, player, bounce, null, this)
+    // spring = this.physics.add.staticImage(550, 600, 'spring')
+    // spring.setScale(1)
+    // spring.body.checkCollision.up = false
+    // spring.body.checkCollision.left = false
+    // spring.body.checkCollision.right = false
+    // this.physics.add.overlap(spring, player, bounce, null, this)
     // console.log(spring)
 
     // coin and collection
@@ -332,8 +321,8 @@ export default class JumpLevel extends Phaser.Scene {
     })
 
     // colliders
-    this.physics.add.collider(floor, [player, react, tutor, trigger, spring])
-    this.physics.add.collider(player, [platforms, wall, spring])
+    this.physics.add.collider([floor, bump], [player, react, tutor, trigger])
+    this.physics.add.collider(player, [platforms, wall, bump])
   }
 
   update() {
@@ -375,11 +364,8 @@ export default class JumpLevel extends Phaser.Scene {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
     }
-    if (jumpUp) {
-      player.setVelocityY(-400)
-      if (facing === 'left') {
-        player.anims.play('jumpLeft', true)
-      } else player.anims.play('jumpRight', true)
+    if (tutLevelComplete) {
+      this.scene.start('jump-scene', scoreTut)
     }
   }
 }

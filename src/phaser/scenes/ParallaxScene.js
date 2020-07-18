@@ -101,7 +101,7 @@ export default class ParallaxScene extends Phaser.Scene {
       frameWidth: 21,
       frameHeight: 33
     })
-    this.load.spritesheet('idle', '/assets/man/idle.png', {
+    this.load.spritesheet('idle', '/assets/man/idleLeft.png', {
       frameWidth: 19,
       frameHeight: 34
     })
@@ -146,9 +146,6 @@ export default class ParallaxScene extends Phaser.Scene {
     player = this.physics.add.sprite(100, 500, 'idle')
     player.setScale(3)
     player.body.setGravityY(-100)
-
-    // console.log(player.body)
-
     player.setBounce(0.2)
     player.setCollideWorldBounds(true)
 

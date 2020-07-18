@@ -12,6 +12,7 @@ import dusk from './phaser/scenes/DuskScene'
 import title from './phaser/scenes/TitleScene'
 import jumpLevel from './phaser/scenes/JumpLevel'
 import parallax from './phaser/scenes/ParallaxScene'
+import tutLevel from './phaser/scenes/TutLevel'
 
 var firebaseConfig = {
   apiKey: 'AIzaSyD5DEUiq_fXMfIJpiPH4HUvbXbPGPDP2-0',
@@ -21,7 +22,7 @@ var firebaseConfig = {
   storageBucket: 'eda-quest.appspot.com',
   messagingSenderId: '574152578233',
   appId: '1:574152578233:web:c375548e8908c8aaf93768',
-  measurementId: 'G-XS0WPPZRYR'
+  measurementId: 'G-XS0WPPZRYR',
 }
 
 firebase.initializeApp(firebaseConfig)
@@ -35,10 +36,10 @@ let config = {
     default: 'arcade',
     arcade: {
       gravity: { y: 420 },
-      debug: false
-    }
+      debug: false,
+    },
   },
-  scene: [title, dusk, jumpLevel, parallax]
+  scene: [parallax, tutLevel, dusk, jumpLevel],
 }
 
 const game = new Phaser.Game(config)
@@ -49,7 +50,7 @@ window.onscroll = function () {
   scrollFunction()
 }
 
-function scrollFunction () {
+function scrollFunction() {
   if (document.body.scrollTop >= 1 || document.documentElement.scrollTop >= 1) {
     document.getElementById('logo').style.width = '10px'
     document.getElementById('logo').style.visibility = 'hidden'
