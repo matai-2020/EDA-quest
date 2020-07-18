@@ -134,11 +134,10 @@ export default class TutLevel extends Phaser.Scene {
 
     this.add.image(width * 0.5, height * 0.5, 'sky').setScrollFactor(0)
 
-    // createAligned(this, totalWidth, 'mountain', 0.15)
-    // createAligned(this, totalWidth, 'plateau', 0.5)
+    createAligned(this, totalWidth, 'mountain', 0.15)
+    createAligned(this, totalWidth, 'plateau', 0.5)
     createAligned(this, totalWidth, 'ground', 1)
-    // createAligned(this, totalWidth, 'plants', 1.25)
-    // this.add.image(width * 0.5, height * 1, 'platform').setScrollFactor(0)
+    createAligned(this, totalWidth, 'plants', 1.25)
 
     // Collider floor & platforms
 
