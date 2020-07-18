@@ -21,7 +21,7 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   }
 }
 let jumpUp = false
-let score = 0
+let scoreJumpScene = 0
 let scoreText
 
 const airUp = () => {
@@ -39,12 +39,24 @@ const bounce = (player, spring) => {
   setTimeout(airDown, 500)
 }
 
-const collectScore = (player, react) => {
-  react.disableBody(true, true)
-  score += 1
-  scoreText.setText('Score: ' + score)
-  if (score === 1) {
-    canAsk = true
+let checkText
+let checkAmount = 0
+let checksToPass = '1'
+
+const collectScore = (player, type) => {
+  if (type.texture.key === 'react') {
+    type.disableBody(true, true)
+    scoreJumpScene += 10
+    scoreText.setText('Score: ' + scoreJumpScene)
+  } else {
+    type.disableBody(true, true)
+    scoreJumpScene += 20
+    checkAmount += 1
+    scoreText.setText('Score: ' + scoreJumpScene)
+    checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
+    if (checkAmount == checksToPass) {
+      canAsk = true
+    }
   }
 }
 
@@ -52,12 +64,13 @@ let canAsk = false
 let popUp = 0
 let notYet
 let noQuestion
+let jumpSceneComplete = false
 
 const askQuestion = () => {
   if (canAsk) {
     noQuestion.setText('Congrats, you have completed your trello card!')
     setTimeout(() => {
-      tutLevelComplete = true
+      jumpSceneComplete = true
     }, 1000)
   } else {
     noQuestion.setText('Please come back with a complete trello card')
@@ -187,11 +200,6 @@ export default class JumpLevel extends Phaser.Scene {
     //     (platform.body.checkCollision.down = false)
     // })
     // background images
-
-    this.add.image(150, 475, 'arrow-keys').setScale(0.2)
-    this.add.image(700, 450, 'reactText').setScale(0.6)
-    this.add.image(1400, 400, 'checkText').setScale(0.6)
-    this.add.image(1150, 475, 'up-key').setScale(0.2)
 
     // Character sprites
 

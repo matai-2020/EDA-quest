@@ -39,7 +39,7 @@ const collectScore = (player, type) => {
     checkAmount += 1
     scoreText.setText('Score: ' + scoreTut)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
-    if (checkAmount === 1) {
+    if (checkAmount == checksToPass) {
       canAsk = true
     }
   }
@@ -271,12 +271,12 @@ export default class TutLevel extends Phaser.Scene {
     // Interactive Sprites
 
     // Spring
-    spring = this.physics.add.staticImage(550, 600, 'spring')
-    spring.setScale(1)
-    spring.body.checkCollision.up = false
-    spring.body.checkCollision.left = false
-    spring.body.checkCollision.right = false
-    this.physics.add.overlap(spring, player, bounce, null, this)
+    // spring = this.physics.add.staticImage(550, 600, 'spring')
+    // spring.setScale(1)
+    // spring.body.checkCollision.up = false
+    // spring.body.checkCollision.left = false
+    // spring.body.checkCollision.right = false
+    // this.physics.add.overlap(spring, player, bounce, null, this)
     // console.log(spring)
 
     // coin and collection
@@ -365,7 +365,7 @@ export default class TutLevel extends Phaser.Scene {
       } else player.anims.play('jumpRight', true)
     }
     if (tutLevelComplete) {
-      this.scene.start('title-scene', scoreTut)
+      this.scene.start('jump-scene', scoreTut)
     }
   }
 }
