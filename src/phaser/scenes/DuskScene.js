@@ -7,6 +7,7 @@ import Phaser from 'phaser'
  * @param {string} texture
  * @param {number} scrollFactor
  */
+
 const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   const getWidth = scene.textures.get(texture).getSourceImage().width
   const count = Math.ceil(totalWidth / getWidth) * scrollFactor
@@ -70,7 +71,7 @@ let worldWidth = 3000
 
 export default class TutLevel extends Phaser.Scene {
   constructor () {
-    super('parallax-scene')
+    super('dusk-scene')
   }
 
   preload () {
@@ -142,10 +143,10 @@ export default class TutLevel extends Phaser.Scene {
     const totalWidth = width * 10
 
     this.add.image(width * 0.5, height * 0.5, 'background').setScale(5).setScrollFactor(0)
-    this.add.image(600, 300, 'far-mount').setScale(4).setScrollFactor(0)
+    this.add.image(800, 300, 'far-mount').setScale(4).setScrollFactor(0)
     this.add.image(700, 400, 'near-mount').setScale(3).setScrollFactor(0.05)
-    this.add.image(700, 280, 'far-trees').setScale(4.5).setScrollFactor(0.1)
-    this.add.image(1000, 230, 'near-trees').setScale(5).setScrollFactor(0.7)
+    this.add.image(800, 300, 'far-trees').setScale(4.5).setScrollFactor(0.4)
+    this.add.image(1200, 230, 'near-trees').setScale(5).setScrollFactor(0.7)
 
     // createAligned(this, totalWidth, 'mountain', 0.15)
     // createAligned(this, totalWidth, 'plateau', 0.5)
@@ -153,7 +154,7 @@ export default class TutLevel extends Phaser.Scene {
     // createAligned(this, totalWidth, 'plants', 1.25)
     // this.add.image(width * 0.5, height * 1, 'platform').setScrollFactor(0)
 
-    // Collider floor & platforms
+    // Collider floor
 
     wall = this.physics.add.staticGroup()
     wall.create(-10, 0, 'wallBlock')
@@ -162,18 +163,33 @@ export default class TutLevel extends Phaser.Scene {
     floor = this.physics.add.staticGroup()
     floor.create(2010, 648, 'base').setScrollFactor(0)
 
-    platforms = this.physics.add.staticGroup()
-    platforms.create(800, 450, 'platform').setScale(0.4).refreshBody()
+    // Platforms
+
+    let platforms = this.physics.add.staticGroup()
+    platforms.create(500, 510, 'platform').setScale(0.4).refreshBody()
+    platforms.create(600, 600, 'platform').setScale(0.4).refreshBody()
+
+    platforms.children.entries.forEach(platform => {
+      platform.body.checkCollision.left = false
+      platform.body.checkCollision.right = false
+      platform.body.checkCollision.down = false
+    })
+
+    // let platform3 = this.physics.add.staticGroup()
+    // platform3.create(800, 450, 'platform').setScale(0.4).refreshBody()
 
     // Character sprites
 
     // Tutor
-    tutor = this.physics.add.sprite(1100, 535, 'idle')
+    let tutorAxisX = 2900
+    let tutorAxisY = 535
+
+    tutor = this.physics.add.sprite(tutorAxisX, tutorAxisY, 'idleLeft')
     tutor.setScale(3)
 
     // Tutor trigger
 
-    trigger = this.physics.add.sprite(1100, 535, 'triggerBlock')
+    trigger = this.physics.add.sprite(tutorAxisX, tutorAxisY, 'triggerBlock')
 
     // Player sprite
 
@@ -242,7 +258,7 @@ export default class TutLevel extends Phaser.Scene {
 
     // coin and collection
 
-    react = this.physics.add.sprite(550, 600, 'react')
+    react = this.physics.add.sprite(550, 200, 'react')
     react.setScale(0.2)
 
     this.physics.add.overlap(player, react, collectScore, null, this)
@@ -266,13 +282,19 @@ export default class TutLevel extends Phaser.Scene {
         fill: '#000'
       })
       .setScrollFactor(0)
-    noQuestion = this.add.text(1000, 470, '', {
+
+    noQuestion = this.add.text(tutorAxisX - 480, tutorAxisY - 250, '', {
       fontSize: '18px',
       fill: '#000'
     })
 
+    this.add.image(1500, 400, 'near-trees').setScale(5.5).setScrollFactor(2.5)
+    this.add.image(3500, 400, 'near-trees').setScale(5.5).setScrollFactor(2.5)
+    this.add.image(5000, 400, 'near-trees').setScale(5.5).setScrollFactor(2.5)
+
     // colliders
     this.physics.add.collider(floor, [player, react, tutor, trigger])
+    this.physics.add.collider(react, [platforms])
     this.physics.add.collider(player, [platforms, wall])
   }
 
