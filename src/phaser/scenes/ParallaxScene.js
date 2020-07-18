@@ -37,7 +37,7 @@ const loseHp = () => {
     isAlive = false
     healthBar.anims.play(`health${health}`, true)
     explode.anims.play('death', true)
-    setTimeout(() => { player.setScale(0) }, 100)
+    setTimeout(() => { player.disableBody(true, true) }, 100)
     setTimeout(() => { gameOver(isAlive) }, 2000)
   }
 }
@@ -317,7 +317,7 @@ export default class ParallaxScene extends Phaser.Scene {
       key: 'death',
       frames: this.anims.generateFrameNumbers('explode', {
         start: 0,
-        end: 15
+        end: 16
       }),
       frameRate: 24
 
