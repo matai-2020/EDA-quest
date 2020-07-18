@@ -5,7 +5,7 @@ import App from './components/App.jsx'
 
 import dusk from './phaser/scenes/DuskScene'
 import title from './phaser/scenes/TitleScene'
-import { playGame } from './phaser/scene'
+import tutLevel from './phaser/scenes/TutLevel'
 import * as firebase from 'firebase'
 
 var firebaseConfig = {
@@ -33,7 +33,7 @@ let config = {
       debug: false
     }
   },
-  scene: [dusk]
+  scene: [tutLevel]
 }
 
 const game = new Phaser.Game(config)
