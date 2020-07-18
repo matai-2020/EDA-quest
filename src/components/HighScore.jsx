@@ -6,7 +6,8 @@ export class HighScore extends React.Component {
   state = {
     score: 0,
     name: '',
-    highScores: []
+    highScores: [],
+    isAlive: true
   }
   componentDidMount () {
     this.updateData()
@@ -14,7 +15,14 @@ export class HighScore extends React.Component {
     subscribe((score) => {
       this.setState({
         score
+
       })
+      subscribe((isAlive) => {
+        this.setState({
+          isAlive
+        })
+      })
+      console.log(this.state)
     })
   }
 
@@ -60,20 +68,27 @@ export class HighScore extends React.Component {
   }
 
   render () {
-    return (
-      <div>
-        <ul>
-          {this.state.highScores.map(player => {
-            let indexKey = this.state.highScores.indexOf(player)
-            return (
-              <li key={indexKey}>{player.name}: {player.score}</li>
-            )
-          })}
-        </ul>
-        <input onChange={this.nameChange}></input>
-        <button onClick={() => this.clickHandler()}>Submit Score</button>
-      </div>
-    )
+    if (this.state.isAlive === false) {
+      return (
+        <div className='score-container reveal'>
+          <img className='game-over' src="/assets/Game/game-over.png" alt="Quest Logo" />
+          <input type='text' placeholder='Your Name' className='name-input' onChange={this.nameChange}></input>
+          <button className='submit-button' onClick={() => this.clickHandler()}>Submit Score</button>
+          <p>Final Score: {this.state.score}</p>
+          <ol className='score-list'>
+            {this.state.highScores.map(player => {
+              let indexKey = this.state.highScores.indexOf(player)
+              if (indexKey < 10) {
+                return (
+                  <li className='rank' key={indexKey}>{player.name}: {player.score}</li>
+                )
+              }
+            })}
+          </ol>
+
+        </div>
+      )
+    } else return <></>
   }
 }
 
