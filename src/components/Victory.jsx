@@ -9,6 +9,7 @@ export class Victory extends React.Component {
     highScores: [],
     wonGame: false
   }
+
   componentDidMount () {
     this.updateData()
     this.getHighScores()
@@ -48,7 +49,7 @@ export class Victory extends React.Component {
   }
 
   clickHandler () {
-    let childName = this.state.highScores.length
+    const childName = this.state.highScores.length
     const queryData = firebase.database().ref('highScores/').child(childName)
     if (this.state.name.length > 0) {
       queryData.set({
@@ -78,7 +79,7 @@ export class Victory extends React.Component {
           <p>Final Score: {this.state.score}</p>
           <ol className='score-list'>
             {this.state.highScores.map(player => {
-              let indexKey = this.state.highScores.indexOf(player)
+              const indexKey = this.state.highScores.indexOf(player)
               if (indexKey < 10) {
                 return (
                   <li className='rank' key={indexKey}>{player.name}: {player.score}</li>
