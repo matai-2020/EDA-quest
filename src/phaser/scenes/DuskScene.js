@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import { scoreChanged } from '../score'
 
 /**
  *
@@ -26,13 +27,15 @@ let score = 0
 let currentSceneScore = 0
 let scoreText
 let checkAmount = 0
+let check
 let checkText
-let checksToPass = '1'
+const checksToPass = '1'
 
 const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
     type.disableBody(true, true)
     currentSceneScore += 10
+    scoreChanged(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
     if (checkAmount == checksToPass) {
       canAsk = true
@@ -41,6 +44,7 @@ const collectScore = (player, type) => {
     type.disableBody(true, true)
     currentSceneScore += 20
     checkAmount += 1
+    scoreChanged(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
     if (checkAmount == checksToPass) {
@@ -90,6 +94,7 @@ export default class DuskScene extends Phaser.Scene {
 
     // dusk assets
     this.load.image('react', '/assets/react.svg')
+    this.load.image('check', '/assets/check.png')
     this.load.image('background', '/assets/Dusk/dusk-bg.png')
     this.load.image('far-mount', '/assets/Dusk/dusk-far-mount.png')
     this.load.image('near-mount', '/assets/Dusk/dusk-near-mount.png')
@@ -166,7 +171,7 @@ export default class DuskScene extends Phaser.Scene {
     wall.create(worldWidth, 0, 'wallBlock')
 
     floor = this.physics.add.staticGroup()
-    floor.create(2010, 648, 'base').setScrollFactor(0)
+    floor.create(2010, 643, 'base').setScrollFactor(0)
 
     // Platforms
 
@@ -264,6 +269,11 @@ export default class DuskScene extends Phaser.Scene {
     react.setScale(0.2)
 
     this.physics.add.overlap(player, react, collectScore, null, this)
+
+    check = this.physics.add.staticGroup()
+    check.create(1000, 550, 'check').setScale(0.08).refreshBody()
+
+    this.physics.add.overlap(player, check, collectScore, null, this)
     this.physics.add.overlap(player, trigger, askQuestion, null, this)
 
     // camera follow
@@ -276,7 +286,6 @@ export default class DuskScene extends Phaser.Scene {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
         fill: 'white'
-        // fill: '#000'
       })
       .setScrollFactor(0)
 
@@ -285,14 +294,12 @@ export default class DuskScene extends Phaser.Scene {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
         fill: 'white'
-        // fill: '#000'
       })
       .setScrollFactor(0)
 
     noQuestion = this.add.text(tutorAxisX - 480, tutorAxisY - 250, '', {
       fontSize: '18px',
       fill: 'white'
-      // fill: '#000'
     })
 
     this.add.image(1500, 400, 'near-trees').setScale(5.5).setScrollFactor(2.5)
@@ -300,7 +307,7 @@ export default class DuskScene extends Phaser.Scene {
     this.add.image(5000, 400, 'near-trees').setScale(5.5).setScrollFactor(2.5)
 
     // colliders
-    this.physics.add.collider([floor], [player, react, tutor, trigger])
+    this.physics.add.collider([floor], [player, check, react, tutor, trigger])
     this.physics.add.collider(player, [platforms, wall])
   }
 

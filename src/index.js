@@ -47,21 +47,21 @@ const game = new Phaser.Game(config)
 
 // Game Logo disappears on scroll
 
-// window.onscroll = function () {
-//   scrollFunction()
-// }
+window.onscroll = function () {
+  scrollFunction()
+}
 
-// function scrollFunction () {
-//   if (document.body.scrollTop >= 1 || document.documentElement.scrollTop >= 1) {
-//     document.getElementById('logo').style.width = '10px'
-//     document.getElementById('logo').style.visibility = 'hidden'
-//   } else {
-//     document.getElementById('logo').style.visibility = 'visible'
-//     document.getElementById('logo').style.width = '900px'
-//     document.getElementById('logo').style.marginTop = '150px'
-//     document.getElementById('logo').style.marginBottom = '230px'
-//   }
-// }
+function scrollFunction () {
+  if (document.body.scrollTop >= 1 || document.documentElement.scrollTop >= 1) {
+    document.getElementById('logo').style.width = '10px'
+    document.getElementById('logo').style.visibility = 'hidden'
+  } else {
+    document.getElementById('logo').style.visibility = 'visible'
+    document.getElementById('logo').style.width = '900px'
+    document.getElementById('logo').style.marginTop = '150px'
+    document.getElementById('logo').style.marginBottom = '230px'
+  }
+}
 
 ReactDOM.render(
   <App />,

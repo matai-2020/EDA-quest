@@ -22,11 +22,15 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   }
 }
 
-let score = 0
+const score = 0
 let scoreText
 let currentSceneScore = 0
+let checkAmount = 0
+let check
+let checkText
+const checksToPass = '1'
 
-const collectScore = (player, react) => {
+const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
     type.disableBody(true, true)
     currentSceneScore += 10
@@ -37,20 +41,24 @@ const collectScore = (player, react) => {
     checkAmount += 1
     scoreText.setText('Score: ' + currentSceneScore)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
-    // if (checkAmount == checksToPass) {
-    //   canAsk = true
-    // }
+    if (checkAmount == checksToPass) {
+      canAsk = true
+    }
   }
 }
 
 let canAsk = false
-let popUp = 0
-let notYet
 let noQuestion
+let citySceneComplete = false
+const popUp = 0
+let notYet
 
 const askQuestion = () => {
   if (canAsk) {
-    popUp = 2
+    noQuestion.setText('Congrats, you have completed your trello card!')
+    setTimeout(() => {
+      citySceneComplete = true
+    }, 1000)
   } else {
     noQuestion.setText('Please come back with a complete trello card')
   }
@@ -74,9 +82,9 @@ let trigger
 let game
 
 let keyText
-let keyAmount = 0
+const keyAmount = 0
 
-let worldWidth = window.innerWidth - 100
+const worldWidth = window.innerWidth - 100
 
 export default class CityScene extends Phaser.Scene {
   constructor () {
@@ -124,7 +132,7 @@ export default class CityScene extends Phaser.Scene {
       frameWidth: 21,
       frameHeight: 33
     })
-    this.load.spritesheet('idleRight', '/assets/man/idle.png', {
+    this.load.spritesheet('idleRight', '/assets/man/idleRight.png', {
       frameWidth: 19,
       frameHeight: 34
     })
@@ -159,7 +167,7 @@ export default class CityScene extends Phaser.Scene {
     wall.create(worldWidth, 0, 'wallBlock')
 
     floor = this.physics.add.staticGroup()
-    floor.create(2010, 800, 'base').setScrollFactor(0)
+    floor.create(2010, 780, 'base').setScrollFactor(0)
 
     // Platforms
 
@@ -221,8 +229,8 @@ export default class CityScene extends Phaser.Scene {
     })
 
     this.anims.create({
-      key: 'idle',
-      frames: this.anims.generateFrameNumbers('idle', { start: 0, end: 11 }),
+      key: 'idleRight',
+      frames: this.anims.generateFrameNumbers('idleRight', { start: 0, end: 11 }),
       frameRate: 10,
       repeat: -1
     })
@@ -268,20 +276,18 @@ export default class CityScene extends Phaser.Scene {
 
     // text
     scoreText = this.add
-      .text(16, 16, 'Score: 0', {
+      .text(16, 16, 'Score: ' + currentSceneScore, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
         fill: 'white'
-        // fill: '#000'
       })
       .setScrollFactor(0)
 
-    keyText = this.add
-      .text(width - 200, 16, 'Trello: 0', {
+    checkText = this.add
+      .text(width - 300, 16, 'Trello: 0 / ' + checksToPass, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
         fill: 'white'
-        // fill: '#000'
       })
       .setScrollFactor(0)
 
@@ -334,6 +340,9 @@ export default class CityScene extends Phaser.Scene {
       if (facing === 'left') {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
+    }
+    if (citySceneComplete) {
+      // do something
     }
   }
 }
