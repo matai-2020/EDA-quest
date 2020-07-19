@@ -31,7 +31,7 @@ const config = {
   parent: 'phaser',
   type: Phaser.AUTO,
   width: window.innerWidth - 100,
-  height: window.innerHeight,
+  height: window.innerHeight - 20,
   physics: {
     default: 'arcade',
     arcade: {
