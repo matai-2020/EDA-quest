@@ -22,54 +22,56 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   }
 }
 
-let score = 0
+let scoreDusk = 0
 let scoreText
 
-const collectScore = (player, react) => {
-  react.disableBody(true, true)
-  score += 1
-  scoreText.setText('Score: ' + score)
-  if (score === 1) {
-    canAsk = true
+let checkText
+let checkAmount = 0
+const checksToPass = 1
+
+const collectScore = (player, type) => {
+  if (type.texture.key === 'react') {
+    type.disableBody(true, true)
+    scoreDusk += 10
+    scoreText.setText('Score: ' + scoreDusk)
+  } else {
+    type.disableBody(true, true)
+    scoreDusk += 20
+    checkAmount += 1
+    scoreText.setText('Score: ' + scoreDusk)
+    checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
+    if (checkAmount === checksToPass) {
+      canAsk = true
+    }
   }
 }
 
 let canAsk = false
-let popUp = 0
-let notYet
 let noQuestion
+let duskLevelComplete = false
 
 const askQuestion = () => {
   if (canAsk) {
-    popUp = 2
+    noQuestion.setText('Congrats, you have completed your trello card!')
+    setTimeout(() => {
+      duskLevelComplete = true
+    }, 1000)
   } else {
     noQuestion.setText('Please come back with a complete trello card')
   }
 }
 
 let facing = ''
-
 let react
 let tutor
 let player
-let platforms
-let platform
-let cursors
-
-let ground
-let base
 let floor
 let wall
 let trigger
 
-let game
+const worldWidth = 3000
 
-let keyText
-let keyAmount = 0
-
-let worldWidth = 3000
-
-export default class DuskScene extends Phaser.Scene {
+export default class TutLevel extends Phaser.Scene {
   constructor () {
     super('dusk-scene')
   }
@@ -89,11 +91,11 @@ export default class DuskScene extends Phaser.Scene {
     this.load.image('near-trees', '/assets/Dusk/dusk-near-trees.png')
     // assets
     this.load.image('react', '/assets/react.svg')
-    this.load.image('platform', '/assets/Jungle/platform.png')
+    this.load.image('platform', '/assets/Dusk/platform.png')
     this.load.image('sky', '/assets/Jungle/sky.png')
     this.load.image('mountain', '/assets/Jungle/mountains.png')
     this.load.image('plateau', '/assets/Jungle/plateau.png')
-    this.load.image('ground', '/assets/Jungle/ground.png')
+    this.load.image('ground', '/assets/Dusk/duskGround.png')
     this.load.image('arrow-keys', '/assets/Jungle/arrow-keys.png')
     this.load.image(
       'platform',
@@ -118,7 +120,7 @@ export default class DuskScene extends Phaser.Scene {
       frameWidth: 21,
       frameHeight: 33
     })
-    this.load.spritesheet('idle', '/assets/man/idle.png', {
+    this.load.spritesheet('idleRight', '/assets/man/idleRight.png', {
       frameWidth: 19,
       frameHeight: 34
     })
@@ -168,7 +170,7 @@ export default class DuskScene extends Phaser.Scene {
 
     // Platforms
 
-    let platforms = this.physics.add.staticGroup()
+    const platforms = this.physics.add.staticGroup()
     platforms.create(500, 510, 'platform').setScale(0.4).refreshBody()
     platforms.create(600, 600, 'platform').setScale(0.4).refreshBody()
 
@@ -184,19 +186,21 @@ export default class DuskScene extends Phaser.Scene {
     // Character sprites
 
     // Tutor
-    let tutorAxisX = 2900
-    let tutorAxisY = 535
+    const tutorAxisX = 2900
+    const tutorAxisY = 535
 
     tutor = this.physics.add.sprite(tutorAxisX, tutorAxisY, 'idleLeft')
     tutor.setScale(3)
 
     // Tutor trigger
 
-    trigger = this.physics.add.sprite(tutorAxisX, tutorAxisY, 'triggerBlock')
+    const spot = tutor.body.position
+
+    trigger = this.physics.add.sprite(spot.x, spot.y, 'triggerBlock')
 
     // Player sprite
 
-    player = this.physics.add.sprite(100, 500, 'idle')
+    player = this.physics.add.sprite(100, 500, 'idlRight')
     player.setScale(3)
     player.body.setGravityY(60)
 
@@ -226,8 +230,8 @@ export default class DuskScene extends Phaser.Scene {
     })
 
     this.anims.create({
-      key: 'idle',
-      frames: this.anims.generateFrameNumbers('idle', { start: 0, end: 11 }),
+      key: 'idleRight',
+      frames: this.anims.generateFrameNumbers('idleRight', { start: 0, end: 11 }),
       frameRate: 10,
       repeat: -1
     })
@@ -274,12 +278,13 @@ export default class DuskScene extends Phaser.Scene {
     // text
     scoreText = this.add
       .text(16, 16, 'Score: 0', {
-        fontSize: '32px',
+        fontFamily: "'Press Start 2P', cursive",
+        fontSize: '20px',
         fill: '#000'
       })
       .setScrollFactor(0)
 
-    keyText = this.add
+    checkText = this.add
       .text(width - 200, 16, 'Trello: 0', {
         fontSize: '32px',
         fill: '#000'
@@ -296,8 +301,7 @@ export default class DuskScene extends Phaser.Scene {
     this.add.image(5000, 400, 'near-trees').setScale(5.5).setScrollFactor(2.5)
 
     // colliders
-    this.physics.add.collider(floor, [player, react, tutor, trigger])
-    this.physics.add.collider(react, [platforms])
+    this.physics.add.collider([floor], [player, react, tutor, trigger])
     this.physics.add.collider(player, [platforms, wall])
   }
 
@@ -332,13 +336,16 @@ export default class DuskScene extends Phaser.Scene {
       player.anims.play('idleLeft', true)
     } else {
       player.setVelocityX(0)
-      player.anims.play('idle', true)
+      player.anims.play('idleRight', true)
     }
     if (this.cursors.up.isDown && player.body.touching.down) {
       player.setVelocityY(-300)
       if (facing === 'left') {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
+    }
+    if (duskLevelComplete) {
+      this.scene.start('jump-scene', scoreDusk)
     }
   }
 }

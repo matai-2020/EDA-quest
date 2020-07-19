@@ -21,8 +21,6 @@ export default class TitleScene extends Phaser.Scene {
   }
 
   create (score) {
-    // console.log(score)
-    console.log(window.innerWidth)
     this.add.image(500, 300, 'dark-forest').setScale(2.5)
     this.add.image((window.innerWidth / 2.1), 400, 'click-here').setScale(0.5)
 

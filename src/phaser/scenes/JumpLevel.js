@@ -77,20 +77,21 @@ const bounce = (player, spring) => {
 
 let checkText
 let checkAmount = 0
-let checksToPass = '1'
+const checksToPass = 1
+let currentSceneScore
 
 const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
     type.disableBody(true, true)
-    scoreJumpScene += 10
-    scoreText.setText('Score: ' + scoreJumpScene)
+    currentSceneScore += 10
+    scoreText.setText('Score: ' + currentSceneScore)
   } else {
     type.disableBody(true, true)
-    scoreJumpScene += 20
+    currentSceneScore += 20
     checkAmount += 1
-    scoreText.setText('Score: ' + scoreJumpScene)
+    scoreText.setText('Score: ' + currentSceneScore)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
-    if (checkAmount == checksToPass) {
+    if (checkAmount === checksToPass) {
       canAsk = true
     }
   }
@@ -118,7 +119,6 @@ const death = () => {
 // const explosion = () => {
 
 // }
-
 
 const askQuestion = () => {
   if (canAsk) {
@@ -209,7 +209,8 @@ export default class JumpLevel extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create () {
+  create (prevScore) {
+    currentSceneScore = prevScore
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -225,7 +226,6 @@ export default class JumpLevel extends Phaser.Scene {
 
     createAligned(this, totalWidth, 'mountain', 0.15)
     createAligned(this, totalWidth, 'plateau', 0.5)
-    bump = this.physics.add.staticImage(1400, 620, 'bump')
     createAligned(this, totalWidth, 'ground', 1)
     createAligned(this, totalWidth, 'plants', 1.25)
     // this.add.image(width * 0.5, height * 1, 'platform').setScrollFactor(0)
@@ -261,7 +261,7 @@ export default class JumpLevel extends Phaser.Scene {
 
     // Tutor trigger
 
-    let spot = tutor.body.position
+    const spot = tutor.body.position
 
     trigger = this.physics.add.sprite(spot.x, spot.y, 'triggerBlock')
 
@@ -382,8 +382,8 @@ export default class JumpLevel extends Phaser.Scene {
 
     })
 
-    // Explosion animation 
-   
+    // Explosion animation
+
     // Enemy Sprites
     ent = this.physics.add.sprite(800, 400, 'walkRight')
     ent.setScale(3)
@@ -447,7 +447,7 @@ export default class JumpLevel extends Phaser.Scene {
 
     // text
     scoreText = this.add
-      .text(16, 16, 'Score: 0', {
+      .text(16, 16, 'Score: ' + currentSceneScore, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
         fill: '#000'
@@ -539,7 +539,6 @@ export default class JumpLevel extends Phaser.Scene {
 
     // DEATH
     if (!isAlive) {
-      
       explode = this.add.sprite(player.body.position.x + 50, player.body.position.y + 45, 'explode')
       explode.setScale(1.4)
       this.anims.create({
@@ -550,10 +549,8 @@ export default class JumpLevel extends Phaser.Scene {
         }),
         frameRate: 24
       })
-  
-     
-      isAlive = true
 
+      isAlive = true
     }
   }
 }
