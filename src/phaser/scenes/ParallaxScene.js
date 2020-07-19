@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { scoreChanged, gameOver } from '../score'
+import { scoreChanged, gameOver, victoryCheck } from '../score'
 
 /**
  *
@@ -81,17 +81,24 @@ const death = () => {
     player.disableBody(true, true)
     healthBar.disableBody(true, true)
   }, 100)
-  setTimeout(() => { gameOver(isAlive) }, 2000)
+  setTimeout(() => { gameOver({ isAlive, wonGame }) }, 2000)
+}
+
+const victory = () => {
+  wonGame = true
+  setTimeout(() => { gameOver({ isAlive, wonGame }) }, 2000)
 }
 
 let wall
 let facing = ''
 let react
 let badReact
+let winReact
 let player
 let platforms
 let healthBar
 let health = 3
+let wonGame = false
 let floor
 let isAlive = true
 let explode
@@ -328,7 +335,6 @@ export default class ParallaxScene extends Phaser.Scene {
 
     react = this.physics.add.staticGroup()
     react.create(550, 600, 'react').setScale(0.05).refreshBody()
-    react.create(850, 600, 'react').setScale(0.05).refreshBody()
 
     check = this.physics.add.staticGroup()
     check.create(1400, 550, 'check').setScale(0.08).refreshBody()
@@ -337,9 +343,11 @@ export default class ParallaxScene extends Phaser.Scene {
     this.physics.add.overlap(player, trigger, askQuestion, null, this)
 
     badReact = this.physics.add.staticImage(700, 600, 'react').setScale(0.05).refreshBody()
+    winReact = this.physics.add.staticImage(850, 600, 'react').setScale(0.05).refreshBody()
 
     this.physics.add.overlap(player, react, collectScore, null, this)
     this.physics.add.overlap(player, badReact, loseHp, null, this)
+    this.physics.add.overlap(player, winReact, victory, null, this)
 
     // text
     this.cameras.main.setBounds(0, 0, worldWidth, 0)
