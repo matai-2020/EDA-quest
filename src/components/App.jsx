@@ -8,7 +8,7 @@ window.onscroll = function () {
 }
 
 function scrollFunction () {
-  if (document.body.scrollTop >= 200 || document.documentElement.scrollTop >= 200) {
+  if (document.body.scrollTop >= 1 || document.documentElement.scrollTop >= 1) {
     document.getElementById('logo').style.width = '10px'
     document.getElementById('logo').style.visibility = 'hidden'
   } else {
