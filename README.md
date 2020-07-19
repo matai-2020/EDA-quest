@@ -2,6 +2,8 @@
 
 A simple side scrolling platform game built with phaser.
 
+https://eda-quest.netlify.app/
+
 Built by Isaac Bell, Jake Hurley, Keenen Leyson and Louis Fowler
 
 
