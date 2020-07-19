@@ -222,7 +222,7 @@ export default class JumpLevel extends Phaser.Scene {
     const height = this.scale.height
     const totalWidth = width * 10
 
-    this.add.image(width * 0.5, height * 0.5, 'sky').setScrollFactor(0)
+    this.add.image(width * 0.5, height * 0.5, 'sky').setScrollFactor(0).setScale(2)
 
     createAligned(this, totalWidth, 'mountain', 0.15)
     createAligned(this, totalWidth, 'plateau', 0.5)
@@ -394,7 +394,7 @@ export default class JumpLevel extends Phaser.Scene {
     ent.body.checkCollision.left = true
     ent.body.checkCollision.right = true
     this.physics.add.overlap(ent, player, bounce, null, this)
-    this.physics.add.overlap(ent, player, death, null, this)
+    this.physics.add.overlap(ent, player, loseHp, null, this)
 
     this.anims.create({
       key: 'entLeft',
