@@ -3,6 +3,13 @@
   padding: 0;
 }
 
+#logo {
+  visibility: visible;
+  width: 900px;
+  margin-top: 150px;
+  margin-bottom: 230px;
+}
+
 
 #phaser {
   display: flex;
