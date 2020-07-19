@@ -39,10 +39,11 @@ const config = {
       debug: false
     }
   },
-  scene: [title, tutLevel, dusk, jumpLevel, parallax]
+  scene: [tutLevel, title, dusk, jumpLevel, parallax]
 }
-
+/*eslint-disable */
 const game = new Phaser.Game(config)
+/* eslint-enable */
 
 // Game Logo disappears on scroll
 

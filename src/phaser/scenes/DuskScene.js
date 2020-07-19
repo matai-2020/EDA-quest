@@ -91,11 +91,11 @@ export default class TutLevel extends Phaser.Scene {
     this.load.image('near-trees', '/assets/Dusk/dusk-near-trees.png')
     // assets
     this.load.image('react', '/assets/react.svg')
-    this.load.image('platform', '/assets/Jungle/platform.png')
+    this.load.image('platform', '/assets/Dusk/platform.png')
     this.load.image('sky', '/assets/Jungle/sky.png')
     this.load.image('mountain', '/assets/Jungle/mountains.png')
     this.load.image('plateau', '/assets/Jungle/plateau.png')
-    this.load.image('ground', '/assets/Jungle/ground.png')
+    this.load.image('ground', '/assets/Dusk/duskGround.png')
     this.load.image('arrow-keys', '/assets/Jungle/arrow-keys.png')
     this.load.image(
       'platform',

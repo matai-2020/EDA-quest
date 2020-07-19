@@ -7,24 +7,31 @@ export class HighScore extends React.Component {
     score: 0,
     name: '',
     highScores: [],
-    isAlive: true
+    isAlive: true,
+    wonGame: false,
+    level: 'Jungle'
   }
 
   componentDidMount () {
     this.updateData()
     this.getHighScores()
+    // Update Score
     subscribe(score => {
       this.setState({
         score
       })
-      subscribe(isAlive => {
+      // Check if Player is alive and if game has been won
+      subscribe(gameStatus => {
+        let { isAlive, wonGame } = gameStatus
         this.setState({
-          isAlive
+          isAlive,
+          wonGame
         })
       })
-      console.log(this.state)
     })
   }
+
+  // Get Data for current player from Firebase
 
   updateData () {
     const queryData = firebase.database().ref('currentPlayer')
@@ -33,6 +40,8 @@ export class HighScore extends React.Component {
       score: this.state.score
     })
   }
+
+  // Get Highscores and sort based on total.
 
   getHighScores () {
     firebase
@@ -50,6 +59,8 @@ export class HighScore extends React.Component {
         })
       })
   }
+
+  // Score submission
 
   clickHandler () {
     const childName = this.state.highScores.length
@@ -72,7 +83,7 @@ export class HighScore extends React.Component {
   }
 
   render () {
-    if (this.state.isAlive === false) {
+    if (this.state.isAlive === false && this.state.wonGame === false) {
       return (
         <div className="score-container reveal">
           <img
@@ -101,6 +112,40 @@ export class HighScore extends React.Component {
               }
             })}
           </ol>
+          <img src={`/assets/${this.state.level}/${this.state.level}Highscore.png`} className='jungle-background'/>
+        </div>
+      )
+    } else if (this.state.wonGame === true) {
+      return (
+        <div className="score-container reveal">
+          {/* <img
+            className="game-over"
+            src="/assets/Game/game-over.png"
+            alt="Quest Logo"
+          /> */}
+          <p>You Win!</p>
+          <input
+            type="text"
+            placeholder="Your Name"
+            className="name-input"
+            onChange={this.nameChange}></input>
+          <button className="submit-button" onClick={() => this.clickHandler()}>
+            Submit Score
+          </button>
+          <p>Final Score: {this.state.score}</p>
+          <ol className="score-list">
+            {this.state.highScores.map(player => {
+              const indexKey = this.state.highScores.indexOf(player)
+              if (indexKey < 10) {
+                return (
+                  <li className="rank" key={indexKey}>
+                    {player.name}: {player.score}
+                  </li>
+                )
+              }
+            })}
+          </ol>
+          <img src={`/assets/${this.state.level}/${this.state.level}Highscore.png`} className='jungle-background'/>
         </div>
       )
     } else return <></>
