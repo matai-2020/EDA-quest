@@ -1,4 +1,8 @@
-## EDA Quest for victory
+## EDA Quest
+
+A simple side scrolling platform game built with phaser.
+
+Built by Isaac Bell, Jake Hurley, Keenen Leyson and Louis Fowler
 
 
 ## Available Commands
@@ -8,6 +12,11 @@
 | `npm install` | Install project dependencies |
 | `npm start` | Build project and open web server running project |
 | `npm run build` | Builds code bundle with production settings (minification, uglification, etc..) |
+| `npm run lint` | Run eslint config to find linting errors|
+| `npm run format` | Formats all .js and .jsx files based on eslint config|
+| `npm test` | Run all jest tests |
+
+
 
 
 ## Customizing Template
