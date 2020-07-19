@@ -34,13 +34,19 @@ const collectScore = (player, type) => {
     type.disableBody(true, true)
     currentSceneScore += 10
     scoreText.setText('Score: ' + currentSceneScore)
+    if (currentSceneScore) {
+      canAsk = true
+    }
   } else {
     type.disableBody(true, true)
     currentSceneScore += 20
     checkAmount += 1
     scoreText.setText('Score: ' + currentSceneScore)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
-    if (checkAmount == checksToPass) {
+    // if (checkAmount == checksToPass) {
+    //   canAsk = true
+    // }
+    if (currentSceneScore) {
       canAsk = true
     }
   }
@@ -135,7 +141,7 @@ export default class DuskScene extends Phaser.Scene {
       frameWidth: 21,
       frameHeight: 33
     })
-    this.load.spritesheet('idle', '/assets/man/idle.png', {
+    this.load.spritesheet('idleRight', '/assets/man/idleRight.png', {
       frameWidth: 19,
       frameHeight: 34
     })
@@ -294,7 +300,8 @@ export default class DuskScene extends Phaser.Scene {
       .text(16, 16, 'Score: ' + currentSceneScore, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
-        fill: '#000'
+        fill: 'white'
+        // fill: '#000'
       })
       .setScrollFactor(0)
 
@@ -302,13 +309,15 @@ export default class DuskScene extends Phaser.Scene {
       .text(width - 300, 16, 'Trello: 0 / ' + checksToPass, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
-        fill: '#000'
+        fill: 'white'
+        // fill: '#000'
       })
       .setScrollFactor(0)
 
     noQuestion = this.add.text(tutorAxisX - 480, tutorAxisY - 250, '', {
       fontSize: '18px',
-      fill: '#000'
+      fill: 'white'
+      // fill: '#000'
     })
 
     this.add.image(1500, 400, 'near-trees').setScale(5.5).setScrollFactor(2.5)
@@ -361,7 +370,7 @@ export default class DuskScene extends Phaser.Scene {
       } else player.anims.play('jumpRight', true)
     }
     if (duskSceneComplete) {
-      this.scene.start('city-scene')
+      this.scene.start('city-scene', currentSceneScore)
     }
   }
 }

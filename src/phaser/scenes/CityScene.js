@@ -24,13 +24,22 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
 
 let score = 0
 let scoreText
+let currentSceneScore = 0
 
 const collectScore = (player, react) => {
-  react.disableBody(true, true)
-  score += 1
-  scoreText.setText('Score: ' + score)
-  if (score === 1) {
-    canAsk = true
+  if (type.texture.key === 'react') {
+    type.disableBody(true, true)
+    currentSceneScore += 10
+    scoreText.setText('Score: ' + currentSceneScore)
+  } else {
+    type.disableBody(true, true)
+    currentSceneScore += 20
+    checkAmount += 1
+    scoreText.setText('Score: ' + currentSceneScore)
+    checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
+    // if (checkAmount == checksToPass) {
+    //   canAsk = true
+    // }
   }
 }
 
@@ -97,7 +106,6 @@ export default class CityScene extends Phaser.Scene {
       'platform',
       '/assets/airpack/PNG/Environment/ground_grass.png'
     )
-    this.load.image('plants', '/assets/Jungle/plant.png')
 
     // player assets
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
@@ -116,7 +124,7 @@ export default class CityScene extends Phaser.Scene {
       frameWidth: 21,
       frameHeight: 33
     })
-    this.load.spritesheet('idle', '/assets/man/idle.png', {
+    this.load.spritesheet('idleRight', '/assets/man/idle.png', {
       frameWidth: 19,
       frameHeight: 34
     })
@@ -128,7 +136,8 @@ export default class CityScene extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create () {
+  create (prevScore) {
+    currentSceneScore = prevScore
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -260,15 +269,19 @@ export default class CityScene extends Phaser.Scene {
     // text
     scoreText = this.add
       .text(16, 16, 'Score: 0', {
-        fontSize: '32px',
-        fill: '#000'
+        fontFamily: "'Press Start 2P', cursive",
+        fontSize: '20px',
+        fill: 'white'
+        // fill: '#000'
       })
       .setScrollFactor(0)
 
     keyText = this.add
       .text(width - 200, 16, 'Trello: 0', {
-        fontSize: '32px',
-        fill: '#000'
+        fontFamily: "'Press Start 2P', cursive",
+        fontSize: '20px',
+        fill: 'white'
+        // fill: '#000'
       })
       .setScrollFactor(0)
 
