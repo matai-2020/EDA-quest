@@ -39,11 +39,7 @@ const config = {
       debug: false
     }
   },
-<<<<<<< HEAD
   scene: [title, tutLevel, dusk, jumpLevel, parallax]
-=======
-  scene: [title, tutLevel],
->>>>>>> dev
 }
 
 const game = new Phaser.Game(config)
@@ -53,12 +49,8 @@ const game = new Phaser.Game(config)
 window.onscroll = function () {
   scrollFunction()
 }
-<<<<<<< HEAD
 
 function scrollFunction () {
-=======
-function scrollFunction() {
->>>>>>> dev
   if (document.body.scrollTop >= 1 || document.documentElement.scrollTop >= 1) {
     document.getElementById('logo').style.width = '10px'
     document.getElementById('logo').style.visibility = 'hidden'
@@ -69,11 +61,6 @@ function scrollFunction() {
     document.getElementById('logo').style.marginBottom = '230px'
   }
 }
-<<<<<<< HEAD
-
-// const game = new Phaser.Game(config)
-=======
->>>>>>> dev
 
 ReactDOM.render(
   <App />,
