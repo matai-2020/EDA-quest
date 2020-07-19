@@ -39,7 +39,7 @@ const config = {
       debug: false
     }
   },
-  scene: [tutLevel, title, dusk, jumpLevel, parallax]
+  scene: [dusk, title, jumpLevel, parallax]
 }
 
 const game = new Phaser.Game(config)
