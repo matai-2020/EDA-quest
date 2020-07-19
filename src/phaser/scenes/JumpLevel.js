@@ -21,7 +21,7 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   }
 }
 let jumpUp = false
-let scoreJumpScene = 0
+let currentSceneScore = 0
 let scoreText
 
 const airUp = () => {
@@ -46,13 +46,13 @@ let checksToPass = '1'
 const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
     type.disableBody(true, true)
-    scoreJumpScene += 10
-    scoreText.setText('Score: ' + scoreJumpScene)
+    currentSceneScore += 10
+    scoreText.setText('Score: ' + currentSceneScore)
   } else {
     type.disableBody(true, true)
-    scoreJumpScene += 20
+    currentSceneScore += 20
     checkAmount += 1
-    scoreText.setText('Score: ' + scoreJumpScene)
+    scoreText.setText('Score: ' + currentSceneScore)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
     if (checkAmount == checksToPass) {
       canAsk = true
@@ -160,7 +160,8 @@ export default class JumpLevel extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create () {
+  create (prevScore) {
+    currentSceneScore = prevScore
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -310,7 +311,7 @@ export default class JumpLevel extends Phaser.Scene {
 
     // text
     scoreText = this.add
-      .text(16, 16, 'Score: 0', {
+      .text(16, 16, 'Score: ' + currentSceneScore, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
         fill: '#000'
@@ -324,6 +325,7 @@ export default class JumpLevel extends Phaser.Scene {
         fill: '#000'
       })
       .setScrollFactor(0)
+
     noQuestion = this.add.text(spot.x - 250, spot.y - 10, '', {
       fontFamily: "'Press Start 2P', cursive",
       fontSize: '12px',
@@ -379,6 +381,9 @@ export default class JumpLevel extends Phaser.Scene {
       if (facing === 'left') {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
+    }
+    if (jumpSceneComplete) {
+      this.scene.start('dusk-scene', currentSceneScore)
     }
   }
 }

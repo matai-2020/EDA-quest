@@ -23,14 +23,26 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
 }
 
 let score = 0
+let currentSceneScore = 0
 let scoreText
+let checkAmount = 0
+let checkText
+let checksToPass = '1'
 
-const collectScore = (player, react) => {
-  react.disableBody(true, true)
-  score += 1
-  scoreText.setText('Score: ' + score)
-  if (score === 1) {
-    canAsk = true
+const collectScore = (player, type) => {
+  if (type.texture.key === 'react') {
+    type.disableBody(true, true)
+    currentSceneScore += 10
+    scoreText.setText('Score: ' + currentSceneScore)
+  } else {
+    type.disableBody(true, true)
+    currentSceneScore += 20
+    checkAmount += 1
+    scoreText.setText('Score: ' + currentSceneScore)
+    checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
+    if (checkAmount == checksToPass) {
+      canAsk = true
+    }
   }
 }
 
@@ -41,7 +53,10 @@ let noQuestion
 
 const askQuestion = () => {
   if (canAsk) {
-    popUp = 2
+    noQuestion.setText('Congrats, you have completed your trello card!')
+    setTimeout(() => {
+      duskSceneComplete = true
+    }, 1000)
   } else {
     noQuestion.setText('Please come back with a complete trello card')
   }
@@ -66,6 +81,8 @@ let game
 
 let keyText
 let keyAmount = 0
+
+let duskSceneComplete = false
 
 let worldWidth = 3000
 
@@ -130,7 +147,8 @@ export default class DuskScene extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create () {
+  create (prevScore) {
+    currentSceneScore = prevScore
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -273,15 +291,17 @@ export default class DuskScene extends Phaser.Scene {
 
     // text
     scoreText = this.add
-      .text(16, 16, 'Score: 0', {
-        fontSize: '32px',
+      .text(16, 16, 'Score: ' + currentSceneScore, {
+        fontFamily: "'Press Start 2P', cursive",
+        fontSize: '20px',
         fill: '#000'
       })
       .setScrollFactor(0)
 
-    keyText = this.add
-      .text(width - 200, 16, 'Trello: 0', {
-        fontSize: '32px',
+    checkText = this.add
+      .text(width - 300, 16, 'Trello: 0 / ' + checksToPass, {
+        fontFamily: "'Press Start 2P', cursive",
+        fontSize: '20px',
         fill: '#000'
       })
       .setScrollFactor(0)
@@ -332,13 +352,16 @@ export default class DuskScene extends Phaser.Scene {
       player.anims.play('idleLeft', true)
     } else {
       player.setVelocityX(0)
-      player.anims.play('idle', true)
+      player.anims.play('idleRight', true)
     }
     if (this.cursors.up.isDown && player.body.touching.down) {
       player.setVelocityY(-300)
       if (facing === 'left') {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
+    }
+    if (duskSceneComplete) {
+      this.scene.start('city-scene')
     }
   }
 }

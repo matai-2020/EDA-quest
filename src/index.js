@@ -8,11 +8,12 @@ import * as firebase from 'firebase'
 import App from './components/App.jsx'
 
 // Phaser Scenes
-import dusk from './phaser/scenes/DuskScene'
 import title from './phaser/scenes/TitleScene'
-import jumpLevel from './phaser/scenes/JumpLevel'
-// import parallax from './phaser/scenes/ParallaxScene'
 import tutLevel from './phaser/scenes/TutLevel'
+import jumpLevel from './phaser/scenes/JumpLevel'
+import dusk from './phaser/scenes/DuskScene'
+import city from './phaser/scenes/CityScene'
+// import parallax from './phaser/scenes/ParallaxScene'
 
 var firebaseConfig = {
   apiKey: 'AIzaSyD5DEUiq_fXMfIJpiPH4HUvbXbPGPDP2-0',
@@ -39,7 +40,7 @@ let config = {
       debug: false
     }
   },
-  scene: [title, tutLevel, dusk, jumpLevel]
+  scene: [title, tutLevel, dusk, jumpLevel, city]
 }
 
 const game = new Phaser.Game(config)
