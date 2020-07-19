@@ -5,8 +5,10 @@
 
 #phaser {
   display: flex;
-  justify-content: center;
-  padding-bottom: 20px;
+  justify-content: center; /* horizontal */
+  padding-top: 10px;
+  padding-bottom: 10px;
+  align-content: center; /* vertical */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
