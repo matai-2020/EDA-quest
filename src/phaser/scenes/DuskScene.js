@@ -34,7 +34,7 @@ const collectScore = (player, type) => {
     type.disableBody(true, true)
     currentSceneScore += 10
     scoreText.setText('Score: ' + currentSceneScore)
-    if (currentSceneScore) {
+    if (checkAmount == checksToPass) {
       canAsk = true
     }
   } else {
@@ -43,19 +43,15 @@ const collectScore = (player, type) => {
     checkAmount += 1
     scoreText.setText('Score: ' + currentSceneScore)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
-    // if (checkAmount == checksToPass) {
-    //   canAsk = true
-    // }
-    if (currentSceneScore) {
+    if (checkAmount == checksToPass) {
       canAsk = true
     }
   }
 }
 
 let canAsk = false
-let popUp = 0
-let notYet
 let noQuestion
+let duskSceneComplete = false
 
 const askQuestion = () => {
   if (canAsk) {
@@ -69,28 +65,17 @@ const askQuestion = () => {
 }
 
 let facing = ''
-
 let react
 let tutor
 let player
-let platforms
-let platform
-let cursors
-
-let ground
-let base
 let floor
 let wall
 let trigger
 
-let game
+const worldWidth = 3000
 
 let keyText
 let keyAmount = 0
-
-let duskSceneComplete = false
-
-let worldWidth = 3000
 
 export default class DuskScene extends Phaser.Scene {
   constructor () {
@@ -112,11 +97,11 @@ export default class DuskScene extends Phaser.Scene {
     this.load.image('near-trees', '/assets/Dusk/dusk-near-trees.png')
     // assets
     this.load.image('react', '/assets/react.svg')
-    this.load.image('platform', '/assets/Jungle/platform.png')
+    this.load.image('platform', '/assets/Dusk/platform.png')
     this.load.image('sky', '/assets/Jungle/sky.png')
     this.load.image('mountain', '/assets/Jungle/mountains.png')
     this.load.image('plateau', '/assets/Jungle/plateau.png')
-    this.load.image('ground', '/assets/Jungle/ground.png')
+    this.load.image('ground', '/assets/Dusk/duskGround.png')
     this.load.image('arrow-keys', '/assets/Jungle/arrow-keys.png')
     this.load.image(
       'platform',
@@ -166,20 +151,13 @@ export default class DuskScene extends Phaser.Scene {
     const height = this.scale.height
     const totalWidth = width * 10
 
-    this.add
-      .image(width * 0.5, height * 0.5, 'background')
-      .setScale(5)
-      .setScrollFactor(0)
+    this.add.image(width * 0.5, height * 0.5, 'background').setScale(5).setScrollFactor(0)
     this.add.image(800, 300, 'far-mount').setScale(4).setScrollFactor(0)
     this.add.image(700, 400, 'near-mount').setScale(3).setScrollFactor(0.05)
     this.add.image(800, 300, 'far-trees').setScale(4.5).setScrollFactor(0.4)
     this.add.image(1200, 230, 'near-trees').setScale(5).setScrollFactor(0.7)
 
-    // createAligned(this, totalWidth, 'mountain', 0.15)
-    // createAligned(this, totalWidth, 'plateau', 0.5)
     createAligned(this, totalWidth, 'ground', 1)
-    // createAligned(this, totalWidth, 'plants', 1.25)
-    // this.add.image(width * 0.5, height * 1, 'platform').setScrollFactor(0)
 
     // Collider floor
 
@@ -192,7 +170,7 @@ export default class DuskScene extends Phaser.Scene {
 
     // Platforms
 
-    let platforms = this.physics.add.staticGroup()
+    const platforms = this.physics.add.staticGroup()
     platforms.create(500, 510, 'platform').setScale(0.4).refreshBody()
     platforms.create(600, 600, 'platform').setScale(0.4).refreshBody()
 
@@ -202,25 +180,22 @@ export default class DuskScene extends Phaser.Scene {
       platform.body.checkCollision.down = false
     })
 
-    // let platform3 = this.physics.add.staticGroup()
-    // platform3.create(800, 450, 'platform').setScale(0.4).refreshBody()
-
     // Character sprites
 
     // Tutor
-    let tutorAxisX = 2900
-    let tutorAxisY = 535
+    const tutorAxisX = 2900
+    const tutorAxisY = 535
 
     tutor = this.physics.add.sprite(tutorAxisX, tutorAxisY, 'idleLeft')
     tutor.setScale(3)
 
     // Tutor trigger
-
-    trigger = this.physics.add.sprite(tutorAxisX, tutorAxisY, 'triggerBlock')
+    const spot = tutor.body.position
+    trigger = this.physics.add.sprite(spot.x, spot.y, 'triggerBlock')
 
     // Player sprite
 
-    player = this.physics.add.sprite(100, 500, 'idle')
+    player = this.physics.add.sprite(100, 500, 'idlRight')
     player.setScale(3)
     player.body.setGravityY(60)
 
@@ -250,8 +225,8 @@ export default class DuskScene extends Phaser.Scene {
     })
 
     this.anims.create({
-      key: 'idle',
-      frames: this.anims.generateFrameNumbers('idle', { start: 0, end: 11 }),
+      key: 'idleRight',
+      frames: this.anims.generateFrameNumbers('idleRight', { start: 0, end: 11 }),
       frameRate: 10,
       repeat: -1
     })
@@ -325,8 +300,7 @@ export default class DuskScene extends Phaser.Scene {
     this.add.image(5000, 400, 'near-trees').setScale(5.5).setScrollFactor(2.5)
 
     // colliders
-    this.physics.add.collider(floor, [player, react, tutor, trigger])
-    this.physics.add.collider(react, [platforms])
+    this.physics.add.collider([floor], [player, react, tutor, trigger])
     this.physics.add.collider(player, [platforms, wall])
   }
 

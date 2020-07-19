@@ -20,9 +20,7 @@ export default class TitleScene extends Phaser.Scene {
     this.load.image('click-here', '/assets/Game/click-here.png')
   }
 
-  create (score) {
-    // console.log(score)
-    console.log(window.innerWidth)
+  create () {
     this.add.image(500, 300, 'dark-forest').setScale(2.5)
     this.add.image((window.innerWidth / 2.1), 400, 'click-here').setScale(0.5)
 
@@ -30,9 +28,7 @@ export default class TitleScene extends Phaser.Scene {
       'pointerdown',
       function () {
         // console.log('From Title to Level 1')
-        // this.scene.start('tut-level')
-        // this.scene.start('city-scene')
-        this.scene.start('dusk-scene')
+        this.scene.start('tut-level')
         // this.scene.start('jump-scene')
       },
       this

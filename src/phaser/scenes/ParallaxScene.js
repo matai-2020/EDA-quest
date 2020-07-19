@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { scoreChanged, gameOver } from '../score'
+import { scoreChanged, gameOver, victoryCheck } from '../score'
 
 /**
  *
@@ -22,11 +22,46 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   }
 }
 
-const collectScore = (player, react) => {
-  react.disableBody(true, true)
-  score += 120
-  scoreText.setText('Score: ' + score)
-  scoreChanged(score)
+let scorePara = 0
+let scoreText
+
+let checkText
+let checkAmount = 0
+const checksToPass = 1
+let currentSceneScore
+
+const collectScore = (player, type) => {
+  if (type.texture.key === 'react') {
+    type.disableBody(true, true)
+    currentSceneScore += 10
+    scoreText.setText('Score: ' + currentSceneScore)
+    scoreChanged(currentSceneScore)
+  } else {
+    type.disableBody(true, true)
+    currentSceneScore += 20
+    checkAmount += 1
+    scoreText.setText('Score: ' + currentSceneScore)
+    scoreChanged(currentSceneScore)
+    checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
+    if (checkAmount === checksToPass) {
+      canAsk = true
+    }
+  }
+}
+
+let canAsk = false
+let noQuestion
+let paraLevelComplete = false
+
+const askQuestion = () => {
+  if (canAsk) {
+    noQuestion.setText('Congrats, you have completed your trello card!')
+    setTimeout(() => {
+      paraLevelComplete = true
+    }, 1000)
+  } else {
+    noQuestion.setText('Please come back with a complete trello card')
+  }
 }
 
 const loseHp = () => {
@@ -46,28 +81,32 @@ const death = () => {
     player.disableBody(true, true)
     healthBar.disableBody(true, true)
   }, 100)
-  setTimeout(() => { gameOver(isAlive) }, 2000)
+  setTimeout(() => { gameOver({ isAlive, wonGame }) }, 2000)
 }
 
+const victory = () => {
+  wonGame = true
+  setTimeout(() => { gameOver({ isAlive, wonGame }) }, 2000)
+}
+
+let wall
+let facing = ''
 let react
 let badReact
-let tutor
+let winReact
 let player
 let platforms
-let platform
-let cursors
-let score = 0
 let healthBar
 let health = 3
-let scoreText
-let ground
-let block
+let wonGame = false
 let floor
 let isAlive = true
 let explode
+let trigger
+let tutor
+let check
 
-let keyText
-let keyAmount = 0
+const worldWidth = 2000
 
 export default class ParallaxScene extends Phaser.Scene {
   constructor () {
@@ -75,7 +114,14 @@ export default class ParallaxScene extends Phaser.Scene {
   }
 
   preload () {
-    this.load.image('react', '/assets/react.svg')
+    // invis walls/triggers
+    this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
+    this.load.image('base', '/assets/blocksTriggers/base.png')
+    this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
+
+    // assets
+    this.load.image('react', '/assets/reactCoinP.png')
+    this.load.image('check', '/assets/check.png')
     this.load.image('platform', '/assets/Jungle/platform.png')
     this.load.image('block', '/assets/man/base.png')
     this.load.image('sky', '/assets/Jungle/sky.png')
@@ -101,7 +147,11 @@ export default class ParallaxScene extends Phaser.Scene {
       frameWidth: 21,
       frameHeight: 33
     })
-    this.load.spritesheet('idle', '/assets/man/idleLeft.png', {
+    this.load.spritesheet('idleRight', '/assets/man/idleRight.png', {
+      frameWidth: 19,
+      frameHeight: 34
+    })
+    this.load.spritesheet('idleLeft', '/assets/man/idleLeft.png', {
       frameWidth: 19,
       frameHeight: 34
     })
@@ -118,7 +168,14 @@ export default class ParallaxScene extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create () {
+  create (prevScore) {
+    currentSceneScore = prevScore
+    this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
+      facing = 'left'
+    })
+    this.input.keyboard.on('keydown-' + 'RIGHT', function (event) {
+      facing = 'right'
+    })
     const width = this.scale.width
     const height = this.scale.height
     const totalWidth = width * 10
@@ -132,8 +189,12 @@ export default class ParallaxScene extends Phaser.Scene {
 
     // Collider floor & platforms
 
+    wall = this.physics.add.staticGroup()
+    wall.create(-10, 0, 'wallBlock')
+    wall.create(worldWidth, 0, 'wallBlock')
+
     floor = this.physics.add.staticGroup()
-    floor.create(2010, 648, 'block')
+    floor.create(2010, 648, 'base').setScrollFactor(0)
 
     platforms = this.physics.add.staticGroup()
     platforms.create(800, 450, 'platform').setScale(0.4).refreshBody()
@@ -143,11 +204,24 @@ export default class ParallaxScene extends Phaser.Scene {
 
     // Player sprite
 
-    player = this.physics.add.sprite(100, 500, 'idle')
+    // Tutor
+    tutor = this.physics.add.sprite(1700, 535, 'idleLeft')
+    tutor.setScale(3)
+
+    // Tutor trigger
+
+    const spot = tutor.body.position
+
+    trigger = this.physics.add.sprite(spot.x, spot.y, 'triggerBlock')
+
+    // player sprite
+
+    player = this.physics.add.sprite(100, 580, 'idleRight')
     player.setScale(3)
-    player.body.setGravityY(-100)
-    player.setBounce(0.2)
-    player.setCollideWorldBounds(true)
+    player.body.setGravityY(80)
+    player.setCollideWorldBounds(false)
+    // player.onWorldBounds = true
+    player.body.checkCollision.up = false
 
     this.anims.create({
       key: 'left',
@@ -160,26 +234,49 @@ export default class ParallaxScene extends Phaser.Scene {
     })
 
     this.anims.create({
-      key: 'turn',
-      frames: this.anims.generateFrameNumbers('idle', { start: 0, end: 11 }),
-      frameRate: 10,
-      repeat: -1
-    })
-
-    this.anims.create({
-      key: 'jump',
-      frames: this.anims.generateFrameNumbers('jumpLeft', { start: 0, end: 2 }),
-      frameRate: 5,
-      repeat: -1
-    })
-
-    this.anims.create({
       key: 'right',
       frames: this.anims.generateFrameNumbers('runRight', {
         start: 0,
         end: 7
       }),
       frameRate: 10,
+      repeat: -1
+    })
+
+    this.anims.create({
+      key: 'idleRight',
+      frames: this.anims.generateFrameNumbers('idleRight', {
+        start: 0,
+        end: 11
+      }),
+      frameRate: 10,
+      repeat: -1
+    })
+
+    this.anims.create({
+      key: 'idleLeft',
+      frames: this.anims.generateFrameNumbers('idleLeft', {
+        start: 0,
+        end: 11
+      }),
+      frameRate: 10,
+      repeat: -1
+    })
+
+    this.anims.create({
+      key: 'jumpLeft',
+      frames: this.anims.generateFrameNumbers('jumpLeft', { start: 0, end: 2 }),
+      frameRate: 5,
+      repeat: -1
+    })
+
+    this.anims.create({
+      key: 'jumpRight',
+      frames: this.anims.generateFrameNumbers('jumpRight', {
+        start: 0,
+        end: 2
+      }),
+      frameRate: 5,
       repeat: -1
     })
 
@@ -236,56 +333,90 @@ export default class ParallaxScene extends Phaser.Scene {
 
     // coin and collection
 
-    react = this.physics.add.sprite(550, 600, 'react')
-    react.setScale(0.2)
+    react = this.physics.add.staticGroup()
+    react.create(550, 600, 'react').setScale(0.05).refreshBody()
 
-    badReact = this.physics.add.sprite(700, 600, 'react')
-    badReact.setScale(0.2)
+    check = this.physics.add.staticGroup()
+    check.create(1400, 550, 'check').setScale(0.08).refreshBody()
+
+    this.physics.add.overlap(player, check, collectScore, null, this)
+    this.physics.add.overlap(player, trigger, askQuestion, null, this)
+
+    badReact = this.physics.add.staticImage(700, 600, 'react').setScale(0.05).refreshBody()
+    winReact = this.physics.add.staticImage(850, 600, 'react').setScale(0.05).refreshBody()
 
     this.physics.add.overlap(player, react, collectScore, null, this)
     this.physics.add.overlap(player, badReact, loseHp, null, this)
+    this.physics.add.overlap(player, winReact, victory, null, this)
 
     // text
-    this.cameras.main.setBounds(0, 0, 3000, 0)
+    this.cameras.main.setBounds(0, 0, worldWidth, 0)
     this.cameras.main.startFollow(player)
 
-    scoreText = this.add.text(16, 16, 'Score: 0', {
-      fontSize: '32px',
-      fill: '#000'
-    })
+    scoreText = this.add
+      .text(16, 16, 'Score: ' + currentSceneScore, {
+        fontFamily: "'Press Start 2P', cursive",
+        fontSize: '20px',
+        fill: '#000'
+      })
+      .setScrollFactor(0)
 
-    keyText = this.add.text(950, 16, 'Trello: 0', {
-      fontSize: '32px',
+    checkText = this.add
+      .text(width - 300, 16, 'Trello: 0 / ' + checksToPass, {
+        fontFamily: "'Press Start 2P', cursive",
+        fontSize: '20px',
+        fill: '#000'
+      })
+      .setScrollFactor(0)
+    noQuestion = this.add.text(spot.x - 250, spot.y - 10, '', {
+      fontFamily: "'Press Start 2P', cursive",
+      fontSize: '12px',
       fill: '#000'
     })
 
     // colliders
     this.physics.add.collider(floor, [player, react, badReact])
-    this.physics.add.collider(player, [platforms])
+    this.physics.add.collider(player, [platforms, wall])
   }
 
   update () {
     const cam = this.cameras.main
     const speed = 15
+
     if (this.cursors.left.isDown) {
+      // facing = 'left'
       player.setVelocityX(-300)
-      player.anims.play('left', true)
-      // move left
       cam.scrollX -= speed
+      if (!player.body.touching.down) {
+        player.anims.play('jumpLeft', true)
+      } else {
+        player.anims.play('left', true)
+      }
     } else if (this.cursors.right.isDown) {
+      // facing = 'right'
       player.setVelocityX(300)
-      player.anims.play('right', true)
-      // move right
       cam.scrollX += speed
-    } else if (!player.body.touching.down) {
-      player.anims.play('jump', true)
+      if (!player.body.touching.down) {
+        player.anims.play('jumpRight', true)
+      } else {
+        player.anims.play('right', true)
+      }
+    } else if (!player.body.touching.down && facing === 'left') {
+      player.anims.play('jumpLeft', true)
+    } else if (!player.body.touching.down && facing === 'right') {
+      player.anims.play('jumpRight', true)
+    } else if (facing === 'left') {
+      player.setVelocityX(0)
+      player.anims.play('idleLeft', true)
     } else {
       player.setVelocityX(0)
-      player.anims.play('turn', true)
+      player.anims.play('idleRight', true)
     }
     if (this.cursors.up.isDown && player.body.touching.down) {
       player.setVelocityY(-300)
-      player.anims.play('jump', true)
+      if (facing === 'left') {
+        player.anims.play('jumpLeft', true)
+      } else player.anims.play('jumpRight', true)
     }
 
     // HEALTHBAR ABOVE PLAYER
@@ -307,5 +438,8 @@ export default class ParallaxScene extends Phaser.Scene {
       frameRate: 24
 
     })
+    if (paraLevelComplete) {
+      this.scene.start('jump-scene', scorePara)
+    }
   }
 }

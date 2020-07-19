@@ -13,7 +13,7 @@ import tutLevel from './phaser/scenes/TutLevel'
 import jumpLevel from './phaser/scenes/JumpLevel'
 import dusk from './phaser/scenes/DuskScene'
 import city from './phaser/scenes/CityScene'
-// import parallax from './phaser/scenes/ParallaxScene'
+import parallax from './phaser/scenes/ParallaxScene'
 
 var firebaseConfig = {
   apiKey: 'AIzaSyD5DEUiq_fXMfIJpiPH4HUvbXbPGPDP2-0',
@@ -28,7 +28,7 @@ var firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig)
 
-let config = {
+const config = {
   parent: 'phaser',
   type: Phaser.AUTO,
   width: window.innerWidth - 100,
@@ -40,30 +40,28 @@ let config = {
       debug: false
     }
   },
-  scene: [title, tutLevel, dusk, jumpLevel, city]
+  scene: [title, tutLevel, jumpLevel, parallax, dusk, city]
 }
 
 const game = new Phaser.Game(config)
 
 // Game Logo disappears on scroll
 
-window.onscroll = function () {
-  scrollFunction()
-}
+// window.onscroll = function () {
+//   scrollFunction()
+// }
 
-function scrollFunction () {
-  if (document.body.scrollTop >= 1 || document.documentElement.scrollTop >= 1) {
-    document.getElementById('logo').style.width = '10px'
-    document.getElementById('logo').style.visibility = 'hidden'
-  } else {
-    document.getElementById('logo').style.visibility = 'visible'
-    document.getElementById('logo').style.width = '900px'
-    document.getElementById('logo').style.marginTop = '150px'
-    document.getElementById('logo').style.marginBottom = '230px'
-  }
-}
-
-// const game = new Phaser.Game(config)
+// function scrollFunction () {
+//   if (document.body.scrollTop >= 1 || document.documentElement.scrollTop >= 1) {
+//     document.getElementById('logo').style.width = '10px'
+//     document.getElementById('logo').style.visibility = 'hidden'
+//   } else {
+//     document.getElementById('logo').style.visibility = 'visible'
+//     document.getElementById('logo').style.width = '900px'
+//     document.getElementById('logo').style.marginTop = '150px'
+//     document.getElementById('logo').style.marginBottom = '230px'
+//   }
+// }
 
 ReactDOM.render(
   <App />,
