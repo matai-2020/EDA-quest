@@ -7,7 +7,8 @@ export class HighScore extends React.Component {
     score: 0,
     name: '',
     highScores: [],
-    isAlive: true
+    isAlive: true,
+    level: 'Jungle'
   }
 
   componentDidMount () {
@@ -101,7 +102,7 @@ export class HighScore extends React.Component {
               }
             })}
           </ol>
-          <img src='/assets/Jungle/jungleHighscore.png' className='jungle-background'/>
+          <img src={`/assets/${this.state.level}/${this.state.level}Highscore.png`} className='jungle-background'/>
         </div>
       )
     } else return <></>
