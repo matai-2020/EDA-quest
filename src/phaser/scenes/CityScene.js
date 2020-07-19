@@ -22,58 +22,56 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   }
 }
 
-let scoreDusk = 0
+let score = 0
 let scoreText
 
-let checkText
-let checkAmount = 0
-const checksToPass = 1
-
-const collectScore = (player, type) => {
-  if (type.texture.key === 'react') {
-    type.disableBody(true, true)
-    scoreDusk += 10
-    scoreText.setText('Score: ' + scoreDusk)
-  } else {
-    type.disableBody(true, true)
-    scoreDusk += 20
-    checkAmount += 1
-    scoreText.setText('Score: ' + scoreDusk)
-    checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
-    if (checkAmount === checksToPass) {
-      canAsk = true
-    }
+const collectScore = (player, react) => {
+  react.disableBody(true, true)
+  score += 1
+  scoreText.setText('Score: ' + score)
+  if (score === 1) {
+    canAsk = true
   }
 }
 
 let canAsk = false
+let popUp = 0
+let notYet
 let noQuestion
-let duskLevelComplete = false
 
 const askQuestion = () => {
   if (canAsk) {
-    noQuestion.setText('Congrats, you have completed your trello card!')
-    setTimeout(() => {
-      duskLevelComplete = true
-    }, 1000)
+    popUp = 2
   } else {
     noQuestion.setText('Please come back with a complete trello card')
   }
 }
 
 let facing = ''
+
 let react
 let tutor
 let player
+let platforms
+let platform
+let cursors
+
+let ground
+let base
 let floor
 let wall
 let trigger
 
-const worldWidth = 3000
+let game
 
-export default class TutLevel extends Phaser.Scene {
+let keyText
+let keyAmount = 0
+
+let worldWidth = window.innerWidth - 100
+
+export default class CityScene extends Phaser.Scene {
   constructor () {
-    super('dusk-scene')
+    super('city-scene')
   }
 
   preload () {
@@ -82,13 +80,11 @@ export default class TutLevel extends Phaser.Scene {
     this.load.image('base', '/assets/blocksTriggers/base.png')
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
 
-    // dusk assets
+    // city assets
     this.load.image('react', '/assets/react.svg')
-    this.load.image('background', '/assets/Dusk/dusk-bg.png')
-    this.load.image('far-mount', '/assets/Dusk/dusk-far-mount.png')
-    this.load.image('near-mount', '/assets/Dusk/dusk-near-mount.png')
-    this.load.image('far-trees', '/assets/Dusk/dusk-far-trees.png')
-    this.load.image('near-trees', '/assets/Dusk/dusk-near-trees.png')
+    this.load.image('street', '/assets/City/street.png')
+    this.load.image('near-buildings', '/assets/City/near-buildings.png')
+    this.load.image('far-buildings', '/assets/City/far-buildings.png')
     // assets
     this.load.image('react', '/assets/react.svg')
     this.load.image('platform', '/assets/Jungle/platform.png')
@@ -120,7 +116,7 @@ export default class TutLevel extends Phaser.Scene {
       frameWidth: 21,
       frameHeight: 33
     })
-    this.load.spritesheet('idleRight', '/assets/man/idleRight.png', {
+    this.load.spritesheet('idle', '/assets/man/idle.png', {
       frameWidth: 19,
       frameHeight: 34
     })
@@ -141,23 +137,11 @@ export default class TutLevel extends Phaser.Scene {
     })
 
     const width = this.scale.width
-    const height = this.scale.height
-    const totalWidth = width * 10
 
-    this.add
-      .image(width * 0.5, height * 0.5, 'background')
-      .setScale(5)
-      .setScrollFactor(0)
-    this.add.image(800, 300, 'far-mount').setScale(4).setScrollFactor(0)
-    this.add.image(700, 400, 'near-mount').setScale(3).setScrollFactor(0.05)
-    this.add.image(800, 300, 'far-trees').setScale(4.5).setScrollFactor(0.4)
-    this.add.image(1200, 230, 'near-trees').setScale(5).setScrollFactor(0.7)
-
-    // createAligned(this, totalWidth, 'mountain', 0.15)
-    // createAligned(this, totalWidth, 'plateau', 0.5)
-    createAligned(this, totalWidth, 'ground', 1)
-    // createAligned(this, totalWidth, 'plants', 1.25)
-    // this.add.image(width * 0.5, height * 1, 'platform').setScrollFactor(0)
+    this.add.image(670, 505, 'far-buildings').setScale(5.3).setScrollFactor(0)
+    this.add.image(220, 500, 'near-buildings').setScale(5).setScrollFactor(0)
+    this.add.image(600, 475, 'street').setScale(3.5).setScrollFactor(0)
+    this.add.image(1830, 475, 'street').setScale(3.5).setScrollFactor(0)
 
     // Collider floor
 
@@ -166,19 +150,19 @@ export default class TutLevel extends Phaser.Scene {
     wall.create(worldWidth, 0, 'wallBlock')
 
     floor = this.physics.add.staticGroup()
-    floor.create(2010, 648, 'base').setScrollFactor(0)
+    floor.create(2010, 800, 'base').setScrollFactor(0)
 
     // Platforms
 
-    const platforms = this.physics.add.staticGroup()
-    platforms.create(500, 510, 'platform').setScale(0.4).refreshBody()
-    platforms.create(600, 600, 'platform').setScale(0.4).refreshBody()
+    // let platforms = this.physics.add.staticGroup()
+    // platforms.create(500, 510, 'platform').setScale(0.4).refreshBody()
+    // platforms.create(600, 600, 'platform').setScale(0.4).refreshBody()
 
-    platforms.children.entries.forEach(platform => {
-      platform.body.checkCollision.left = false
-      platform.body.checkCollision.right = false
-      platform.body.checkCollision.down = false
-    })
+    // platforms.children.entries.forEach(platform => {
+    //   platform.body.checkCollision.left = false
+    //   platform.body.checkCollision.right = false
+    //   platform.body.checkCollision.down = false
+    // })
 
     // let platform3 = this.physics.add.staticGroup()
     // platform3.create(800, 450, 'platform').setScale(0.4).refreshBody()
@@ -186,21 +170,19 @@ export default class TutLevel extends Phaser.Scene {
     // Character sprites
 
     // Tutor
-    const tutorAxisX = 2900
-    const tutorAxisY = 535
+    // let tutorAxisX = 2900
+    // let tutorAxisY = 535
 
-    tutor = this.physics.add.sprite(tutorAxisX, tutorAxisY, 'idleLeft')
-    tutor.setScale(3)
+    // tutor = this.physics.add.sprite(tutorAxisX, tutorAxisY, 'idleLeft')
+    // tutor.setScale(3)
 
     // Tutor trigger
 
-    const spot = tutor.body.position
-
-    trigger = this.physics.add.sprite(spot.x, spot.y, 'triggerBlock')
+    // trigger = this.physics.add.sprite(tutorAxisX, tutorAxisY, 'triggerBlock')
 
     // Player sprite
 
-    player = this.physics.add.sprite(100, 500, 'idlRight')
+    player = this.physics.add.sprite(100, 500, 'idle')
     player.setScale(3)
     player.body.setGravityY(60)
 
@@ -230,8 +212,8 @@ export default class TutLevel extends Phaser.Scene {
     })
 
     this.anims.create({
-      key: 'idleRight',
-      frames: this.anims.generateFrameNumbers('idleRight', { start: 0, end: 11 }),
+      key: 'idle',
+      frames: this.anims.generateFrameNumbers('idle', { start: 0, end: 11 }),
       frameRate: 10,
       repeat: -1
     })
@@ -278,30 +260,26 @@ export default class TutLevel extends Phaser.Scene {
     // text
     scoreText = this.add
       .text(16, 16, 'Score: 0', {
-        fontFamily: "'Press Start 2P', cursive",
-        fontSize: '20px',
+        fontSize: '32px',
         fill: '#000'
       })
       .setScrollFactor(0)
 
-    checkText = this.add
+    keyText = this.add
       .text(width - 200, 16, 'Trello: 0', {
         fontSize: '32px',
         fill: '#000'
       })
       .setScrollFactor(0)
 
-    noQuestion = this.add.text(tutorAxisX - 480, tutorAxisY - 250, '', {
-      fontSize: '18px',
-      fill: '#000'
-    })
-
-    this.add.image(1500, 400, 'near-trees').setScale(5.5).setScrollFactor(2.5)
-    this.add.image(3500, 400, 'near-trees').setScale(5.5).setScrollFactor(2.5)
-    this.add.image(5000, 400, 'near-trees').setScale(5.5).setScrollFactor(2.5)
+    // noQuestion = this.add.text(tutorAxisX - 480, tutorAxisY - 250, '', {
+    //   fontSize: '18px',
+    //   fill: '#000'
+    // })
 
     // colliders
-    this.physics.add.collider([floor], [player, react, tutor, trigger])
+    this.physics.add.collider(floor, [player, react, tutor, trigger])
+    this.physics.add.collider(react, [platforms])
     this.physics.add.collider(player, [platforms, wall])
   }
 
@@ -336,16 +314,13 @@ export default class TutLevel extends Phaser.Scene {
       player.anims.play('idleLeft', true)
     } else {
       player.setVelocityX(0)
-      player.anims.play('idleRight', true)
+      player.anims.play('idle', true)
     }
     if (this.cursors.up.isDown && player.body.touching.down) {
       player.setVelocityY(-300)
       if (facing === 'left') {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
-    }
-    if (duskLevelComplete) {
-      this.scene.start('jump-scene', scoreDusk)
     }
   }
 }
