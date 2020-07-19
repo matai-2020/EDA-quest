@@ -22,25 +22,25 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   }
 }
 
-let scorePara = 0
 let scoreText
 
 let checkText
 let checkAmount = 0
 const checksToPass = 1
+let currentSceneScore
 
 const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
     type.disableBody(true, true)
-    scorePara += 10
-    scoreText.setText('Score: ' + scorePara)
-    scoreChanged(scorePara)
+    currentSceneScore += 10
+    scoreText.setText('Score: ' + currentSceneScore)
+    scoreChanged(currentSceneScore)
   } else {
     type.disableBody(true, true)
-    scorePara += 20
+    currentSceneScore += 20
     checkAmount += 1
-    scoreText.setText('Score: ' + scorePara)
-    scoreChanged(scorePara)
+    scoreText.setText('Score: ' + currentSceneScore)
+    scoreChanged(currentSceneScore)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
     if (checkAmount === checksToPass) {
       canAsk = true
@@ -160,7 +160,8 @@ export default class ParallaxScene extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create () {
+  create (prevScore) {
+    currentSceneScore = prevScore
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -344,7 +345,7 @@ export default class ParallaxScene extends Phaser.Scene {
     this.cameras.main.startFollow(player)
 
     scoreText = this.add
-      .text(16, 16, 'Score: 0', {
+      .text(16, 16, 'Score: ' + currentSceneScore, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
         fill: '#000'
@@ -429,7 +430,7 @@ export default class ParallaxScene extends Phaser.Scene {
 
     })
     if (paraLevelComplete) {
-      this.scene.start('jump-scene', scorePara)
+      this.scene.start('jump-scene', currentSceneScore)
     }
   }
 }
