@@ -18,3 +18,72 @@ body {
   padding: 40px 10px;
   transition: 0.2s;
 }
+
+/* HIGHSCORE POP UP */
+
+.score-container {
+  position: fixed;
+  padding: 5%;
+  left:35%;
+  bottom: 2%;
+  width: 20%;
+  background-color: #ffa658;
+  font-size: 1.5em;
+  border-radius: 15px;
+}
+
+.game-over {
+  width:60%;
+}
+
+.statement {
+  padding: 2% 0;
+}
+
+.score {
+  text-align: left;
+}
+
+.rank {
+  background-color: #fff;
+  padding: 1%;
+  width: 60%;
+  border-radius: 15px;
+  margin: 2% auto;
+}
+
+.name-input {
+  background: grey;
+  text-align: center;
+  border: none;
+  width:70%;
+  border-radius: 15px;
+  padding: 2%;
+}
+.submit-button {
+  
+  display: block;
+  margin:2% auto;
+  width: 60%;
+  background: hotpink;
+  padding: 2%;
+  border-radius: 15px;
+  border:none;
+
+}
+
+.reveal {
+
+  animation-name: reveal;
+  animation-duration: 3s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

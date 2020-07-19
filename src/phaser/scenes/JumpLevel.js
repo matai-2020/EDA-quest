@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-
+import { scoreChanged, gameOver } from '../score'
 /**
  *
  * @param {Phaser.Scene} scene
@@ -20,9 +20,45 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
     x += m.width
   }
 }
+
+let badReact
+let health = 0
+let isAlive = true
+let explode
+let healthBar
+let right = true
 let jumpUp = false
-let score = 0
+let scoreJumpScene = 0
 let scoreText
+let canAsk = false
+let popUp = 0
+let notYet
+let noQuestion
+let jumpSceneComplete = false
+let facing = ''
+let backPack
+let react
+let check
+let tutor
+let player
+let platforms
+let platform
+let cursors
+let spring
+let ground
+let base
+let floor
+let wall
+let enemyWall
+let trigger
+let bump
+let ent
+let game
+let keyText
+let keyAmount = 0
+let worldWidth = 2000
+let GPSx = 0
+let GPSy = 0
 
 const airUp = () => {
   if (!jumpUp) {
@@ -39,53 +75,64 @@ const bounce = (player, spring) => {
   setTimeout(airDown, 500)
 }
 
-const collectScore = (player, react) => {
-  react.disableBody(true, true)
-  score += 1
-  scoreText.setText('Score: ' + score)
-  if (score === 1) {
-    canAsk = true
+let checkText
+let checkAmount = 0
+let checksToPass = '1'
+
+const collectScore = (player, type) => {
+  if (type.texture.key === 'react') {
+    type.disableBody(true, true)
+    scoreJumpScene += 10
+    scoreText.setText('Score: ' + scoreJumpScene)
+  } else {
+    type.disableBody(true, true)
+    scoreJumpScene += 20
+    checkAmount += 1
+    scoreText.setText('Score: ' + scoreJumpScene)
+    checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
+    if (checkAmount == checksToPass) {
+      canAsk = true
+    }
   }
 }
 
-let canAsk = false
-let popUp = 0
-let notYet
-let noQuestion
+const loseHp = () => {
+  health = health + 1
+  healthBar.anims.play(`health${health}`, true)
+  if (health === 4) {
+    death()
+  }
+}
+
+const death = () => {
+  isAlive = false
+  healthBar.anims.play(`health${health}`, true)
+  // explode.anims.play('death', true)
+  setTimeout(() => {
+    player.disableBody(true, true)
+    healthBar.disableBody(true, true)
+  }, 100)
+  setTimeout(() => { gameOver(isAlive) }, 2000)
+}
+
+// const explosion = () => {
+
+// }
 
 const askQuestion = () => {
   if (canAsk) {
-    popUp = 2
+    noQuestion.setText('Congrats, you have completed your trello card!')
+    setTimeout(() => {
+      jumpSceneComplete = true
+    }, 1000)
   } else {
     noQuestion.setText('Please come back with a complete trello card')
   }
 }
 
-let facing = ''
-let backPack
-let react
-let tutor
-let player
-let platforms
-let platform
-let cursors
-let spring
-let ground
-let base
-let floor
-let wall
-let trigger
-
-let game
-
-let keyText
-let keyAmount = 0
-let worldWidth = 20000
-let worldHeight = 20000
-
 export default class JumpLevel extends Phaser.Scene {
   constructor () {
-    super('parallax-scene')
+    super('jump-scene')
   }
 
   preload () {
@@ -93,15 +140,21 @@ export default class JumpLevel extends Phaser.Scene {
     this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
     this.load.image('base', '/assets/blocksTriggers/base.png')
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
+    this.load.image('wallBlockEnemy', '/assets/blocksTriggers/wallBlock.png')
 
     // assets
-    this.load.image('react', '/assets/react.svg')
+    this.load.image('reactText', '/assets/coinsText.png')
+    this.load.image('checkText', '/assets/checkText.png')
+    this.load.image('check', '/assets/check.png')
+    this.load.image('react', '/assets/reactCoinP.png')
     this.load.image('platform', '/assets/Jungle/platform.png')
+    this.load.image('bump', '/assets/Jungle/bump.png')
     this.load.image('sky', '/assets/Jungle/sky.png')
     this.load.image('mountain', '/assets/Jungle/mountains.png')
     this.load.image('plateau', '/assets/Jungle/plateau.png')
     this.load.image('ground', '/assets/Jungle/ground.png')
-    this.load.image('arrow-keys', '/assets/Jungle/arrow-keys.png')
+    this.load.image('arrow-keys', '/assets/left-right-keys.png')
+    this.load.image('up-key', '/assets/up-key.png')
     this.load.image(
       'platform',
       '/assets/airpack/PNG/Environment/ground_grass.png'
@@ -126,7 +179,7 @@ export default class JumpLevel extends Phaser.Scene {
       frameWidth: 21,
       frameHeight: 33
     })
-    this.load.spritesheet('idle', '/assets/man/idle.png', {
+    this.load.spritesheet('idleRight', '/assets/man/idleRight.png', {
       frameWidth: 19,
       frameHeight: 34
     })
@@ -134,7 +187,24 @@ export default class JumpLevel extends Phaser.Scene {
       frameWidth: 19,
       frameHeight: 34
     })
+    this.load.spritesheet('heart', '/assets/Game/Hearts/PNG/animated/border/heart_animated_2.png', {
+      frameHeight: 17,
+      frameWidth: 17
+    })
+    this.load.spritesheet('explode', '/assets/Game/explosion.png', {
+      frameWidth: 125.4,
+      frameHeight: 107
+    })
 
+    // ent enemy assets
+    this.load.spritesheet('walkRight', '/assets/PNG/ent/walk-right.png', {
+      frameWidth: 99,
+      frameHeight: 103
+    })
+    this.load.spritesheet('walkLeft', '/assets/PNG/ent/walk-left.png', {
+      frameWidth: 99,
+      frameHeight: 103
+    })
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
@@ -152,10 +222,11 @@ export default class JumpLevel extends Phaser.Scene {
 
     this.add.image(width * 0.5, height * 0.5, 'sky').setScrollFactor(0)
 
-    // createAligned(this, totalWidth, 'mountain', 0.15)
-    // createAligned(this, totalWidth, 'plateau', 0.5)
+    createAligned(this, totalWidth, 'mountain', 0.15)
+    createAligned(this, totalWidth, 'plateau', 0.5)
+    bump = this.physics.add.staticImage(1400, 620, 'bump')
     createAligned(this, totalWidth, 'ground', 1)
-    // createAligned(this, totalWidth, 'plants', 1.25)
+    createAligned(this, totalWidth, 'plants', 1.25)
     // this.add.image(width * 0.5, height * 1, 'platform').setScrollFactor(0)
 
     // Collider floor & platforms
@@ -164,33 +235,40 @@ export default class JumpLevel extends Phaser.Scene {
     wall.create(-10, 0, 'wallBlock')
     wall.create(worldWidth, 0, 'wallBlock')
 
+    enemyWall = this.physics.add.staticGroup()
+    enemyWall.create(1500, 400, 'wallBlockEnemy')
+    enemyWall.create(500, 400, 'wallBlockEnemy')
+
     floor = this.physics.add.staticGroup()
     floor.create(2010, 648, 'base').setScrollFactor(0)
 
-    platforms = this.physics.add.staticGroup()
-    platforms.create(800, 450, 'platform').setScale(0.4).refreshBody()
+    // platforms = this.physics.add.staticGroup()
+    // platforms.create(800, 500, 'platform').setScale(0.4).refreshBody()
 
+    // platforms.children.entries.forEach(platform => {
+    //   ;(platform.body.checkCollision.left = false),
+    //     (platform.body.checkCollision.right = false),
+    //     (platform.body.checkCollision.down = false)
+    // })
     // background images
-
-    this.add.image(300, 580, 'arrow-keys').setScale(0.2)
 
     // Character sprites
 
     // Tutor
-    tutor = this.physics.add.sprite(1100, 535, 'idle')
+    tutor = this.physics.add.sprite(1700, 535, 'idleLeft')
     tutor.setScale(3)
 
     // Tutor trigger
 
-    trigger = this.physics.add.sprite(1100, 535, 'triggerBlock')
+    let spot = tutor.body.position
+
+    trigger = this.physics.add.sprite(spot.x, spot.y, 'triggerBlock')
 
     // Player sprite
 
-    player = this.physics.add.sprite(100, 500, 'idle')
+    player = this.physics.add.sprite(100, 580, 'idleRight')
     player.setScale(3)
-    player.body.setGravityY(60)
-
-    // player.setBounce(0.05)
+    player.body.setGravityY(50)
     player.setCollideWorldBounds(false)
     // player.onWorldBounds = true
     player.body.checkCollision.up = false
@@ -216,8 +294,11 @@ export default class JumpLevel extends Phaser.Scene {
     })
 
     this.anims.create({
-      key: 'idle',
-      frames: this.anims.generateFrameNumbers('idle', { start: 0, end: 11 }),
+      key: 'idleRight',
+      frames: this.anims.generateFrameNumbers('idleRight', {
+        start: 0,
+        end: 11
+      }),
       frameRate: 10,
       repeat: -1
     })
@@ -249,6 +330,90 @@ export default class JumpLevel extends Phaser.Scene {
       repeat: -1
     })
 
+    // HEALTH BAR
+    healthBar = this.physics.add.sprite(player.body.position.x + 15, player.body.position.y - 40, 'heart')
+    healthBar.setScale(2)
+
+    this.anims.create({
+      key: 'health1',
+      frames: this.anims.generateFrameNumbers('heart', {
+        start: 0,
+        end: 1
+      }),
+      frameRate: 10
+
+    })
+
+    this.anims.create({
+      key: 'health2',
+      frames: this.anims.generateFrameNumbers('heart', {
+        start: 1,
+        end: 2
+      }),
+      frameRate: 10
+
+    })
+    this.anims.create({
+      key: 'health3',
+      frames: this.anims.generateFrameNumbers('heart', {
+        start: 2,
+        end: 3
+      }),
+      frameRate: 10
+
+    })
+    this.anims.create({
+      key: 'health4',
+      frames: this.anims.generateFrameNumbers('heart', {
+        start: 3,
+        end: 4
+      }),
+      frameRate: 10
+
+    })
+    this.anims.create({
+      key: 'health5',
+      frames: this.anims.generateFrameNumbers('heart', {
+        start: 4,
+        end: 5
+      }),
+      frameRate: 10
+
+    })
+
+    // Explosion animation
+
+    // Enemy Sprites
+    ent = this.physics.add.sprite(800, 400, 'walkRight')
+    ent.setScale(3)
+    ent.body.setGravityY(80)
+    // ent.setCollideWorldBounds(true)
+    ent.onWorldBounds = true
+    ent.body.checkCollision.up = false
+    ent.body.checkCollision.left = true
+    ent.body.checkCollision.right = true
+    this.physics.add.overlap(ent, player, bounce, null, this)
+    this.physics.add.overlap(ent, player, death, null, this)
+
+    this.anims.create({
+      key: 'entLeft',
+      frames: this.anims.generateFrameNumbers('walkLeft', {
+        start: 0,
+        end: 4
+      }),
+      frameRate: 10,
+      repeat: -1
+    })
+
+    this.anims.create({
+      key: 'entRight',
+      frames: this.anims.generateFrameNumbers('walkRight', {
+        start: 0,
+        end: 4
+      }),
+      frameRate: 10,
+      repeat: -1
+    })
     // Interactive Sprites
 
     // Spring
@@ -258,14 +423,21 @@ export default class JumpLevel extends Phaser.Scene {
     spring.body.checkCollision.left = false
     spring.body.checkCollision.right = false
     this.physics.add.overlap(spring, player, bounce, null, this)
-    console.log(spring)
+    // console.log(spring)
 
     // coin and collection
 
-    react = this.physics.add.sprite(550, 600, 'react')
-    react.setScale(0.2)
+    react = this.physics.add.staticGroup()
+    react.create(550, 600, 'react').setScale(0.05).refreshBody()
+    react.create(850, 600, 'react').setScale(0.05).refreshBody()
 
     this.physics.add.overlap(player, react, collectScore, null, this)
+    this.physics.add.overlap(player, trigger, askQuestion, null, this)
+
+    check = this.physics.add.staticGroup()
+    check.create(1400, 550, 'check').setScale(0.08).refreshBody()
+
+    this.physics.add.overlap(player, check, collectScore, null, this)
     this.physics.add.overlap(player, trigger, askQuestion, null, this)
 
     // camera follow
@@ -275,26 +447,29 @@ export default class JumpLevel extends Phaser.Scene {
     // text
     scoreText = this.add
       .text(16, 16, 'Score: 0', {
-        fontSize: '32px',
+        fontFamily: "'Press Start 2P', cursive",
+        fontSize: '20px',
         fill: '#000'
       })
       .setScrollFactor(0)
 
-    keyText = this.add
-      .text(width - 200, 16, 'Trello: 0', {
-        fontSize: '32px',
+    checkText = this.add
+      .text(width - 300, 16, 'Trello: 0 / ' + checksToPass, {
+        fontFamily: "'Press Start 2P', cursive",
+        fontSize: '20px',
         fill: '#000'
       })
       .setScrollFactor(0)
-    noQuestion = this.add.text(1000, 470, '', {
-      fontSize: '18px',
+    noQuestion = this.add.text(spot.x - 250, spot.y - 10, '', {
+      fontFamily: "'Press Start 2P', cursive",
+      fontSize: '12px',
       fill: '#000'
     })
 
     // colliders
-    this.physics.add.collider(floor, [player, react, tutor, trigger, spring])
-
-    this.physics.add.collider(player, [platforms, wall, spring])
+    this.physics.add.collider(floor, [player, ent, react, tutor, trigger, spring])
+    this.physics.add.collider(player, [platforms, ent, wall, spring])
+    this.physics.add.collider(ent, [platforms, ent, enemyWall, wall, spring])
   }
 
   update () {
@@ -302,7 +477,10 @@ export default class JumpLevel extends Phaser.Scene {
     // console.log(gps)
     const cam = this.cameras.main
     const speed = 15
+    GPSy = player.body.position.y
+    GPSx = player.body.position.x
 
+    // Player
     if (this.cursors.left.isDown) {
       // facing = 'left'
       player.setVelocityX(-300)
@@ -330,7 +508,7 @@ export default class JumpLevel extends Phaser.Scene {
       player.anims.play('idleLeft', true)
     } else {
       player.setVelocityX(0)
-      player.anims.play('idle', true)
+      player.anims.play('idleRight', true)
     }
     if (this.cursors.up.isDown && player.body.touching.down) {
       player.setVelocityY(-300)
@@ -344,5 +522,33 @@ export default class JumpLevel extends Phaser.Scene {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
     }
+    // enemy ENT
+    if (ent.body.touching.right || ent.body.blocked.right) {
+      right = false
+      ent.body.velocity.x = -100
+      ent.anims.play('entLeft', true)
+    }
+    if (ent.body.touching.left || ent.body.blocked.left || right) {
+      ent.body.velocity.x = 100
+      ent.anims.play('entRight', true)
+    }
+
+    // HEALTHBAR ABOVE PLAYER
+
+    healthBar.body.position.x = player.body.position.x + 15
+    healthBar.body.position.y = player.body.position.y - 40
+
+    // DEATH
+    // if (!isAlive) {
+    //   explode = this.add.sprite(player.body.position.x + 50, player.body.position.y + 45, 'explode')
+    //   explode.setScale(1.4)
+    //   this.anims.create({
+    //     key: 'death',
+    //     frames: this.anims.generateFrameNumbers('explode', {
+    //       start: 0,
+    //       end: 16
+    //     }),
+    //     frameRate: 24
+    //   })
   }
 }
