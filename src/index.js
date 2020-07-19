@@ -11,7 +11,7 @@ import App from './components/App.jsx'
 import dusk from './phaser/scenes/DuskScene'
 import title from './phaser/scenes/TitleScene'
 import jumpLevel from './phaser/scenes/JumpLevel'
-// import parallax from './phaser/scenes/ParallaxScene'
+import parallax from './phaser/scenes/ParallaxScene'
 import tutLevel from './phaser/scenes/TutLevel'
 
 var firebaseConfig = {
@@ -27,7 +27,7 @@ var firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig)
 
-let config = {
+const config = {
   parent: 'phaser',
   type: Phaser.AUTO,
   width: window.innerWidth - 100,
@@ -39,30 +39,28 @@ let config = {
       debug: false
     }
   },
-  scene: [title, tutLevel, dusk, jumpLevel]
+  scene: [tutLevel, title, dusk, jumpLevel, parallax]
 }
 
 const game = new Phaser.Game(config)
 
 // Game Logo disappears on scroll
 
-window.onscroll = function () {
-  scrollFunction()
-}
+// window.onscroll = function () {
+//   scrollFunction()
+// }
 
-function scrollFunction () {
-  if (document.body.scrollTop >= 1 || document.documentElement.scrollTop >= 1) {
-    document.getElementById('logo').style.width = '10px'
-    document.getElementById('logo').style.visibility = 'hidden'
-  } else {
-    document.getElementById('logo').style.visibility = 'visible'
-    document.getElementById('logo').style.width = '900px'
-    document.getElementById('logo').style.marginTop = '150px'
-    document.getElementById('logo').style.marginBottom = '230px'
-  }
-}
-
-// const game = new Phaser.Game(config)
+// function scrollFunction () {
+//   if (document.body.scrollTop >= 1 || document.documentElement.scrollTop >= 1) {
+//     document.getElementById('logo').style.width = '10px'
+//     document.getElementById('logo').style.visibility = 'hidden'
+//   } else {
+//     document.getElementById('logo').style.visibility = 'visible'
+//     document.getElementById('logo').style.width = '900px'
+//     document.getElementById('logo').style.marginTop = '150px'
+//     document.getElementById('logo').style.marginBottom = '230px'
+//   }
+// }
 
 ReactDOM.render(
   <App />,

@@ -26,7 +26,7 @@ let scoreText
 
 let checkText
 let checkAmount = 0
-let checksToPass = '1'
+const checksToPass = 1
 
 const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
@@ -39,15 +39,13 @@ const collectScore = (player, type) => {
     checkAmount += 1
     scoreText.setText('Score: ' + scoreTut)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
-    if (checkAmount == checksToPass) {
+    if (checkAmount === checksToPass) {
       canAsk = true
     }
   }
 }
 
 let canAsk = false
-let popUp = 0
-let notYet
 let noQuestion
 
 const askQuestion = () => {
@@ -62,34 +60,26 @@ const askQuestion = () => {
 }
 
 let facing = ''
-let backPack
 let react
 let check
 let tutor
 let player
 let platforms
-let platform
-let cursors
-let spring
-let ground
-let base
 let floor
 let wall
 let trigger
 let bump
 
-let game
-
 let tutLevelComplete = false
 
-let worldWidth = 2000
+const worldWidth = 2000
 
 export default class TutLevel extends Phaser.Scene {
-  constructor() {
+  constructor () {
     super('tut-level')
   }
 
-  preload() {
+  preload () {
     // invis walls/triggers
     this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
     this.load.image('base', '/assets/blocksTriggers/base.png')
@@ -118,33 +108,33 @@ export default class TutLevel extends Phaser.Scene {
     // player assets
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
       frameWidth: 20,
-      frameHeight: 35,
+      frameHeight: 35
     })
     this.load.spritesheet('jumpLeft', '/assets/man/jumpLeft.png', {
       frameWidth: 20,
-      frameHeight: 35,
+      frameHeight: 35
     })
     this.load.spritesheet('runLeft', '/assets/man/runLeft.png', {
       frameWidth: 21,
-      frameHeight: 33,
+      frameHeight: 33
     })
     this.load.spritesheet('runRight', '/assets/man/runRight.png', {
       frameWidth: 21,
-      frameHeight: 33,
+      frameHeight: 33
     })
     this.load.spritesheet('idleRight', '/assets/man/idleRight.png', {
       frameWidth: 19,
-      frameHeight: 34,
+      frameHeight: 34
     })
     this.load.spritesheet('idleLeft', '/assets/man/idleLeft.png', {
       frameWidth: 19,
-      frameHeight: 34,
+      frameHeight: 34
     })
 
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create() {
+  create () {
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -198,7 +188,7 @@ export default class TutLevel extends Phaser.Scene {
 
     // Tutor trigger
 
-    let spot = tutor.body.position
+    const spot = tutor.body.position
 
     trigger = this.physics.add.sprite(spot.x, spot.y, 'triggerBlock')
 
@@ -215,69 +205,60 @@ export default class TutLevel extends Phaser.Scene {
       key: 'left',
       frames: this.anims.generateFrameNumbers('runLeft', {
         start: 7,
-        end: 0,
+        end: 0
       }),
       frameRate: 10,
-      repeat: -1,
+      repeat: -1
     })
 
     this.anims.create({
       key: 'right',
       frames: this.anims.generateFrameNumbers('runRight', {
         start: 0,
-        end: 7,
+        end: 7
       }),
       frameRate: 10,
-      repeat: -1,
+      repeat: -1
     })
 
     this.anims.create({
       key: 'idleRight',
       frames: this.anims.generateFrameNumbers('idleRight', {
         start: 0,
-        end: 11,
+        end: 11
       }),
       frameRate: 10,
-      repeat: -1,
+      repeat: -1
     })
 
     this.anims.create({
       key: 'idleLeft',
       frames: this.anims.generateFrameNumbers('idleLeft', {
         start: 0,
-        end: 11,
+        end: 11
       }),
       frameRate: 10,
-      repeat: -1,
+      repeat: -1
     })
 
     this.anims.create({
       key: 'jumpLeft',
       frames: this.anims.generateFrameNumbers('jumpLeft', { start: 0, end: 2 }),
       frameRate: 5,
-      repeat: -1,
+      repeat: -1
     })
 
     this.anims.create({
       key: 'jumpRight',
       frames: this.anims.generateFrameNumbers('jumpRight', {
         start: 0,
-        end: 2,
+        end: 2
       }),
       frameRate: 5,
-      repeat: -1,
+      repeat: -1
     })
 
     // Interactive Sprites
-
-    // Spring
-    // spring = this.physics.add.staticImage(550, 600, 'spring')
-    // spring.setScale(1)
-    // spring.body.checkCollision.up = false
-    // spring.body.checkCollision.left = false
-    // spring.body.checkCollision.right = false
-    // this.physics.add.overlap(spring, player, bounce, null, this)
-    // console.log(spring)
 
     // coin and collection
 
@@ -303,7 +284,7 @@ export default class TutLevel extends Phaser.Scene {
       .text(16, 16, 'Score: 0', {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
-        fill: '#000',
+        fill: '#000'
       })
       .setScrollFactor(0)
 
@@ -311,13 +292,13 @@ export default class TutLevel extends Phaser.Scene {
       .text(width - 300, 16, 'Trello: 0 / ' + checksToPass, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
-        fill: '#000',
+        fill: '#000'
       })
       .setScrollFactor(0)
     noQuestion = this.add.text(spot.x - 250, spot.y - 10, '', {
       fontFamily: "'Press Start 2P', cursive",
       fontSize: '12px',
-      fill: '#000',
+      fill: '#000'
     })
 
     // colliders
@@ -325,7 +306,7 @@ export default class TutLevel extends Phaser.Scene {
     this.physics.add.collider(player, [platforms, wall, bump])
   }
 
-  update() {
+  update () {
     const cam = this.cameras.main
     const speed = 15
 

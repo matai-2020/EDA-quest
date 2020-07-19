@@ -2,57 +2,59 @@
   margin: 0;
   padding: 0;
 }
-
 #phaser {
   display: flex;
   justify-content: center;
   padding-bottom: 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
 body {
   background-color: #16303c;
+  text-align: center;
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
 #logo {
   padding: 40px 10px;
   transition: 0.2s;
 }
-
 /* HIGHSCORE POP UP */
-
 .score-container {
   position: fixed;
   padding: 5%;
   left:35%;
   bottom: 2%;
   width: 20%;
-  background-color: #ffa658;
   font-size: 1.5em;
   border-radius: 15px;
 }
-
+.jungle-background {
+  position: fixed;
+  left:35%;
+  bottom: 7%;
+  width: 30%;
+  font-size: 1.5em;
+  border-radius: 15px;
+  z-index: -1;
+}
 .game-over {
   width:60%;
+  padding-top: 1%;
 }
-
 .statement {
   padding: 2% 0;
 }
-
-.score {
-  text-align: left;
-}
-
 .rank {
-  background-color: #fff;
+  color: #fff;
+  background: #a2be30;
   padding: 1%;
   width: 60%;
   border-radius: 15px;
   margin: 2% auto;
 }
-
 .name-input {
+  font-size: 1em;
+  color: #fff;
   background: grey;
   text-align: center;
   border: none;
@@ -60,25 +62,33 @@ body {
   border-radius: 15px;
   padding: 2%;
 }
+
+.name-input:focus{
+  outline:none;
+}
+
 .submit-button {
-  
+  color: #fff;
   display: block;
   margin:2% auto;
   width: 60%;
-  background: hotpink;
+  background: #303a07;
   padding: 2%;
   border-radius: 15px;
   border:none;
-
 }
-
+.submit-button:hover {
+  background: #1f2505;
+}
+.submit-button:focus {
+  border: none;
+  outline: none;
+}
 .reveal {
-
   animation-name: reveal;
   animation-duration: 3s;
   animation-fill-mode: forwards;
 }
-
 @keyframes reveal {
   from {
     opacity: 0;

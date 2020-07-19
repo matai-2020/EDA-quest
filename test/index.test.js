@@ -1,9 +1,9 @@
-const { config } = require("../src/index.js");
+const { config } = require('../src/index.js')
 
-test("string is a string", () => {
-	expect(typeof "string").toBe("string");
-});
+test('string is a string', () => {
+  expect(typeof 'string').toBe('string')
+})
 
-test("config is an object", () => {
-	expect(typeof config).toBe("object");
-});
+test('config is an object', () => {
+  expect(typeof config).toBe('object')
+})
