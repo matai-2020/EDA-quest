@@ -2,6 +2,22 @@
   margin: 0;
   padding: 0;
 }
+
+#logo {
+  visibility: visible;
+  width: 900px;
+  height: 400px;
+  /* margin-top: 150px;
+  margin-bottom: 230px; */
+}
+
+.logoContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
 #phaser {
   display: flex;
   justify-content: center;
@@ -63,8 +79,13 @@ body {
   padding: 2%;
 }
 
+<<<<<<< HEAD
 .name-input:focus{
   outline:none;
+=======
+.name-input:focus {
+  outline: none;
+>>>>>>> dev
 }
 
 .submit-button {

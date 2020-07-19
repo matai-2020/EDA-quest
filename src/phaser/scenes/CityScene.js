@@ -117,28 +117,28 @@ export default class CityScene extends Phaser.Scene {
 
     // player assets
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
-      frameWidth: 20,
-      frameHeight: 35
+      frameWidth: 60,
+      frameHeight: 105
     })
     this.load.spritesheet('jumpLeft', '/assets/man/jumpLeft.png', {
-      frameWidth: 20,
-      frameHeight: 35
+      frameWidth: 60,
+      frameHeight: 105
     })
     this.load.spritesheet('runLeft', '/assets/man/runLeft.png', {
-      frameWidth: 21,
-      frameHeight: 33
+      frameWidth: 63,
+      frameHeight: 99
     })
     this.load.spritesheet('runRight', '/assets/man/runRight.png', {
-      frameWidth: 21,
-      frameHeight: 33
+      frameWidth: 63,
+      frameHeight: 99
     })
     this.load.spritesheet('idleRight', '/assets/man/idleRight.png', {
-      frameWidth: 19,
-      frameHeight: 34
+      frameWidth: 57,
+      frameHeight: 102
     })
     this.load.spritesheet('idleLeft', '/assets/man/idleLeft.png', {
-      frameWidth: 19,
-      frameHeight: 34
+      frameWidth: 57,
+      frameHeight: 102
     })
 
     this.cursors = this.input.keyboard.createCursorKeys()
@@ -200,7 +200,6 @@ export default class CityScene extends Phaser.Scene {
     // Player sprite
 
     player = this.physics.add.sprite(100, 500, 'idle')
-    player.setScale(3)
     player.body.setGravityY(60)
 
     // player.setBounce(0.05)
