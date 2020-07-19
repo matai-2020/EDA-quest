@@ -50,12 +50,12 @@ let noQuestion
 
 const askQuestion = () => {
   if (canAsk) {
-    noQuestion.setText('Congrats, you have completed your trello card!')
+    noQuestion.setText('Congrats, you have \n\ncompleted your trello card!')
     setTimeout(() => {
       tutLevelComplete = true
     }, 1000)
   } else {
-    noQuestion.setText('Please come back with a complete trello card')
+    noQuestion.setText('Please come back with \n\na complete trello card')
   }
 }
 
@@ -86,7 +86,7 @@ export default class TutLevel extends Phaser.Scene {
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
 
     // assets
-    this.load.image('don', '/assets/man/lane.png')
+    this.load.image('lane', '/assets/man/lane.png')
     this.load.image('reactText', '/assets/coinsText.png')
     this.load.image('checkText', '/assets/checkText.png')
     this.load.image('check', '/assets/check.png')
@@ -184,14 +184,14 @@ export default class TutLevel extends Phaser.Scene {
     // Character sprites
 
     // Tutor
-    tutor = this.physics.add.sprite(1700, 535, 'don')
+    tutor = this.physics.add.sprite(1700, 535, 'lane')
     tutor.setScale(0.3)
 
     // Tutor trigger
 
     const spot = tutor.body.position
 
-    trigger = this.physics.add.sprite(spot.x, spot.y, 'triggerBlock')
+    trigger = this.physics.add.sprite(1700, 535, 'triggerBlock')
 
     // Player sprite
 
@@ -296,10 +296,10 @@ export default class TutLevel extends Phaser.Scene {
         fill: '#000'
       })
       .setScrollFactor(0)
-    noQuestion = this.add.text(spot.x - 250, spot.y - 10, '', {
+    noQuestion = this.add.text(spot.x - 10, spot.y + 100, '', {
       fontFamily: "'Press Start 2P', cursive",
       fontSize: '12px',
-      fill: '#000'
+      fill: 'white'
     })
 
     // colliders
