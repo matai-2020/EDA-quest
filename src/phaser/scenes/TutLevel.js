@@ -26,7 +26,7 @@ let scoreText
 
 let checkText
 let checkAmount = 0
-const checksToPass = '1'
+const checksToPass = 1
 
 const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
@@ -39,15 +39,13 @@ const collectScore = (player, type) => {
     checkAmount += 1
     scoreText.setText('Score: ' + scoreTut)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
-    if (checkAmount == checksToPass) {
+    if (checkAmount === checksToPass) {
       canAsk = true
     }
   }
 }
 
 let canAsk = false
-const popUp = 0
-let notYet
 let noQuestion
 
 const askQuestion = () => {
@@ -62,23 +60,15 @@ const askQuestion = () => {
 }
 
 let facing = ''
-let backPack
 let react
 let check
 let tutor
 let player
 let platforms
-let platform
-let cursors
-let spring
-let ground
-let base
 let floor
 let wall
 let trigger
 let bump
-
-let game
 
 let tutLevelComplete = false
 
@@ -269,15 +259,6 @@ export default class TutLevel extends Phaser.Scene {
     })
 
     // Interactive Sprites
-
-    // Spring
-    // spring = this.physics.add.staticImage(550, 600, 'spring')
-    // spring.setScale(1)
-    // spring.body.checkCollision.up = false
-    // spring.body.checkCollision.left = false
-    // spring.body.checkCollision.right = false
-    // this.physics.add.overlap(spring, player, bounce, null, this)
-    // console.log(spring)
 
     // coin and collection
 

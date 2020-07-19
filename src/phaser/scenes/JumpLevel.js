@@ -41,7 +41,7 @@ const bounce = (player, spring) => {
 
 let checkText
 let checkAmount = 0
-const checksToPass = '1'
+const checksToPass = 1
 
 const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
@@ -54,15 +54,13 @@ const collectScore = (player, type) => {
     checkAmount += 1
     scoreText.setText('Score: ' + scoreJumpScene)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
-    if (checkAmount == checksToPass) {
+    if (checkAmount === checksToPass) {
       canAsk = true
     }
   }
 }
 
 let canAsk = false
-const popUp = 0
-let notYet
 let noQuestion
 let jumpSceneComplete = false
 
@@ -78,26 +76,16 @@ const askQuestion = () => {
 }
 
 let facing = ''
-let backPack
 let react
 let check
 let tutor
 let player
 let platforms
-let platform
-let cursors
 let spring
-let ground
-let base
 let floor
 let wall
 let trigger
-let bump
 
-let game
-
-let keyText
-const keyAmount = 0
 const worldWidth = 2000
 
 export default class JumpLevel extends Phaser.Scene {
@@ -160,7 +148,7 @@ export default class JumpLevel extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create () {
+  create (lastLevelScore) {
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -176,7 +164,6 @@ export default class JumpLevel extends Phaser.Scene {
 
     createAligned(this, totalWidth, 'mountain', 0.15)
     createAligned(this, totalWidth, 'plateau', 0.5)
-    bump = this.physics.add.staticImage(1400, 620, 'bump')
     createAligned(this, totalWidth, 'ground', 1)
     createAligned(this, totalWidth, 'plants', 1.25)
     // this.add.image(width * 0.5, height * 1, 'platform').setScrollFactor(0)
@@ -310,7 +297,7 @@ export default class JumpLevel extends Phaser.Scene {
 
     // text
     scoreText = this.add
-      .text(16, 16, 'Score: 0', {
+      .text(16, 16, 'Score: ' + lastLevelScore, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
         fill: '#000'
@@ -379,6 +366,9 @@ export default class JumpLevel extends Phaser.Scene {
       if (facing === 'left') {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
+    }
+    if (jumpSceneComplete) {
+      this.scene.start('parallax-scene', scoreJumpScene)
     }
   }
 }
