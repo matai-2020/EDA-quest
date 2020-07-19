@@ -269,7 +269,7 @@ export default class JumpLevel extends Phaser.Scene {
 
     player = this.physics.add.sprite(100, 580, 'idleRight')
     player.setScale(3)
-    player.body.setGravityY(50)
+    player.body.setGravityY(30)
     player.setCollideWorldBounds(false)
     // player.onWorldBounds = true
     player.body.checkCollision.up = false
