@@ -42,17 +42,18 @@ const bounce = (player, spring) => {
 let checkText
 let checkAmount = 0
 const checksToPass = 1
+let currentSceneScore
 
 const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
     type.disableBody(true, true)
-    scoreJumpScene += 10
-    scoreText.setText('Score: ' + scoreJumpScene)
+    currentSceneScore += 10
+    scoreText.setText('Score: ' + currentSceneScore)
   } else {
     type.disableBody(true, true)
-    scoreJumpScene += 20
+    currentSceneScore += 20
     checkAmount += 1
-    scoreText.setText('Score: ' + scoreJumpScene)
+    scoreText.setText('Score: ' + currentSceneScore)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
     if (checkAmount === checksToPass) {
       canAsk = true
@@ -148,7 +149,8 @@ export default class JumpLevel extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create (lastLevelScore) {
+  create (prevScore) {
+    currentSceneScore = prevScore
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -297,7 +299,7 @@ export default class JumpLevel extends Phaser.Scene {
 
     // text
     scoreText = this.add
-      .text(16, 16, 'Score: ' + lastLevelScore, {
+      .text(16, 16, 'Score: ' + currentSceneScore, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
         fill: '#000'
@@ -368,7 +370,7 @@ export default class JumpLevel extends Phaser.Scene {
       } else player.anims.play('jumpRight', true)
     }
     if (jumpSceneComplete) {
-      this.scene.start('parallax-scene', scoreJumpScene)
+      this.scene.start('parallax-scene', currentSceneScore)
     }
   }
 }
