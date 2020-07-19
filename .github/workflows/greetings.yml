@@ -5,7 +5,7 @@ on:
     branches: [master, dev]
   push:
     branches:
-      - dev
+      - [dev, master]
 
 jobs:
   tests:
