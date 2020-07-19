@@ -6,10 +6,17 @@
 #logo {
   visibility: visible;
   width: 900px;
-  margin-top: 150px;
-  margin-bottom: 230px;
+  height: 400px;
+  /* margin-top: 150px;
+  margin-bottom: 230px; */
 }
 
+.logoContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
 #phaser {
   display: flex;
