@@ -30,7 +30,7 @@ let healthBar
 let right = true
 let jumpUp = false
 let tornadoHit = false
-let scoreJumpScene = 0
+const scoreJumpScene = 0
 let scoreText
 let canAsk = false
 const popUp = 0
@@ -60,8 +60,8 @@ let springDown
 let keyText
 const keyAmount = 0
 const worldWidth = 2000
-let GPSx = 0
-let GPSy = 0
+const GPSx = 0
+const GPSy = 0
 
 const airUp = () => {
   if (!jumpUp) {
@@ -92,12 +92,14 @@ const collectScore = (player, type) => {
     type.disableBody(true, true)
     currentSceneScore += 10
     scoreChanged(currentSceneScore)
+    console.log(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
   } else {
     type.disableBody(true, true)
     currentSceneScore += 20
     checkAmount += 1
     scoreChanged(currentSceneScore)
+    console.log(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
     if (checkAmount === checksToPass) {
@@ -170,10 +172,10 @@ export default class JumpLevel extends Phaser.Scene {
       '/assets/airpack/PNG/Environment/ground_grass.png'
     )
     this.load.image('plants', '/assets/Jungle/plant.png')
-    this.load.image('information', '/assets/PNG/tornado.png')
+    this.load.image('information', '/assets/PNG/tornado_text.png')
 
     // Tornado load
-    this.load.spritesheet('tornado', '/assets/PNG/Tornado.png', {
+    this.load.spritesheet('tornado', '/assets/PNG/tornado.png', {
       frameWidth: 28.8333,
       frameHeight: 42
     })
@@ -497,7 +499,7 @@ export default class JumpLevel extends Phaser.Scene {
       .text(16, 16, 'Score: ' + currentSceneScore, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
-        fill: '#000'
+        fill: 'white'
       })
       .setScrollFactor(0)
 
@@ -505,14 +507,14 @@ export default class JumpLevel extends Phaser.Scene {
       .text(width - 300, 16, 'Trello: 0 / ' + checksToPass, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
-        fill: '#000'
+        fill: 'white'
       })
       .setScrollFactor(0)
 
     noQuestion = this.add.text(spot.x - 250, spot.y - 10, '', {
       fontFamily: "'Press Start 2P', cursive",
       fontSize: '12px',
-      fill: '#000'
+      fill: 'white'
     })
 
     // colliders
@@ -579,11 +581,11 @@ export default class JumpLevel extends Phaser.Scene {
 
     if (tornado.body.y > 1600) {
       tornado.setY(500)
-      tornado.setX(40) 
+      tornado.setX(40)
     }
     // next level
     if (jumpSceneComplete) {
-      this.scene.start('parallax-scene', currentSceneScore)
+      this.scene.start('question-two', currentSceneScore)
     }
     // enemy ENT
     if (ent.body.touching.right || ent.body.blocked.right) {
@@ -596,11 +598,6 @@ export default class JumpLevel extends Phaser.Scene {
       ent.body.velocity.x = 100
       ent.anims.play('entRight', true)
     }
-    // Change Scene
-    if (jumpSceneComplete) {
-      this.scene.start('dusk-scene', currentSceneScore)
-    }
-
     // HEALTHBAR ABOVE PLAYER
 
     healthBar.body.position.x = player.body.position.x + 15

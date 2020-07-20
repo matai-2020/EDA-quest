@@ -15,6 +15,11 @@ import dusk from './phaser/scenes/DuskScene'
 import city from './phaser/scenes/CityScene'
 import parallax from './phaser/scenes/ParallaxScene'
 
+import questionOne from './phaser/scenes/textScenes/questionOne.js'
+import questionTwo from './phaser/scenes/textScenes/questionTwo.js'
+import questionThree from './phaser/scenes/textScenes/questionThree.js'
+import questionFour from './phaser/scenes/textScenes/questionFour.js'
+
 var firebaseConfig = {
   apiKey: 'AIzaSyD5DEUiq_fXMfIJpiPH4HUvbXbPGPDP2-0',
   authDomain: 'eda-quest.firebaseapp.com',
@@ -40,7 +45,7 @@ const config = {
       debug: false
     }
   },
-  scene: [title, tutLevel, jumpLevel, parallax, dusk, city]
+  scene: [title, questionOne, tutLevel, jumpLevel, parallax, dusk, city, questionTwo, questionThree, questionFour]
 }
 /*eslint-disable */
 const game = new Phaser.Game(config)

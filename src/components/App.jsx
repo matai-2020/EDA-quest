@@ -2,8 +2,6 @@ import React from 'react'
 import HighScore from './HighScore.jsx'
 
 window.onscroll = function () {
-  console.log(window.scrollY)
-  console.log('test')
   scrollFunction()
 }
 
