@@ -30,7 +30,7 @@ let healthBar
 let right = true
 let jumpUp = false
 let tornadoHit = false
-let scoreJumpScene = 0
+const scoreJumpScene = 0
 let scoreText
 let canAsk = false
 const popUp = 0
@@ -60,8 +60,8 @@ let springDown
 let keyText
 const keyAmount = 0
 const worldWidth = 2000
-let GPSx = 0
-let GPSy = 0
+const GPSx = 0
+const GPSy = 0
 
 const airUp = () => {
   if (!jumpUp) {
@@ -579,11 +579,11 @@ export default class JumpLevel extends Phaser.Scene {
 
     if (tornado.body.y > 1600) {
       tornado.setY(500)
-      tornado.setX(40) 
+      tornado.setX(40)
     }
     // next level
     if (jumpSceneComplete) {
-      this.scene.start('parallax-scene', currentSceneScore)
+      this.scene.start('question-two', currentSceneScore)
     }
     // enemy ENT
     if (ent.body.touching.right || ent.body.blocked.right) {
@@ -596,11 +596,6 @@ export default class JumpLevel extends Phaser.Scene {
       ent.body.velocity.x = 100
       ent.anims.play('entRight', true)
     }
-    // Change Scene
-    if (jumpSceneComplete) {
-      this.scene.start('dusk-scene', currentSceneScore)
-    }
-
     // HEALTHBAR ABOVE PLAYER
 
     healthBar.body.position.x = player.body.position.x + 15

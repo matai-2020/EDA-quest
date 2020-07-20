@@ -86,7 +86,7 @@ export default class TutLevel extends Phaser.Scene {
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
 
     // assets
-    this.load.image('lane', '/assets/man/lane.png')
+    this.load.image('lache', '/assets/man/lache.png')
     this.load.image('reactText', '/assets/coinsText.png')
     this.load.image('checkText', '/assets/checkText.png')
     this.load.image('check', '/assets/check.png')
@@ -184,7 +184,7 @@ export default class TutLevel extends Phaser.Scene {
     // Character sprites
 
     // Tutor
-    tutor = this.physics.add.sprite(1800, 535, 'lane')
+    tutor = this.physics.add.sprite(1800, 535, 'lache')
     tutor.setScale(0.3)
 
     // Tutor trigger
@@ -347,7 +347,7 @@ export default class TutLevel extends Phaser.Scene {
       } else player.anims.play('jumpRight', true)
     }
     if (tutLevelComplete) {
-      this.scene.start('jump-scene', scoreTut)
+      this.scene.start('question-one', scoreTut)
     }
   }
 }

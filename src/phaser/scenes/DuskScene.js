@@ -8,7 +8,6 @@ import { scoreChanged } from '../score'
  * @param {string} texture
  * @param {number} scrollFactor
  */
-
 const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   const getWidth = scene.textures.get(texture).getSourceImage().width
   const count = Math.ceil(totalWidth / getWidth) * scrollFactor
@@ -23,28 +22,10 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   }
 }
 
-let jumpUp = false
-let spring
-
-const airUp = () => {
-  if (!jumpUp) {
-    jumpUp = true
-  }
-}
-
-const airDown = () => {
-  jumpUp = false
-}
-
-const bounce = (player, spring) => {
-  airUp()
-  setTimeout(airDown, 500)
-}
-
+const score = 0
 let currentSceneScore = 0
 let scoreText
 let checkAmount = 0
-let check
 let checkText
 const checksToPass = '1'
 
@@ -87,20 +68,23 @@ const askQuestion = () => {
 
 let facing = ''
 let react
+let check
 let tutor
 let player
+let platforms
 let floor
 let wall
 let trigger
+let bump
 
-const worldWidth = 3000
+const worldWidth = 2000
 
 let keyText
-let keyAmount = 0
+const keyAmount = 0
 
 export default class DuskScene extends Phaser.Scene {
   constructor () {
-    super('dusk-scene')
+    super('new-level')
   }
 
   preload () {
@@ -110,21 +94,25 @@ export default class DuskScene extends Phaser.Scene {
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
 
     // dusk assets
-    this.load.image('react', '/assets/react.svg')
-    this.load.image('check', '/assets/check.png')
     this.load.image('background', '/assets/Dusk/dusk-bg.png')
     this.load.image('far-mount', '/assets/Dusk/dusk-far-mount.png')
     this.load.image('near-mount', '/assets/Dusk/dusk-near-mount.png')
     this.load.image('far-trees', '/assets/Dusk/dusk-far-trees.png')
     this.load.image('near-trees', '/assets/Dusk/dusk-near-trees.png')
     // assets
-    this.load.image('react', '/assets/react.svg')
+    this.load.image('don', '/assets/man/lache.png')
+    this.load.image('reactText', '/assets/coinsText.png')
+    this.load.image('checkText', '/assets/checkText.png')
+    this.load.image('check', '/assets/check.png')
+    this.load.image('react', '/assets/reactCoinP.png')
     this.load.image('platform', '/assets/Dusk/platform.png')
+    this.load.image('bump', '/assets/Jungle/bump.png')
     this.load.image('sky', '/assets/Jungle/sky.png')
     this.load.image('mountain', '/assets/Jungle/mountains.png')
     this.load.image('plateau', '/assets/Jungle/plateau.png')
     this.load.image('ground', '/assets/Dusk/duskGround.png')
-    this.load.image('arrow-keys', '/assets/Jungle/arrow-keys.png')
+    this.load.image('arrow-keys', '/assets/left-right-keys.png')
+    this.load.image('up-key', '/assets/up-key.png')
     this.load.image(
       'platform',
       '/assets/airpack/PNG/Environment/ground_grass.png'
@@ -132,6 +120,7 @@ export default class DuskScene extends Phaser.Scene {
     this.load.image('spring', '/assets/airpack/PNG/Items/spring.png')
 
     this.load.image('plants', '/assets/Jungle/plant.png')
+    this.load.image('spring', '/assets/airpack/PNG/Items/spring.png')
 
     // player assets
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
@@ -179,11 +168,12 @@ export default class DuskScene extends Phaser.Scene {
     this.add.image(800, 300, 'far-mount').setScale(4).setScrollFactor(0)
     this.add.image(700, 400, 'near-mount').setScale(3).setScrollFactor(0.05)
     this.add.image(800, 300, 'far-trees').setScale(4.5).setScrollFactor(0.4)
-    this.add.image(1200, 230, 'near-trees').setScale(5).setScrollFactor(0.7)
 
     createAligned(this, totalWidth, 'ground', 1)
+    this.add.image(1200, 230, 'near-trees').setScale(5).setScrollFactor(0.7)
+    // this.add.image(width * 0.5, height * 1, 'platform').setScrollFactor(0)
 
-    // Collider floor
+    // Collider floor & platforms
 
     wall = this.physics.add.staticGroup()
     wall.create(-10, 0, 'wallBlock')
@@ -192,27 +182,21 @@ export default class DuskScene extends Phaser.Scene {
     floor = this.physics.add.staticGroup()
     floor.create(2010, 580, 'base').setScrollFactor(0)
 
-    // Platforms
-
-    const platforms = this.physics.add.staticGroup()
-    platforms.create(500, 300, 'platform').setScale(0.4).refreshBody()
-    platforms.create(600, 500, 'platform').setScale(0.4).refreshBody()
+    platforms = this.physics.add.staticGroup()
+    platforms.create(800, 500, 'platform').setScale(0.4).refreshBody()
 
     platforms.children.entries.forEach(platform => {
-      platform.body.checkCollision.up = true
-      platform.body.checkCollision.left = true
-      platform.body.checkCollision.right = false
-      platform.body.checkCollision.down = false
-      platform.setScale(0.4).refreshBody()
+      return ((platform.body.checkCollision.left = false),
+      (platform.body.checkCollision.right = false),
+      (platform.body.checkCollision.down = false))
     })
+    // background images
 
     // Character sprites
 
     // Tutor
-    const tutorAxisX = 2900
-    const tutorAxisY = 535
-
-    tutor = this.physics.add.sprite(tutorAxisX, tutorAxisY, 'idleLeft')
+    tutor = this.physics.add.sprite(1700, 535, 'don')
+    tutor.setScale(0.3)
 
     // Tutor trigger
     const spot = tutor.body.position
@@ -220,12 +204,11 @@ export default class DuskScene extends Phaser.Scene {
 
     // Player sprite
 
-    player = this.physics.add.sprite(100, 500, 'idlRight')
-    player.body.setGravityY(60)
-
-    // player.setBounce(0.05)
+    player = this.physics.add.sprite(100, 580, 'idleRight')
+    // player.setScale(3)
+    player.body.setGravityY(80)
     player.setCollideWorldBounds(false)
-    player.onWorldBounds = true
+    // player.onWorldBounds = true
     player.body.checkCollision.up = false
 
     this.anims.create({
@@ -250,7 +233,10 @@ export default class DuskScene extends Phaser.Scene {
 
     this.anims.create({
       key: 'idleRight',
-      frames: this.anims.generateFrameNumbers('idleRight', { start: 0, end: 11 }),
+      frames: this.anims.generateFrameNumbers('idleRight', {
+        start: 0,
+        end: 11
+      }),
       frameRate: 10,
       repeat: -1
     })
@@ -282,24 +268,24 @@ export default class DuskScene extends Phaser.Scene {
       repeat: -1
     })
 
-    // Spring
-    spring = this.physics.add.staticImage(300, 600, 'spring')
-    spring.setScale(0.9)
-    spring.body.checkCollision.up = true
-    spring.body.checkCollision.left = false
-    spring.body.checkCollision.right = false
-    spring.body.checkCollision.down = false
-    this.physics.add.overlap(spring, player, bounce, null, this)
+    // Interactive Sprites
 
     // coin and collection
 
-    react = this.physics.add.sprite(550, 200, 'react')
-    react.setScale(0.2)
+    react = this.physics.add.staticGroup()
+    react.create(550, 600, 'react').setScale(0.05).refreshBody()
+    react.create(850, 600, 'react').setScale(0.05).refreshBody()
 
     this.physics.add.overlap(player, react, collectScore, null, this)
 
     check = this.physics.add.staticGroup()
     check.create(1000, 550, 'check').setScale(0.08).refreshBody()
+
+    this.physics.add.overlap(player, check, collectScore, null, this)
+    this.physics.add.overlap(player, trigger, askQuestion, null, this)
+
+    check = this.physics.add.staticGroup()
+    check.create(1400, 550, 'check').setScale(0.08).refreshBody()
 
     this.physics.add.overlap(player, check, collectScore, null, this)
     this.physics.add.overlap(player, trigger, askQuestion, null, this)
@@ -321,23 +307,18 @@ export default class DuskScene extends Phaser.Scene {
       .text(width - 300, 16, 'Trello: 0 / ' + checksToPass, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
-        fill: 'white'
+        fill: '#000'
       })
       .setScrollFactor(0)
-
-    noQuestion = this.add.text(tutorAxisX - 480, tutorAxisY - 250, '', {
-      fontSize: '18px',
-      fill: 'white'
+    noQuestion = this.add.text(spot.x - 250, spot.y - 10, '', {
+      fontFamily: "'Press Start 2P', cursive",
+      fontSize: '12px',
+      fill: '#000'
     })
 
-    this.add.image(1500, 400, 'near-trees').setScale(5.5).setScrollFactor(2.5)
-    this.add.image(3500, 400, 'near-trees').setScale(5.5).setScrollFactor(2.5)
-    this.add.image(5000, 400, 'near-trees').setScale(5.5).setScrollFactor(2.5)
-
     // colliders
-    this.physics.add.collider([floor], [player, check, react, tutor, trigger, spring])
-    this.physics.add.collider(react, [platforms])
-    this.physics.add.collider(player, [platforms, wall, spring])
+    this.physics.add.collider([floor, bump], [player, react, tutor, trigger])
+    this.physics.add.collider(player, [platforms, wall, bump])
   }
 
   update () {
@@ -374,19 +355,13 @@ export default class DuskScene extends Phaser.Scene {
       player.anims.play('idleRight', true)
     }
     if (this.cursors.up.isDown && player.body.touching.down) {
-      player.setVelocityY(-300)
+      player.setVelocityY(-600)
       if (facing === 'left') {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
     }
-    if (jumpUp) {
-      player.setVelocityY(-400)
-      if (facing === 'left') {
-        player.anims.play('jumpLeft', true)
-      } else player.anims.play('jumpRight', true)
+    if (duskSceneComplete) {
+      this.scene.start('city-scene', currentSceneScore)
     }
-    // if (duskSceneComplete) {
-    //   this.scene.start('city-scene', currentSceneScore)
-    // }
   }
 }
