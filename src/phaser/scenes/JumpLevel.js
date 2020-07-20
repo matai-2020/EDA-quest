@@ -449,7 +449,7 @@ export default class JumpLevel extends Phaser.Scene {
       .text(16, 16, 'Score: ' + currentSceneScore, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
-        fill: '#000'
+        fill: 'white'
       })
       .setScrollFactor(0)
 
@@ -457,14 +457,14 @@ export default class JumpLevel extends Phaser.Scene {
       .text(width - 300, 16, 'Trello: 0 / ' + checksToPass, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
-        fill: '#000'
+        fill: 'white'
       })
       .setScrollFactor(0)
 
     noQuestion = this.add.text(spot.x - 250, spot.y - 10, '', {
       fontFamily: "'Press Start 2P', cursive",
       fontSize: '12px',
-      fill: '#000'
+      fill: 'white'
     })
 
     // colliders

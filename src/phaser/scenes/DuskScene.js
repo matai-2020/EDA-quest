@@ -23,7 +23,24 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   }
 }
 
-let score = 0
+let jumpUp = false
+let spring
+
+const airUp = () => {
+  if (!jumpUp) {
+    jumpUp = true
+  }
+}
+
+const airDown = () => {
+  jumpUp = false
+}
+
+const bounce = (player, spring) => {
+  airUp()
+  setTimeout(airDown, 500)
+}
+
 let currentSceneScore = 0
 let scoreText
 let checkAmount = 0
@@ -112,6 +129,8 @@ export default class DuskScene extends Phaser.Scene {
       'platform',
       '/assets/airpack/PNG/Environment/ground_grass.png'
     )
+    this.load.image('spring', '/assets/airpack/PNG/Items/spring.png')
+
     this.load.image('plants', '/assets/Jungle/plant.png')
 
     // player assets
@@ -180,9 +199,11 @@ export default class DuskScene extends Phaser.Scene {
     platforms.create(600, 500, 'platform').setScale(0.4).refreshBody()
 
     platforms.children.entries.forEach(platform => {
-      platform.body.checkCollision.left = false
+      platform.body.checkCollision.up = true
+      platform.body.checkCollision.left = true
       platform.body.checkCollision.right = false
       platform.body.checkCollision.down = false
+      platform.setScale(0.4).refreshBody()
     })
 
     // Character sprites
@@ -261,6 +282,15 @@ export default class DuskScene extends Phaser.Scene {
       repeat: -1
     })
 
+    // Spring
+    spring = this.physics.add.staticImage(300, 600, 'spring')
+    spring.setScale(0.9)
+    spring.body.checkCollision.up = true
+    spring.body.checkCollision.left = false
+    spring.body.checkCollision.right = false
+    spring.body.checkCollision.down = false
+    this.physics.add.overlap(spring, player, bounce, null, this)
+
     // coin and collection
 
     react = this.physics.add.sprite(550, 200, 'react')
@@ -305,9 +335,9 @@ export default class DuskScene extends Phaser.Scene {
     this.add.image(5000, 400, 'near-trees').setScale(5.5).setScrollFactor(2.5)
 
     // colliders
-    this.physics.add.collider([floor], [player, check, react, tutor, trigger])
+    this.physics.add.collider([floor], [player, check, react, tutor, trigger, spring])
     this.physics.add.collider(react, [platforms])
-    this.physics.add.collider(player, [platforms, wall])
+    this.physics.add.collider(player, [platforms, wall, spring])
   }
 
   update () {
@@ -349,8 +379,14 @@ export default class DuskScene extends Phaser.Scene {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
     }
-    if (duskSceneComplete) {
-      this.scene.start('city-scene', currentSceneScore)
+    if (jumpUp) {
+      player.setVelocityY(-400)
+      if (facing === 'left') {
+        player.anims.play('jumpLeft', true)
+      } else player.anims.play('jumpRight', true)
     }
+    // if (duskSceneComplete) {
+    //   this.scene.start('city-scene', currentSceneScore)
+    // }
   }
 }

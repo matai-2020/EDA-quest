@@ -184,14 +184,14 @@ export default class TutLevel extends Phaser.Scene {
     // Character sprites
 
     // Tutor
-    tutor = this.physics.add.sprite(1700, 535, 'lane')
+    tutor = this.physics.add.sprite(1800, 535, 'lane')
     tutor.setScale(0.3)
 
     // Tutor trigger
 
     const spot = tutor.body.position
 
-    trigger = this.physics.add.sprite(1700, 535, 'triggerBlock')
+    trigger = this.physics.add.sprite(1800, 535, 'triggerBlock')
 
     // Player sprite
 
@@ -296,7 +296,7 @@ export default class TutLevel extends Phaser.Scene {
         fill: '#000'
       })
       .setScrollFactor(0)
-    noQuestion = this.add.text(spot.x - 10, spot.y + 100, '', {
+    noQuestion = this.add.text(spot.x - 50, spot.y + 100, '', {
       fontFamily: "'Press Start 2P', cursive",
       fontSize: '12px',
       fill: 'white'
