@@ -92,12 +92,14 @@ const collectScore = (player, type) => {
     type.disableBody(true, true)
     currentSceneScore += 10
     scoreChanged(currentSceneScore)
+    console.log(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
   } else {
     type.disableBody(true, true)
     currentSceneScore += 20
     checkAmount += 1
     scoreChanged(currentSceneScore)
+    console.log(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
     if (checkAmount === checksToPass) {
@@ -170,10 +172,10 @@ export default class JumpLevel extends Phaser.Scene {
       '/assets/airpack/PNG/Environment/ground_grass.png'
     )
     this.load.image('plants', '/assets/Jungle/plant.png')
-    this.load.image('information', '/assets/PNG/tornado.png')
+    this.load.image('information', '/assets/PNG/tornado_text.png')
 
     // Tornado load
-    this.load.spritesheet('tornado', '/assets/PNG/Tornado.png', {
+    this.load.spritesheet('tornado', '/assets/PNG/tornado.png', {
       frameWidth: 28.8333,
       frameHeight: 42
     })
@@ -497,7 +499,7 @@ export default class JumpLevel extends Phaser.Scene {
       .text(16, 16, 'Score: ' + currentSceneScore, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
-        fill: '#000'
+        fill: 'white'
       })
       .setScrollFactor(0)
 
@@ -505,14 +507,14 @@ export default class JumpLevel extends Phaser.Scene {
       .text(width - 300, 16, 'Trello: 0 / ' + checksToPass, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
-        fill: '#000'
+        fill: 'white'
       })
       .setScrollFactor(0)
 
     noQuestion = this.add.text(spot.x - 250, spot.y - 10, '', {
       fontFamily: "'Press Start 2P', cursive",
       fontSize: '12px',
-      fill: '#000'
+      fill: 'white'
     })
 
     // colliders

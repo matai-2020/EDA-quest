@@ -1,13 +1,14 @@
 import Phaser from 'phaser'
 
 let qCorrect = false
+let currentSceneScore = 0
 
-export default class questionOne extends Phaser.Scene {
-  constructor () {
+export default class questionTwo extends Phaser.Scene {
+  constructor() {
     super('question-two')
   }
 
-  preload () {
+  preload() {
     this.load.scenePlugin({
       key: 'rexuiplugin',
       url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
@@ -16,7 +17,8 @@ export default class questionOne extends Phaser.Scene {
     this.load.script('rexdialogquest', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexdialogquest.min.js')
   }
 
-  create () {
+  create(prevScore) {
+    currentSceneScore = prevScore
     const print = this.add.text(0, 0, '')
 
     const dialog = CreateDialog(this)
@@ -38,7 +40,7 @@ export default class questionOne extends Phaser.Scene {
           .setData('option', option)
       })
       .on('update-dialog', function (dialog, question, quest) {
-        dialog.getElement('title').setText(question.key)
+        dialog.getElement('title').setText(`${tutor} asks:`)
         dialog.getElement('actions')[0].setText((question.end) ? 'End' : 'Next')
         quest.setData('nextKey', null)
         dialog
@@ -62,24 +64,35 @@ export default class questionOne extends Phaser.Scene {
           // print.text += ` --> |${optionKey}| ${nextKey}\n`;
 
           if (nextKey === true) {
+            dialog.getElement('title').setText(`Correct! +50 points`)
+            currentSceneScore += 50
             setTimeout(() => {
               qCorrect = true
-            }, 100)
+            }, 1500)
+          } else {
+            dialog.getElement('title').setText(`Try again, -20 points :(`)
+            currentSceneScore -= 20
+            setTimeout(() => {
+              qCorrect = 'again'
+            }, 1500)
           }
         }
       })
       .start()
   }
 
-  update (score) {
-    if (qCorrect) {
-      this.scene.start('parallax-scene')
+  update() {
+    if (qCorrect === true) {
+      this.scene.start('parallax-scene', currentSceneScore)
+    } else if (qCorrect === 'again') {
+      qCorrect = false
+      this.scene.start('question-two', currentSceneScore)
     }
   }
 }
 
-const COLOR_PRIMARY = 0x4e342e
-const COLOR_LIGHT = 0x7b5e57
+const COLOR_PRIMARY = 0x4e3b18
+const COLOR_LIGHT = 0x2f3906
 const COLOR_DARK = 0x260e04
 
 var CreateDialog = function (scene) {
@@ -92,8 +105,9 @@ var CreateDialog = function (scene) {
 
     title: CreateTitle(scene, ' ', COLOR_DARK),
 
-    content: scene.add.text(0, 0, ' ', {
-      fontSize: '24px'
+    content: scene.add.text(0, 0, sceneQuestion, {
+      fontSize: '24px',
+      color: '#e9f459'
     }),
 
     choices: [
@@ -130,7 +144,7 @@ var CreateDialog = function (scene) {
 var CreateTitle = function (scene, text, backgroundColor) {
   return scene.rexUI.add.label({
     background: scene.rexUI.add.roundRectangle(0, 0, 100, 40, 20, backgroundColor),
-    text: scene.add.text(0, 0, text, {
+    text: scene.add.text(0, 0, '', {
       fontSize: '24px'
     }),
     space: {
@@ -146,7 +160,7 @@ var CreateButton = function (scene, text, backgroundColor) {
   return scene.rexUI.add.label({
     background: scene.rexUI.add.roundRectangle(0, 0, 100, 40, 20, backgroundColor),
 
-    text: scene.add.text(0, 0, text, {
+    text: scene.add.text(0, 0, 'Next', {
       fontSize: '24px'
     }),
 
@@ -174,8 +188,11 @@ F --> |Z| L
 F --> |X| M
 */
 
+const sceneQuestion = `How cool is Louis?`
+const tutor = 'Lane'
+
 const Questions = `type,key,next,end
-q,What is 4 + 4,,
-,8,true,
-,2,false,
-,1,false`
+q,Question,,
+,Not at all,false,
+,Just a little bit,false,
+,EXTREMELY,true`

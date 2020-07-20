@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import { scoreChaged, scoreChanged } from '../score'
 
 /**
  *
@@ -21,7 +22,7 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   }
 }
 
-let scoreTut = 0
+let currentSceneScore = 0
 let scoreText
 
 let checkText
@@ -31,13 +32,17 @@ const checksToPass = 1
 const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
     type.disableBody(true, true)
-    scoreTut += 10
-    scoreText.setText('Score: ' + scoreTut)
+    currentSceneScore += 10
+    scoreChanged(currentSceneScore)
+    console.log(currentSceneScore)
+    scoreText.setText('Score: ' + currentSceneScore)
   } else {
     type.disableBody(true, true)
-    scoreTut += 20
+    currentSceneScore += 20
     checkAmount += 1
-    scoreText.setText('Score: ' + scoreTut)
+    scoreChanged(currentSceneScore)
+    console.log(currentSceneScore)
+    scoreText.setText('Score: ' + currentSceneScore)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
     if (checkAmount === checksToPass) {
       canAsk = true
@@ -50,12 +55,12 @@ let noQuestion
 
 const askQuestion = () => {
   if (canAsk) {
-    noQuestion.setText('Congrats, you have completed your trello card!')
+    noQuestion.setText('Congrats, you have \n\ncompleted your trello card!')
     setTimeout(() => {
       tutLevelComplete = true
-    }, 1000)
+    }, 2000)
   } else {
-    noQuestion.setText('Please come back with a complete trello card')
+    noQuestion.setText('Please come back with \n\na complete trello card')
   }
 }
 
@@ -75,18 +80,18 @@ let tutLevelComplete = false
 const worldWidth = 2000
 
 export default class TutLevel extends Phaser.Scene {
-  constructor () {
+  constructor() {
     super('tut-level')
   }
 
-  preload () {
+  preload() {
     // invis walls/triggers
     this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
     this.load.image('base', '/assets/blocksTriggers/base.png')
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
 
     // assets
-    this.load.image('don', '/assets/man/lache.png')
+    this.load.image('lache', '/assets/man/lache.png')
     this.load.image('reactText', '/assets/coinsText.png')
     this.load.image('checkText', '/assets/checkText.png')
     this.load.image('check', '/assets/check.png')
@@ -135,7 +140,7 @@ export default class TutLevel extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create () {
+  create() {
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -184,14 +189,14 @@ export default class TutLevel extends Phaser.Scene {
     // Character sprites
 
     // Tutor
-    tutor = this.physics.add.sprite(1700, 535, 'don')
-    tutor.setScale(0.3)
+    tutor = this.physics.add.sprite(1800, 535, 'lache')
+    tutor.setScale(0.25)
 
     // Tutor trigger
 
     const spot = tutor.body.position
 
-    trigger = this.physics.add.sprite(spot.x, spot.y, 'triggerBlock')
+    trigger = this.physics.add.sprite(1800, 535, 'triggerBlock')
 
     // Player sprite
 
@@ -265,7 +270,8 @@ export default class TutLevel extends Phaser.Scene {
 
     react = this.physics.add.staticGroup()
     react.create(550, 600, 'react').setScale(0.05).refreshBody()
-    react.create(850, 600, 'react').setScale(0.05).refreshBody()
+    react.create(750, 600, 'react').setScale(0.05).refreshBody()
+    react.create(950, 600, 'react').setScale(0.05).refreshBody()
 
     this.physics.add.overlap(player, react, collectScore, null, this)
     this.physics.add.overlap(player, trigger, askQuestion, null, this)
@@ -296,10 +302,10 @@ export default class TutLevel extends Phaser.Scene {
         fill: '#000'
       })
       .setScrollFactor(0)
-    noQuestion = this.add.text(spot.x - 250, spot.y - 10, '', {
+    noQuestion = this.add.text(spot.x - 130, spot.y + 130, '', {
       fontFamily: "'Press Start 2P', cursive",
-      fontSize: '12px',
-      fill: '#000'
+      fontSize: '14px',
+      fill: 'white'
     })
 
     // colliders
@@ -307,7 +313,7 @@ export default class TutLevel extends Phaser.Scene {
     this.physics.add.collider(player, [platforms, wall, bump])
   }
 
-  update () {
+  update() {
     const cam = this.cameras.main
     const speed = 15
 
@@ -347,7 +353,7 @@ export default class TutLevel extends Phaser.Scene {
       } else player.anims.play('jumpRight', true)
     }
     if (tutLevelComplete) {
-      this.scene.start('question-one', scoreTut)
+      this.scene.start('question-one', currentSceneScore)
     }
   }
 }

@@ -1,7 +1,6 @@
 import Phaser from 'phaser'
 
 let qCorrect = false
-
 let currentSceneScore = 0
 
 export default class questionOne extends Phaser.Scene {
@@ -63,16 +62,16 @@ export default class questionOne extends Phaser.Scene {
           const nextKey = option.next
           const optionKey = option.key
           // print.text += ` --> |${optionKey}| ${nextKey}\n`;
+          console.log(typeof nextKey)
 
           if (nextKey === true) {
             dialog.getElement('title').setText(`Correct! +50 points`)
-            currentSceneScore += 50
+            console.log(currentSceneScore)
             setTimeout(() => {
               qCorrect = true
             }, 1500)
           } else {
             dialog.getElement('title').setText(`Try again, -20 points :(`)
-            currentSceneScore -= 20
             setTimeout(() => {
               qCorrect = 'again'
             }, 1500)
@@ -84,10 +83,12 @@ export default class questionOne extends Phaser.Scene {
 
   update() {
     if (qCorrect === true) {
+      currentSceneScore += 50
       this.scene.start('jump-scene', currentSceneScore)
     } else if (qCorrect === 'again') {
+      currentSceneScore -= 20
       qCorrect = false
-      this.scene.start('question-one')
+      this.scene.start('question-one', currentSceneScore)
     }
   }
 }
