@@ -56,7 +56,7 @@ const askQuestion = () => {
       duskSceneComplete = true
     }, 1000)
   } else {
-    noQuestion.setText('Please come back with a complete trello card')
+    noQuestion.setText('I can help you with that! \n\nHere, pick up the UpSkill token')
   }
 }
 let facing = ''
@@ -172,11 +172,11 @@ export default class DuskScene extends Phaser.Scene {
     floor.create(2010, 650, 'base').setScrollFactor(0)
     // platforms
     platforms = this.physics.add.staticGroup()
-    platforms.create(800, 500, 'platform').setScale(0.4).refreshBody()
+    platforms.create(800, 380, 'platform').setScale(0.4).refreshBody()
     platforms.create(100, 250, 'platformSml1').setScale(0.4).refreshBody()
-    platforms.create(300, 300, 'platformSml2').setScale(0.4).refreshBody()
-    platforms.create(500, 350, 'platformMed1').setScale(0.4).refreshBody()
-    platforms.create(700, 400, 'platformMed2').setScale(0.4).refreshBody()
+    // platforms.create(300, 300, 'platformSml2').setScale(0.4).refreshBody()
+    platforms.create(2500, 600, 'platformMed1').setScale(0.4).refreshBody()
+    // platforms.create(700, 400, 'platformMed2').setScale(0.4).refreshBody()
     platforms.children.entries.forEach(platform => {
       return (
         (platform.body.checkCollision.left = false),
@@ -253,7 +253,7 @@ export default class DuskScene extends Phaser.Scene {
     // Interactive Sprites
     // coin and collection
     upskill = this.physics.add.staticGroup()
-    upskill.create(2000, 575, 'upskill').setScale(0.18).refreshBody()
+    upskill.create(3800, 575, 'upskill').setScale(0.18).refreshBody()
     this.physics.add.overlap(player, upskill, collectSkill, null, this)
     react = this.physics.add.staticGroup()
     react.create(550, 600, 'react').setScale(0.05).refreshBody()
@@ -261,7 +261,7 @@ export default class DuskScene extends Phaser.Scene {
     this.physics.add.overlap(player, react, collectScore, null, this)
     check = this.physics.add.staticGroup()
     react.create(100, 180, 'check').setScale(0.08).refreshBody()
-    check.create(1000, 600, 'check').setScale(0.08).refreshBody()
+    check.create(2500, 530, 'check').setScale(0.08).refreshBody()
     this.physics.add.overlap(player, check, collectScore, null, this)
     this.physics.add.overlap(player, trigger, askQuestion, null, this)
     check = this.physics.add.staticGroup()
@@ -340,7 +340,7 @@ export default class DuskScene extends Phaser.Scene {
       } else player.anims.play('jumpRight', true)
     }
     if (gravityBoost) {
-      player.body.setGravityY(80)
+      player.body.setGravityY(100)
     }
     if (duskSceneComplete) {
       this.scene.start('question-three', currentSceneScore)
