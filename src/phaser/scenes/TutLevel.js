@@ -147,7 +147,7 @@ export default class TutLevel extends Phaser.Scene {
     const height = this.scale.height
     const totalWidth = width * 10
 
-    this.add.image(width * 0.5, height * 0.5, 'sky').setScrollFactor(0)
+    this.add.image(width * 0.5, height * 0.5, 'sky').setScrollFactor(0).setScale(2)
 
     createAligned(this, totalWidth, 'mountain', 0.15)
     createAligned(this, totalWidth, 'plateau', 0.5)

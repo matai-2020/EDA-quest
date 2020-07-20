@@ -21,6 +21,7 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   }
 }
 
+let tornado
 let badReact
 let health = 0
 let isAlive = true
@@ -28,6 +29,8 @@ let explode
 let healthBar
 let right = true
 let jumpUp = false
+let tornadoHit = false
+let scoreJumpScene = 0
 let scoreText
 let canAsk = false
 const popUp = 0
@@ -53,6 +56,7 @@ let trigger
 let bump
 let ent
 let game
+let springDown
 let keyText
 const keyAmount = 0
 const worldWidth = 2000
@@ -62,6 +66,7 @@ let GPSy = 0
 const airUp = () => {
   if (!jumpUp) {
     jumpUp = true
+    tornadoHit = true
   }
 }
 
@@ -69,15 +74,18 @@ const airDown = () => {
   jumpUp = false
 }
 
-const bounce = (player, spring) => {
+const bounce = () => {
   airUp()
   setTimeout(airDown, 500)
+  setTimeout(() => {
+    tornadoHit = false
+  }, 2500)
 }
 
 let checkText
 let checkAmount = 0
-const checksToPass = 1
-let currentSceneScore = 0
+const checksToPass = 2
+let currentSceneScore
 
 const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
@@ -162,7 +170,13 @@ export default class JumpLevel extends Phaser.Scene {
       '/assets/airpack/PNG/Environment/ground_grass.png'
     )
     this.load.image('plants', '/assets/Jungle/plant.png')
-    this.load.image('spring', '/assets/airpack/PNG/Items/spring.png')
+    this.load.image('information', '/assets/PNG/tornado.png')
+
+    // Tornado load
+    this.load.spritesheet('tornado', '/assets/PNG/Tornado.png', {
+      frameWidth: 28.8333,
+      frameHeight: 42
+    })
 
     // player assets
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
@@ -223,7 +237,7 @@ export default class JumpLevel extends Phaser.Scene {
     const height = this.scale.height
     const totalWidth = width * 10
 
-    this.add.image(width * 0.5, height * 0.5, 'sky').setScrollFactor(0)
+    this.add.image(width * 0.5, height * 0.5, 'sky').setScrollFactor(0).setScale(2)
 
     createAligned(this, totalWidth, 'mountain', 0.15)
     createAligned(this, totalWidth, 'plateau', 0.5)
@@ -253,7 +267,7 @@ export default class JumpLevel extends Phaser.Scene {
     //     (platform.body.checkCollision.down = false)
     // })
     // background images
-
+    this.add.image(250, 275, 'information').setScale(0.4)
     // Character sprites
 
     // Tutor
@@ -389,11 +403,11 @@ export default class JumpLevel extends Phaser.Scene {
     ent.body.setGravityY(80)
     // ent.setCollideWorldBounds(true)
     ent.onWorldBounds = true
-    ent.body.checkCollision.up = false
+    ent.body.checkCollision.up = true
     ent.body.checkCollision.left = true
     ent.body.checkCollision.right = true
-    this.physics.add.overlap(ent, player, bounce, null, this)
-    this.physics.add.overlap(ent, player, death, null, this)
+    // this.physics.add.overlap(ent, player, bounce, null, this)
+    this.physics.add.overlap(ent, player, loseHp, null, this)
 
     this.anims.create({
       key: 'entLeft',
@@ -416,26 +430,60 @@ export default class JumpLevel extends Phaser.Scene {
     })
     // Interactive Sprites
 
-    // Spring
-    spring = this.physics.add.staticImage(550, 600, 'spring')
-    spring.setScale(0.9)
-    spring.body.checkCollision.up = false
-    spring.body.checkCollision.left = false
-    spring.body.checkCollision.right = false
-    this.physics.add.overlap(spring, player, bounce, null, this)
+    // Tornado create
+
+    tornado = this.physics.add.sprite(40, 200, 'tornado')
+    tornado.setScale(2.5)
+    tornado.setImmovable = true
+    tornado.onWorldBounds = true
+    tornado.body.checkCollision.up = true
+    tornado.body.checkCollision.left = true
+    tornado.body.checkCollision.right = true
+    tornado.body.checkCollision.down = true
+    // whirlwind
+    this.anims.create({
+      key: 'whirl',
+      frames: this.anims.generateFrameNumbers('tornado', {
+        start: 6,
+        end: 0
+      }),
+      frameRate: 10,
+      repeat: -1
+    })
+
+    this.physics.add.overlap(player, tornado, bounce, null, this)
+    // this.physics.add.overlap(spring, player, bounce, null, this)
     // console.log(spring)
 
     // coin and collection
 
     react = this.physics.add.staticGroup()
-    react.create(550, 600, 'react').setScale(0.05).refreshBody()
-    react.create(850, 600, 'react').setScale(0.05).refreshBody()
+    react.create(360, 600, 'react').setScale(0.05).refreshBody()
+    react.create(536, 150, 'react').setScale(0.05).refreshBody()
+    react.create(536, 200, 'react').setScale(0.05).refreshBody()
+    react.create(536, 250, 'react').setScale(0.05).refreshBody()
+    react.create(536, 300, 'react').setScale(0.05).refreshBody()
+    react.create(536, 350, 'react').setScale(0.05).refreshBody()
+    react.create(536, 400, 'react').setScale(0.05).refreshBody()
+    react.create(536, 450, 'react').setScale(0.05).refreshBody()
+    // react.create(395, 342, 'react').setScale(0.05).refreshBody()
+    react.create(1000, 550, 'react').setScale(0.05).refreshBody()
+    react.create(1200, 550, 'react').setScale(0.05).refreshBody()
+    react.create(1400, 550, 'react').setScale(0.05).refreshBody()
+
+    react.create(1800, -100, 'react').setScale(0.05).refreshBody()
+    react.create(1600, 0, 'react').setScale(0.05).refreshBody()
+    react.create(1600, 100, 'react').setScale(0.05).refreshBody()
+    react.create(1600, 200, 'react').setScale(0.05).refreshBody()
+    react.create(1600, 300, 'react').setScale(0.05).refreshBody()
+    react.create(1600, 400, 'react').setScale(0.05).refreshBody()
 
     this.physics.add.overlap(player, react, collectScore, null, this)
     this.physics.add.overlap(player, trigger, askQuestion, null, this)
 
     check = this.physics.add.staticGroup()
     check.create(1400, 550, 'check').setScale(0.08).refreshBody()
+    check.create(800, 550, 'check').setScale(0.08).refreshBody()
 
     this.physics.add.overlap(player, check, collectScore, null, this)
     this.physics.add.overlap(player, trigger, askQuestion, null, this)
@@ -468,18 +516,17 @@ export default class JumpLevel extends Phaser.Scene {
     })
 
     // colliders
-    this.physics.add.collider(floor, [player, ent, react, tutor, trigger, spring])
-    this.physics.add.collider(player, [platforms, ent, wall, spring])
-    this.physics.add.collider(ent, [platforms, ent, enemyWall, wall, spring])
+    this.physics.add.collider(floor, [player, ent, react, tutor, trigger, tornado])
+    this.physics.add.collider(player, [platforms, ent, wall, tornado, player])
+    this.physics.add.collider(ent, [platforms, ent, enemyWall, wall])
+    this.physics.add.collider(tornado, [platforms, enemyWall, wall, tornado])
   }
 
   update () {
     const gps = player.body.position
-    // console.log(gps)
+
     const cam = this.cameras.main
     const speed = 15
-    GPSy = player.body.position.y
-    GPSx = player.body.position.x
 
     // Player
     if (this.cursors.left.isDown) {
@@ -517,11 +564,22 @@ export default class JumpLevel extends Phaser.Scene {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
     }
+    // console.log('y', gps.y, 'x', gps.x)
+    // Tornado
     if (jumpUp) {
-      player.setVelocityY(-400)
+      player.setVelocityY(-500)
       if (facing === 'left') {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
+    }
+    if (isAlive) {
+      tornado.anims.play('whirl', true)
+      tornado.setVelocityX(100)
+    }
+
+    if (tornado.body.y > 1600) {
+      tornado.setY(500)
+      tornado.setX(40) 
     }
     // next level
     if (jumpSceneComplete) {
@@ -533,6 +591,7 @@ export default class JumpLevel extends Phaser.Scene {
       ent.body.velocity.x = -100
       ent.anims.play('entLeft', true)
     }
+
     if (ent.body.touching.left || ent.body.blocked.left || right) {
       ent.body.velocity.x = 100
       ent.anims.play('entRight', true)
