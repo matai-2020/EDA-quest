@@ -17,7 +17,6 @@ function scrollFunction () {
 
 export default class App extends React.Component {
   render () {
-    console.log(window.scrollY)
     return (
       <div style={{ textAlign: 'center' }}>
         {/* <h1>Hello World</h1> */}
