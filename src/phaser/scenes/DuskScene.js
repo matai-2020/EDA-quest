@@ -200,10 +200,9 @@ export default class DuskScene extends Phaser.Scene {
 
     platforms.children.entries.forEach(platform => {
       platform.body.checkCollision.up = true
-      platform.body.checkCollision.left = true
+      platform.body.checkCollision.left = false
       platform.body.checkCollision.right = false
       platform.body.checkCollision.down = false
-      platform.setScale(0.4).refreshBody()
     })
 
     // Character sprites
