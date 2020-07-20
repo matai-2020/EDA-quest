@@ -567,7 +567,7 @@ export default class JumpLevel extends Phaser.Scene {
     }
     // enemy ENT
     if (ent.body.touching.right || ent.body.blocked.right) {
-      right = false
+      right = false 
       ent.body.velocity.x = -100
       ent.anims.play('entLeft', true)
     }
