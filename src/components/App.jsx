@@ -9,9 +9,13 @@ function scrollFunction () {
   if (document.body.scrollTop >= 1 || document.documentElement.scrollTop >= 1) {
     document.getElementById('logo').style.width = '10px'
     document.getElementById('logo').style.visibility = 'hidden'
+    document.getElementById('arrow').style.width = '10px'
+    document.getElementById('arrow').style.visibility = 'hidden'
   } else {
     document.getElementById('logo').style.visibility = 'visible'
     document.getElementById('logo').style.width = '900px'
+    document.getElementById('arrow').style.visibility = 'visible'
+    document.getElementById('arrow').style.width = '400px'
   }
 }
 
@@ -20,9 +24,9 @@ export default class App extends React.Component {
     console.log(window.scrollY)
     return (
       <div style={{ textAlign: 'center' }}>
-        {/* <h1>Hello World</h1> */}
-        <div className="logoContainer">
+        <div id="logoContainer">
           <img id="logo" src="/assets/Game/eda-quest-logo.png" alt="Quest Logo" />
+          <img id="arrow" src="/assets/Game/scroll-prompt.png" alt="Scroll Prompt" />
         </div>
         <HighScore />
       </div>
