@@ -20,7 +20,7 @@ export default class App extends React.Component {
     return (
       <div style={{ textAlign: 'center' }}>
         {/* <h1>Hello World</h1> */}
-        <div className="logoContainer">
+        <div id="logoContainer">
           <img id="logo" src="/assets/Game/eda-quest-logo.png" alt="Quest Logo" />
         </div>
         <HighScore />

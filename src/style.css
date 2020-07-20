@@ -13,8 +13,9 @@
   margin-bottom: 230px; */
 }
 
-.logoContainer{
+#logoContainer{
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;

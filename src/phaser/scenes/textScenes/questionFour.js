@@ -30,7 +30,9 @@ export default class questionFour extends Phaser.Scene {
       return dialog
     }
 
+    /*eslint-disable */
     const quest = new rexdialogquest({
+    /* eslint-enable */
       dialog: dialog,
       questions: Questions
     })
@@ -60,17 +62,15 @@ export default class questionFour extends Phaser.Scene {
         if (action.text === 'Next') {
           const option = quest.getData('option')
           const nextKey = option.next
-          const optionKey = option.key
-          // print.text += ` --> |${optionKey}| ${nextKey}\n`;
 
           if (nextKey === true) {
-            dialog.getElement('title').setText(`Correct! +50 points`)
+            dialog.getElement('title').setText('Correct! +50 points')
             currentSceneScore += 50
             setTimeout(() => {
               qCorrect = true
             }, 1500)
           } else {
-            dialog.getElement('title').setText(`Try again, -20 points :(`)
+            dialog.getElement('title').setText('Try again, -20 points :(')
             currentSceneScore -= 20
             setTimeout(() => {
               qCorrect = 'again'
@@ -188,7 +188,7 @@ F --> |Z| L
 F --> |X| M
 */
 
-const sceneQuestion = `How dope is this project?`
+const sceneQuestion = 'How dope is this project?'
 const tutor = 'Don'
 
 const Questions = `type,key,next,end
