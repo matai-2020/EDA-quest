@@ -4,7 +4,7 @@ let qCorrect = false
 
 export default class questionOne extends Phaser.Scene {
   constructor () {
-    super('question-one')
+    super('question-two')
   }
 
   preload () {
@@ -73,7 +73,7 @@ export default class questionOne extends Phaser.Scene {
 
   update (score) {
     if (qCorrect) {
-      this.scene.start('jump-scene')
+      this.scene.start('parallax-scene')
     }
   }
 }
@@ -175,7 +175,7 @@ F --> |X| M
 */
 
 const Questions = `type,key,next,end
-q,What is 2 + 2,,
-,4,true,
+q,What is 4 + 4,,
+,8,true,
 ,2,false,
 ,1,false`

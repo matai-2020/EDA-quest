@@ -347,7 +347,7 @@ export default class TutLevel extends Phaser.Scene {
       } else player.anims.play('jumpRight', true)
     }
     if (tutLevelComplete) {
-      this.scene.start('jump-scene', scoreTut)
+      this.scene.start('question-one', scoreTut)
     }
   }
 }

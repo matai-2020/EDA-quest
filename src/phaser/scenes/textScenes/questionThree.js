@@ -4,7 +4,7 @@ let qCorrect = false
 
 export default class questionOne extends Phaser.Scene {
   constructor () {
-    super('question-one')
+    super('question-three')
   }
 
   preload () {

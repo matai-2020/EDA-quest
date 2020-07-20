@@ -522,7 +522,7 @@ export default class JumpLevel extends Phaser.Scene {
     }
     // next level
     if (jumpSceneComplete) {
-      this.scene.start('parallax-scene', currentSceneScore)
+      this.scene.start('question-two', currentSceneScore)
     }
     // enemy ENT
     if (ent.body.touching.right || ent.body.blocked.right) {
