@@ -171,13 +171,13 @@ export default class DuskScene extends Phaser.Scene {
     wall.create(worldWidth, 0, 'wallBlock')
 
     floor = this.physics.add.staticGroup()
-    floor.create(2010, 643, 'base').setScrollFactor(0)
+    floor.create(2010, 580, 'base').setScrollFactor(0)
 
     // Platforms
 
     const platforms = this.physics.add.staticGroup()
-    platforms.create(500, 510, 'platform').setScale(0.4).refreshBody()
-    platforms.create(600, 600, 'platform').setScale(0.4).refreshBody()
+    platforms.create(500, 300, 'platform').setScale(0.4).refreshBody()
+    platforms.create(600, 500, 'platform').setScale(0.4).refreshBody()
 
     platforms.children.entries.forEach(platform => {
       platform.body.checkCollision.left = false
@@ -306,6 +306,7 @@ export default class DuskScene extends Phaser.Scene {
 
     // colliders
     this.physics.add.collider([floor], [player, check, react, tutor, trigger])
+    this.physics.add.collider(react, [platforms])
     this.physics.add.collider(player, [platforms, wall])
   }
 
