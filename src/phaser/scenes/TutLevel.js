@@ -53,7 +53,7 @@ const askQuestion = () => {
     noQuestion.setText('Congrats, you have \n\ncompleted your trello card!')
     setTimeout(() => {
       tutLevelComplete = true
-    }, 1000)
+    }, 2000)
   } else {
     noQuestion.setText('Please come back with \n\na complete trello card')
   }
@@ -185,7 +185,7 @@ export default class TutLevel extends Phaser.Scene {
 
     // Tutor
     tutor = this.physics.add.sprite(1800, 535, 'lache')
-    tutor.setScale(0.3)
+    tutor.setScale(0.25)
 
     // Tutor trigger
 
@@ -296,9 +296,9 @@ export default class TutLevel extends Phaser.Scene {
         fill: '#000'
       })
       .setScrollFactor(0)
-    noQuestion = this.add.text(spot.x - 50, spot.y + 100, '', {
+    noQuestion = this.add.text(spot.x - 130, spot.y + 130, '', {
       fontFamily: "'Press Start 2P', cursive",
-      fontSize: '12px',
+      fontSize: '14px',
       fill: 'white'
     })
 
