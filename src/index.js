@@ -19,6 +19,7 @@ import questionOne from './phaser/scenes/textScenes/questionOne.js'
 import questionTwo from './phaser/scenes/textScenes/questionTwo.js'
 import questionThree from './phaser/scenes/textScenes/questionThree.js'
 import questionFour from './phaser/scenes/textScenes/questionFour.js'
+import credit from './phaser/scenes/CreditScene.js'
 
 var firebaseConfig = {
   apiKey: 'AIzaSyD5DEUiq_fXMfIJpiPH4HUvbXbPGPDP2-0',
@@ -45,7 +46,8 @@ const config = {
       debug: false
     }
   },
-  scene: [title, questionOne, tutLevel, jumpLevel, parallax, dusk, city, questionTwo, questionThree, questionFour]
+  // scene: [title, questionOne, tutLevel, jumpLevel, parallax, dusk, city, questionTwo, questionThree, questionFour]
+  scene: [credit]
 }
 /*eslint-disable */
 const game = new Phaser.Game(config)
