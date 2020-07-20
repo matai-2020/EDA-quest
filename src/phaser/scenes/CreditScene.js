@@ -14,33 +14,7 @@ let wall
 let floor
 let tutors
 let player
-const worldWidth = 5000
-
-// GROUND LAYOUT
-// const createAligned = (scene, totalWidth, texture, scrollFactor) => {
-//   const getWidth = scene.textures.get(texture).getSourceImage().width
-//   const count = Math.ceil(totalWidth / getWidth) * scrollFactor
-//   let x = 0
-//   for (let i = 0; i < count; ++i) {
-//     const m = scene.add
-//       .image(x, scene.scale.height, texture)
-//       .setOrigin(0, 1)
-//       .setScrollFactor(scrollFactor)
-//     x += m.width
-//   }
-// }
-
-// TUTOR TRIGGER
-// const askQuestion = () => {
-//   if (canAsk) {
-//     noQuestion.setText('Congrats, you have completed your trello card!')
-//     setTimeout(() => {
-//       duskSceneComplete = true
-//     }, 1000)
-//   } else {
-//     noQuestion.setText('I can help you with that! \n\nHere, pick up the UpSkill token')
-//   }
-// }
+const worldWidth = 3000
 
 export default class CreditScene extends Phaser.Scene {
   constructor () {
@@ -50,7 +24,7 @@ export default class CreditScene extends Phaser.Scene {
   preload () {
     // WALLS & TRIGGERS
     this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
-    this.load.image('base', '/assets/blocksTriggers/baseC.png')
+    this.load.image('base', '/assets/blocksTriggers/base.png')
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
 
     // ENVIRONMENT
@@ -126,6 +100,7 @@ export default class CreditScene extends Phaser.Scene {
     // FLOOR
     floor = this.physics.add.staticGroup()
     floor.create(700, 700, 'base').setScrollFactor(0)
+    floor.create(1400, 700, 'base').setScrollFactor(0)
 
     //  ------ CHARACTERS ------
 
