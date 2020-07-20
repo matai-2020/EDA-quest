@@ -21,6 +21,9 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   }
 }
 
+let wonGame = false
+let lives = 4
+let life = []
 let tornado
 let badReact
 let health = 0
@@ -108,25 +111,6 @@ const collectScore = (player, type) => {
   }
 }
 
-const loseHp = () => {
-  health = health + 1
-  healthBar.anims.play(`health${health}`, true)
-  if (health === 4) {
-    death()
-  }
-}
-
-const death = () => {
-  isAlive = false
-  healthBar.anims.play(`health${health}`, true)
-  // explode.anims.play('death', true)
-  setTimeout(() => {
-    player.disableBody(true, true)
-    healthBar.disableBody(true, true)
-  }, 100)
-  setTimeout(() => { gameOver(isAlive) }, 2000)
-}
-
 // const explosion = () => {
 
 // }
@@ -167,6 +151,7 @@ export default class JumpLevel extends Phaser.Scene {
     this.load.image('ground', '/assets/Jungle/ground.png')
     this.load.image('arrow-keys', '/assets/left-right-keys.png')
     this.load.image('up-key', '/assets/up-key.png')
+    this.load.image('lives', '/assets/Game/lives-icon.png')
     this.load.image('tutor', '/assets/man/lane.png')
     this.load.image(
       'platform',
@@ -214,6 +199,8 @@ export default class JumpLevel extends Phaser.Scene {
       frameWidth: 125.4,
       frameHeight: 107
     })
+
+    
 
     // ent enemy assets
     this.load.spritesheet('walkRight', '/assets/PNG/ent/walk-right.png', {
@@ -346,7 +333,12 @@ export default class JumpLevel extends Phaser.Scene {
       frameRate: 5,
       repeat: -1
     })
-
+    // Amount of Lives display
+    for (let i = 1; i < lives; i++) {
+      let x = 400
+      x = x + (i * 80)
+      life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)
+    }
     // HEALTH BAR
     healthBar = this.physics.add.sprite(player.body.position.x + 15, player.body.position.y - 40, 'heart')
     healthBar.setScale(2)
@@ -410,7 +402,7 @@ export default class JumpLevel extends Phaser.Scene {
     ent.body.checkCollision.left = true
     ent.body.checkCollision.right = true
     // this.physics.add.overlap(ent, player, bounce, null, this)
-    this.physics.add.overlap(ent, player, loseHp, null, this)
+    this.physics.add.overlap(ent, player, this.loseHp, null, this)
 
     this.anims.create({
       key: 'entLeft',
@@ -575,7 +567,7 @@ export default class JumpLevel extends Phaser.Scene {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
     }
-    if (isAlive) {
+    if (tornado) {
       tornado.anims.play('whirl', true)
       tornado.setVelocityX(100)
     }
@@ -603,18 +595,34 @@ export default class JumpLevel extends Phaser.Scene {
 
     healthBar.body.position.x = player.body.position.x + 15
     healthBar.body.position.y = player.body.position.y - 40
+  }
+
+      loseHp = () => {
+        health = health + 1
+        healthBar.anims.play(`health${health}`, true)
+        if (health === 4) {
+          this.death()
+        }
+      }
 
     // DEATH
-    // if (!isAlive) {
-    //   explode = this.add.sprite(player.body.position.x + 50, player.body.position.y + 45, 'explode')
-    //   explode.setScale(1.4)
-    //   this.anims.create({
-    //     key: 'death',
-    //     frames: this.anims.generateFrameNumbers('explode', {
-    //       start: 0,
-    //       end: 16
-    //     }),
-    //     frameRate: 24
-    //   })
-  }
+    death = () => {
+      lives = lives - 1
+      isAlive = false
+      right = true
+      checkAmount = 0
+      setTimeout(() => {
+        player.disableBody(true, true)
+        healthBar.disableBody(true, true)
+      }, 100)
+      setTimeout(() => {
+        if (lives > 0) {
+          health = 0
+          life[lives].destroy()
+          this.scene.restart()
+        } else if (lives === 0) {
+          gameOver({ isAlive, wonGame, currentSceneScore })
+        }
+      }, 2000)
+    }
 }
