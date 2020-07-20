@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { scoreChaged, scoreChanged } from '../score'
+import { scoreChanged } from '../score'
 
 /**
  *
@@ -80,11 +80,11 @@ let tutLevelComplete = false
 const worldWidth = 2000
 
 export default class TutLevel extends Phaser.Scene {
-  constructor() {
+  constructor () {
     super('tut-level')
   }
 
-  preload() {
+  preload () {
     // invis walls/triggers
     this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
     this.load.image('base', '/assets/blocksTriggers/base.png')
@@ -140,7 +140,7 @@ export default class TutLevel extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create() {
+  create () {
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -313,7 +313,7 @@ export default class TutLevel extends Phaser.Scene {
     this.physics.add.collider(player, [platforms, wall, bump])
   }
 
-  update() {
+  update () {
     const cam = this.cameras.main
     const speed = 15
 
