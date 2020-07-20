@@ -83,7 +83,7 @@ export default class questionTwo extends Phaser.Scene {
 
   update() {
     if (qCorrect === true) {
-      this.scene.start('parallax-scene', currentSceneScore)
+      this.scene.start('dusk-scene', currentSceneScore)
     } else if (qCorrect === 'again') {
       qCorrect = false
       this.scene.start('question-two', currentSceneScore)

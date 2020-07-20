@@ -253,7 +253,7 @@ export default class DuskScene extends Phaser.Scene {
     // Interactive Sprites
     // coin and collection
     upskill = this.physics.add.staticGroup()
-    upskill.create(500, 575, 'upskill').setScale(0.18).refreshBody()
+    upskill.create(2000, 575, 'upskill').setScale(0.18).refreshBody()
     this.physics.add.overlap(player, upskill, collectSkill, null, this)
     react = this.physics.add.staticGroup()
     react.create(550, 600, 'react').setScale(0.05).refreshBody()
@@ -343,7 +343,7 @@ export default class DuskScene extends Phaser.Scene {
       player.body.setGravityY(80)
     }
     if (duskSceneComplete) {
-      this.scene.start('city-scene', currentSceneScore)
+      this.scene.start('question-three', currentSceneScore)
     }
   }
 }
