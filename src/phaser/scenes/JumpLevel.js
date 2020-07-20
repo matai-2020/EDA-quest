@@ -154,6 +154,8 @@ export default class JumpLevel extends Phaser.Scene {
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
     this.load.image('wallBlockEnemy', '/assets/blocksTriggers/wallBlock.png')
 
+    // tutor
+    this.load.image('lane', '/assets/man/lane.png')
     // assets
     this.load.image('reactText', '/assets/coinsText.png')
     this.load.image('checkText', '/assets/checkText.png')
@@ -273,7 +275,7 @@ export default class JumpLevel extends Phaser.Scene {
     // Character sprites
 
     // Tutor
-    tutor = this.physics.add.sprite(1700, 535, 'idleLeft')
+    tutor = this.physics.add.staticImage(1700, 588, 'lane').setScale(0.3).refreshBody()
 
     // Tutor trigger
 

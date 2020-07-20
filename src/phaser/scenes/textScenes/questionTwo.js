@@ -75,7 +75,7 @@ export default class questionOne extends Phaser.Scene {
 
   update (score) {
     if (qCorrect) {
-      this.scene.start('parallax-scene', currentSceneScore)
+      this.scene.start('dusk-scene', currentSceneScore)
     }
   }
 }

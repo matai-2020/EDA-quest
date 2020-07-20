@@ -46,6 +46,7 @@ const config = {
     }
   },
   scene: [title, tutLevel, jumpLevel, parallax, dusk, city, questionOne, questionTwo, questionThree, questionFour]
+  // scene: [dusk, city]
 }
 /*eslint-disable */
 const game = new Phaser.Game(config)
