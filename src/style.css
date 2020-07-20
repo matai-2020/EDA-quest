@@ -15,9 +15,8 @@
   width: 900px;
   height: 400px;
   padding: 40px 10px;
-  transition: 0.8s;
-  /* margin-top: 150px;
-  margin-bottom: 230px; */
+  transition: 0.5s;
+  margin-top: 60px;
 }
 
 #arrow {

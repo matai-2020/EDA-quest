@@ -25,8 +25,8 @@ export default class App extends React.Component {
       <div style={{ textAlign: 'center' }}>
         <div id="logoContainer">
           <img id="logo" src="/assets/Game/eda-quest-logo.png" alt="Quest Logo" />
-          <img id="arrow" src="/assets/Game/scroll-prompt.png" alt="Scroll Prompt" />
         </div>
+        <img id="arrow" src="/assets/Game/scroll-prompt.png" alt="Scroll Prompt" />
         <HighScore />
       </div>
     )
