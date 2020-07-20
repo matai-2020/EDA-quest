@@ -13,6 +13,7 @@ import title from './phaser/scenes/TitleScene'
 import jumpLevel from './phaser/scenes/JumpLevel'
 import parallax from './phaser/scenes/ParallaxScene'
 import tutLevel from './phaser/scenes/TutLevel'
+import questionOne from './phaser/scenes/textScenes/questionOne.js'
 
 var firebaseConfig = {
   apiKey: 'AIzaSyD5DEUiq_fXMfIJpiPH4HUvbXbPGPDP2-0',
@@ -39,7 +40,7 @@ const config = {
       debug: false
     }
   },
-  scene: [title, tutLevel, dusk, jumpLevel, parallax]
+  scene: [questionOne, title, tutLevel, dusk, jumpLevel, parallax]
 }
 /*eslint-disable */
 const game = new Phaser.Game(config)
