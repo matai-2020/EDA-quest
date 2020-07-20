@@ -452,7 +452,8 @@ export default class ParallaxScene extends Phaser.Scene {
         life[lives].destroy()
         this.scene.restart()
       } else if (lives === 0) {
-        gameOver({ isAlive, wonGame })
+        // scoreChanged(currentSceneScore)
+        gameOver({ isAlive, wonGame, currentSceneScore })
       }
     }, 2000)
   }

@@ -9,7 +9,8 @@ export class HighScore extends React.Component {
     highScores: [],
     isAlive: true,
     wonGame: false,
-    level: 'Jungle'
+    level: 'Jungle',
+    currentSceneScore: 0
   }
 
   componentDidMount () {
@@ -22,10 +23,11 @@ export class HighScore extends React.Component {
       })
       // Check if Player is alive and if game has been won
       subscribe(gameStatus => {
-        let { isAlive, wonGame } = gameStatus
+        let { isAlive, wonGame, currentSceneScore } = gameStatus
         this.setState({
           isAlive,
-          wonGame
+          wonGame,
+          currentSceneScore
         })
       })
     })
@@ -37,7 +39,7 @@ export class HighScore extends React.Component {
     const queryData = firebase.database().ref('currentPlayer')
     queryData.set({
       name: this.state.name,
-      score: this.state.score
+      score: this.state.currentSceneScore
     })
   }
 
@@ -68,7 +70,7 @@ export class HighScore extends React.Component {
     if (this.state.name.length > 0) {
       queryData.set({
         name: this.state.name,
-        score: this.state.score
+        score: this.state.currentSceneScore
       })
       this.updateData()
       this.getHighScores()
@@ -99,7 +101,7 @@ export class HighScore extends React.Component {
           <button className="submit-button" onClick={() => this.clickHandler()}>
             Submit Score
           </button>
-          <p>Final Score: {this.state.score}</p>
+          <p>Final Score: {this.state.currentSceneScore}</p>
           <ol className="score-list">
             {this.state.highScores.map(player => {
               const indexKey = this.state.highScores.indexOf(player)
