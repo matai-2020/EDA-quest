@@ -64,9 +64,6 @@ const askQuestion = () => {
 
 let wall
 let facing = ''
-let react
-let badReact
-let winReact
 let player
 let platforms
 let lives = 4
@@ -74,7 +71,6 @@ let life = []
 let healthBar
 let health = 0
 let wonGame = false
-let floor
 let isAlive = true
 let trigger
 let tutor
@@ -158,16 +154,11 @@ export default class SkyScene extends Phaser.Scene {
     createAligned(this, totalWidth, 'mgClouds', 0.3)
     createAligned(this, totalWidth, 'fgClouds', 0.5)
 
- 
-
     // Collider floor & platforms
 
     wall = this.physics.add.staticGroup()
     wall.create(-10, 0, 'wallBlock')
     wall.create(worldWidth, 0, 'wallBlock')
-
-    // floor = this.physics.add.staticGroup()
-    // floor.create(2010, 648, 'base').setScrollFactor(0)
 
     platforms = this.physics.add.staticGroup()
     platforms.create(100, 300, 'smallPlatform').setScale(0.4).refreshBody()
@@ -324,6 +315,8 @@ export default class SkyScene extends Phaser.Scene {
 
     })
 
+    // TRELLO CHECK MECHANICS
+
     check = this.physics.add.staticGroup()
     check.create(1850, 670, 'check').setScale(0.08).refreshBody()
     check.create(150, 630, 'check').setScale(0.08).refreshBody()
@@ -422,10 +415,6 @@ export default class SkyScene extends Phaser.Scene {
     healthBar.body.position.x = player.body.position.x + 15
     healthBar.body.position.y = player.body.position.y - 40
 
-    if (paraLevelComplete) {
-      this.scene.start('jump-scene', currentSceneScore)
-    }
-
     // KILL PLAYER WHEN THEY FALL OFF THE MAP
 
     if (player.body.position.y >= 800) {
@@ -434,6 +423,12 @@ export default class SkyScene extends Phaser.Scene {
     // console.log(checkAmount === 4)
     if (checkAmount === 4) {
       bridge.enableBody(false, bridge.body.position.x, bridge.body.position.x, true, true)
+    }
+
+    // LEVEL COMPLETION
+
+    if (paraLevelComplete) {
+      this.scene.start('jump-scene', currentSceneScore)
     }
   }
 

@@ -4,11 +4,11 @@ let qCorrect = false
 let currentSceneScore = 0
 
 export default class questionOne extends Phaser.Scene {
-  constructor() {
+  constructor () {
     super('question-one')
   }
 
-  preload() {
+  preload () {
     this.load.scenePlugin({
       key: 'rexuiplugin',
       url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
@@ -17,7 +17,7 @@ export default class questionOne extends Phaser.Scene {
     this.load.script('rexdialogquest', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexdialogquest.min.js')
   }
 
-  create(prevScore) {
+  create (prevScore) {
     currentSceneScore = prevScore
     const print = this.add.text(0, 0, '')
 
@@ -81,7 +81,7 @@ export default class questionOne extends Phaser.Scene {
       .start()
   }
 
-  update() {
+  update () {
     if (qCorrect === true) {
       currentSceneScore += 50
       this.scene.start('jump-scene', currentSceneScore)
