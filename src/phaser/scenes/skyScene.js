@@ -97,19 +97,15 @@ export default class SkyScene extends Phaser.Scene {
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
 
     // assets
-    this.load.image('react', '/assets/reactCoinP.png')
     this.load.image('check', '/assets/check.png')
-    this.load.image('platform', '/assets/Jungle/platform.png')
-    this.load.image('medPlatform', '/assets/Jungle/platformMed1.png')
-    this.load.image('smallPlatform', '/assets/Jungle/platformSml1.png')
+    this.load.image('platform', '/assets/Sky/platform.png')
+    this.load.image('medPlatform', '/assets/Sky/platformMed2.png')
+    this.load.image('smallPlatform', '/assets/Sky/platformSml1.png')
     this.load.image('block', '/assets/man/base.png')
     this.load.image('sky', '/assets/Jungle/sky.png')
-    this.load.image('mountain', '/assets/Jungle/mountains.png')
-    this.load.image('plateau', '/assets/Jungle/plateau.png')
-    this.load.image('ground', '/assets/Jungle/ground.png')
-    this.load.image('platform', '/assets/airpack/PNG/Environment/ground_grass.png')
-    this.load.image('plants', '/assets/Jungle/plant.png')
-    this.load.image('arrow-keys', '/assets/Jungle/arrow-keys.png')
+    this.load.image('bgClouds', '/assets/Sky/bgClouds.png')
+    this.load.image('mgClouds', '/assets/Sky/mgClouds.png')
+    this.load.image('fgClouds', '/assets/Sky/fgClouds.png')
     this.load.image('lives', '/assets/Game/lives-icon.png')
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
       frameWidth: 60,
@@ -158,10 +154,11 @@ export default class SkyScene extends Phaser.Scene {
 
     this.add.image(width * 0.5, height * 0.5, 'sky').setScrollFactor(0)
 
-    createAligned(this, totalWidth, 'mountain', 0.15)
-    createAligned(this, totalWidth, 'plateau', 0.5)
-    // createAligned(this, totalWidth, 'ground', 1)
-    createAligned(this, totalWidth, 'plants', 1.25)
+    createAligned(this, totalWidth, 'bgClouds', 0.15)
+    createAligned(this, totalWidth, 'mgClouds', 0.3)
+    createAligned(this, totalWidth, 'fgClouds', 0.5)
+
+ 
 
     // Collider floor & platforms
 
@@ -196,14 +193,11 @@ export default class SkyScene extends Phaser.Scene {
     leftRightPlatform.body.velocity.x = 100
     leftRightPlatform.body.immovable = true
 
-    // Arrow Keys Instructions
-    this.add.image(300, 580, 'arrow-keys').setScale(0.2)
-
     // Amount of Lives display
     for (let i = 1; i < lives; i++) {
       let x = 400
       x = x + (i * 80)
-      life[i] = this.add.image(x, 30, 'lives').setScale(0.5)
+      life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)
     }
 
     // Tuto
@@ -212,7 +206,6 @@ export default class SkyScene extends Phaser.Scene {
     // Tutor trigger
 
     const spot = tutor.body.position
-    console.log(spot)
 
     trigger = this.physics.add.sprite(spot.x, spot.y, 'triggerBlock')
 
@@ -221,7 +214,6 @@ export default class SkyScene extends Phaser.Scene {
     player = this.physics.add.sprite(100, 160, 'idleRight')
     player.body.setGravityY(0)
     player.setCollideWorldBounds(false)
-    // player.onWorldBounds = true
     player.body.checkCollision.up = false
 
     this.anims.create({
@@ -332,11 +324,6 @@ export default class SkyScene extends Phaser.Scene {
 
     })
 
-    // coin and collection
-
-    // react = this.physics.add.staticGroup()
-    // react.create(550, 600, 'react').setScale(0.05).refreshBody()
-
     check = this.physics.add.staticGroup()
     check.create(1850, 670, 'check').setScale(0.08).refreshBody()
     check.create(150, 630, 'check').setScale(0.08).refreshBody()
@@ -347,13 +334,6 @@ export default class SkyScene extends Phaser.Scene {
     this.physics.add.overlap(player, trigger, askQuestion, null, this)
     this.physics.add.collider(player, [upDownPlatform, leftRightPlatform])
     this.physics.add.collider(trigger, [platforms, upDownPlatform, leftRightPlatform])
-
-    // badReact = this.physics.add.staticImage(700, 600, 'react').setScale(0.05).refreshBody()
-    // winReact = this.physics.add.staticImage(850, 600, 'react').setScale(0.05).refreshBody()
-
-    // this.physics.add.overlap(player, react, collectScore, null, this)
-    // this.physics.add.overlap(player, badReact, this.loseHp, null, this)
-    // this.physics.add.overlap(player, winReact, this.victory, null, this)
 
     // text
     this.cameras.main.setBounds(0, 0, worldWidth, 0)
@@ -381,8 +361,7 @@ export default class SkyScene extends Phaser.Scene {
     })
 
     // colliders
-    // this.physics.add.collider(floor, [player, react, badReact])
-    this.physics.add.collider(player, [platforms, wall])
+    this.physics.add.collider(player, [platforms, wall, bridge])
     this.physics.add.collider(tutor, platforms)
   }
 
