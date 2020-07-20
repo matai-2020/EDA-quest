@@ -375,7 +375,7 @@ export default class DuskScene extends Phaser.Scene {
 
     // CHANGE SCENE
     if (duskSceneComplete) {
-      this.scene.start('question-three', currentSceneScore)
+      this.scene.start('question-four', currentSceneScore)
     }
   }
 }

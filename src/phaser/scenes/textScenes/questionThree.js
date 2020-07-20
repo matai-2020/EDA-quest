@@ -83,7 +83,7 @@ export default class questionThree extends Phaser.Scene {
 
   update () {
     if (qCorrect === true) {
-      this.scene.start('city-scene', currentSceneScore)
+      this.scene.start('dusk-scene', currentSceneScore)
     } else if (qCorrect === 'again') {
       qCorrect = false
       this.scene.start('question-three', currentSceneScore)
