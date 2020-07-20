@@ -25,7 +25,7 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
 let scoreText
 let checkText
 let checkAmount = 0
-const checksToPass = 1
+const checksToPass = 4
 let currentSceneScore
 
 const collectScore = (player, type) => {
@@ -81,6 +81,7 @@ let tutor
 let check
 let upDownPlatform
 let leftRightPlatform
+let bridge
 
 const worldWidth = 2000
 
@@ -180,6 +181,10 @@ export default class SkyScene extends Phaser.Scene {
     platforms.create(1850, 300, 'medPlatform').setScale(0.4).refreshBody()
 
     upDownPlatform = this.physics.add.image(600, 500, 'smallPlatform').setScale(0.4)
+    bridge = this.physics.add.image(1600, 380, 'smallPlatform').setScale(0.4)
+    bridge.body.allowGravity = false
+    bridge.body.immovable = true
+    bridge.disableBody(true, true)
 
     upDownPlatform.body.allowGravity = false
     upDownPlatform.body.velocity.y = 100
@@ -207,6 +212,7 @@ export default class SkyScene extends Phaser.Scene {
     // Tutor trigger
 
     const spot = tutor.body.position
+    console.log(spot)
 
     trigger = this.physics.add.sprite(spot.x, spot.y, 'triggerBlock')
 
@@ -340,13 +346,14 @@ export default class SkyScene extends Phaser.Scene {
     this.physics.add.overlap(player, check, collectScore, null, this)
     this.physics.add.overlap(player, trigger, askQuestion, null, this)
     this.physics.add.collider(player, [upDownPlatform, leftRightPlatform])
+    this.physics.add.collider(trigger, [platforms, upDownPlatform, leftRightPlatform])
 
     // badReact = this.physics.add.staticImage(700, 600, 'react').setScale(0.05).refreshBody()
     // winReact = this.physics.add.staticImage(850, 600, 'react').setScale(0.05).refreshBody()
 
-    this.physics.add.overlap(player, react, collectScore, null, this)
-    this.physics.add.overlap(player, badReact, this.loseHp, null, this)
-    this.physics.add.overlap(player, winReact, this.victory, null, this)
+    // this.physics.add.overlap(player, react, collectScore, null, this)
+    // this.physics.add.overlap(player, badReact, this.loseHp, null, this)
+    // this.physics.add.overlap(player, winReact, this.victory, null, this)
 
     // text
     this.cameras.main.setBounds(0, 0, worldWidth, 0)
@@ -445,6 +452,10 @@ export default class SkyScene extends Phaser.Scene {
     if (player.body.position.y >= 800) {
       this.loseHp()
     }
+    // console.log(checkAmount === 4)
+    if (checkAmount === 4) {
+      bridge.enableBody(false, bridge.body.position.x, bridge.body.position.x, true, true)
+    }
   }
 
   loseHp = () => {
@@ -457,6 +468,7 @@ export default class SkyScene extends Phaser.Scene {
   death = () => {
     lives = lives - 1
     isAlive = false
+    checkAmount = 0
     setTimeout(() => {
       player.disableBody(true, true)
       healthBar.disableBody(true, true)
