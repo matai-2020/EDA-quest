@@ -21,11 +21,10 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   }
 }
 
-let wonGame = false
+const wonGame = false
 let lives = 4
-let life = []
+const life = []
 let tornado
-let badReact
 let health = 0
 let isAlive = true
 let explode
@@ -33,38 +32,24 @@ let healthBar
 let right = true
 let jumpUp = false
 let tornadoHit = false
-const scoreJumpScene = 0
+
 let scoreText
 let canAsk = false
-const popUp = 0
-let notYet
 let noQuestion
 let jumpSceneComplete = false
 let facing = ''
-let backPack
 let react
 let check
 let tutor
 let player
 let platforms
-let platform
-let cursors
-let spring
-let ground
-let base
 let floor
 let wall
 let enemyWall
 let trigger
-let bump
 let ent
 let game
-let springDown
-let keyText
-const keyAmount = 0
 const worldWidth = 2000
-const GPSx = 0
-const GPSy = 0
 
 const airUp = () => {
   if (!jumpUp) {
@@ -199,8 +184,6 @@ export default class JumpLevel extends Phaser.Scene {
       frameWidth: 125.4,
       frameHeight: 107
     })
-
-    
 
     // ent enemy assets
     this.load.spritesheet('walkRight', '/assets/PNG/ent/walk-right.png', {
