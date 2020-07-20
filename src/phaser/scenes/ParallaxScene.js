@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { scoreChanged, gameOver, victoryCheck } from '../score'
+import { scoreChanged, gameOver } from '../score'
 
 /**
  *

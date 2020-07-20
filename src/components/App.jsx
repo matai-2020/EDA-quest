@@ -1,7 +1,6 @@
 import React from 'react'
 import HighScore from './HighScore.jsx'
 
-
 export default class App extends React.Component {
   render () {
     return (
