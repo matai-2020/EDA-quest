@@ -188,11 +188,12 @@ F --> |Z| L
 F --> |X| M
 */
 
-const sceneQuestion = 'How dope is this project'
+const sceneQuestion = `In vanilla React what do we use to pass 
+down data to child components?`
 const tutor = 'Emily'
 
 const Questions = `type,key,next,end
 q,Question,,
-,pretty shit tbh,false,
-,Hella,true,
-,slightly,false`
+,setState,false,
+,props,true,
+,arguments,false`

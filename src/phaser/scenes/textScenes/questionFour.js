@@ -188,11 +188,12 @@ F --> |Z| L
 F --> |X| M
 */
 
-const sceneQuestion = 'How dope is this project?'
+const sceneQuestion = `In a React function component,
+how can we use state?`
 const tutor = 'Don'
 
 const Questions = `type,key,next,end
 q,Question,,
-,pretty shit tbh,false,
-,Hella,true,
-,slightly,false`
+,You can't,false,
+,useState hook,true,
+,The same as a Class component,false`
