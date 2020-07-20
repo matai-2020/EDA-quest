@@ -49,13 +49,13 @@ const collectScore = (player, type) => {
 
 let canAsk = false
 let noQuestion
-let paraLevelComplete = false
+let skySceneComplete = false
 
 const askQuestion = () => {
   if (canAsk) {
     noQuestion.setText('Congrats, you have completed your trello card!')
     setTimeout(() => {
-      paraLevelComplete = true
+      skySceneComplete = true
     }, 1000)
   } else {
     noQuestion.setText('Please come back with a complete trello card')
@@ -67,7 +67,7 @@ let facing = ''
 let player
 let platforms
 let lives = 4
-let life = []
+const life = []
 let healthBar
 let health = 0
 let wonGame = false
@@ -427,8 +427,8 @@ export default class SkyScene extends Phaser.Scene {
 
     // LEVEL COMPLETION
 
-    if (paraLevelComplete) {
-      this.scene.start('jump-scene', currentSceneScore)
+    if (skySceneComplete) {
+      this.scene.start('question-three', currentSceneScore)
     }
   }
 
