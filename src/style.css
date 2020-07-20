@@ -77,13 +77,8 @@ body {
   padding: 2%;
 }
 
-<<<<<<< HEAD
-.name-input:focus{
-  outline:none;
-=======
 .name-input:focus {
   outline: none;
->>>>>>> dev
 }
 
 .submit-button {
