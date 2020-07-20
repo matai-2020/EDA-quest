@@ -25,21 +25,21 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
 let scoreText
 let checkText
 let checkAmount = 0
-const checksToPass = 1
+const checksToPass = 4
 let currentSceneScore
 
 const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
     type.disableBody(true, true)
     currentSceneScore += 10
-    scoreChanged(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
+    scoreChanged(currentSceneScore)
   } else {
     type.disableBody(true, true)
     currentSceneScore += 20
     checkAmount += 1
-    scoreChanged(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
+    scoreChanged(currentSceneScore)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
     if (checkAmount === checksToPass) {
       canAsk = true
@@ -64,28 +64,26 @@ const askQuestion = () => {
 
 let wall
 let facing = ''
-let react
-let badReact
-let winReact
 let player
 let platforms
 let lives = 4
 let life = []
 let healthBar
-let health = 3
+let health = 0
 let wonGame = false
-let floor
 let isAlive = true
-let explode
 let trigger
 let tutor
 let check
+let upDownPlatform
+let leftRightPlatform
+let bridge
 
 const worldWidth = 2000
 
-export default class ParallaxScene extends Phaser.Scene {
+export default class SkyScene extends Phaser.Scene {
   constructor () {
-    super('parallax-scene')
+    super('sky-scene')
   }
 
   preload () {
@@ -95,22 +93,16 @@ export default class ParallaxScene extends Phaser.Scene {
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
 
     // assets
-    this.load.image('react', '/assets/reactCoinP.png')
     this.load.image('check', '/assets/check.png')
-    this.load.image('platform', '/assets/Jungle/platform.png')
+    this.load.image('platform', '/assets/Sky/platform.png')
+    this.load.image('medPlatform', '/assets/Sky/platformMed2.png')
+    this.load.image('smallPlatform', '/assets/Sky/platformSml1.png')
     this.load.image('block', '/assets/man/base.png')
     this.load.image('sky', '/assets/Jungle/sky.png')
-    this.load.image('mountain', '/assets/Jungle/mountains.png')
-    this.load.image('plateau', '/assets/Jungle/plateau.png')
-    this.load.image('ground', '/assets/Jungle/ground.png')
-    this.load.image('platform', '/assets/airpack/PNG/Environment/ground_grass.png')
-    this.load.image('plants', '/assets/Jungle/plant.png')
-    this.load.image('arrow-keys', '/assets/Jungle/arrow-keys.png')
+    this.load.image('bgClouds', '/assets/Sky/bgClouds.png')
+    this.load.image('mgClouds', '/assets/Sky/mgClouds.png')
+    this.load.image('fgClouds', '/assets/Sky/fgClouds.png')
     this.load.image('lives', '/assets/Game/lives-icon.png')
-    this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
-      frameWidth: 20,
-      frameHeight: 35
-    })
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
       frameWidth: 60,
       frameHeight: 105
@@ -141,10 +133,6 @@ export default class ParallaxScene extends Phaser.Scene {
       frameWidth: 17
     })
 
-    this.load.spritesheet('explode', '/assets/Game/explosion.png', {
-      frameWidth: 125.4,
-      frameHeight: 107
-    })
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
@@ -162,10 +150,9 @@ export default class ParallaxScene extends Phaser.Scene {
 
     this.add.image(width * 0.5, height * 0.5, 'sky').setScrollFactor(0)
 
-    createAligned(this, totalWidth, 'mountain', 0.15)
-    createAligned(this, totalWidth, 'plateau', 0.5)
-    createAligned(this, totalWidth, 'ground', 1)
-    createAligned(this, totalWidth, 'plants', 1.25)
+    createAligned(this, totalWidth, 'bgClouds', 0.15)
+    createAligned(this, totalWidth, 'mgClouds', 0.3)
+    createAligned(this, totalWidth, 'fgClouds', 0.5)
 
     // Collider floor & platforms
 
@@ -173,24 +160,39 @@ export default class ParallaxScene extends Phaser.Scene {
     wall.create(-10, 0, 'wallBlock')
     wall.create(worldWidth, 0, 'wallBlock')
 
-    floor = this.physics.add.staticGroup()
-    floor.create(2010, 648, 'base').setScrollFactor(0)
-
     platforms = this.physics.add.staticGroup()
-    platforms.create(800, 450, 'platform').setScale(0.4).refreshBody()
+    platforms.create(100, 300, 'smallPlatform').setScale(0.4).refreshBody()
+    platforms.create(150, 700, 'smallPlatform').setScale(0.4).refreshBody()
+    platforms.create(900, 700, 'smallPlatform').setScale(0.4).refreshBody()
+    platforms.create(1850, 730, 'smallPlatform').setScale(0.4).refreshBody()
+    platforms.create(1000, 300, 'medPlatform').setScale(0.4).refreshBody()
+    platforms.create(1850, 300, 'medPlatform').setScale(0.4).refreshBody()
 
-    // Arrow Keys Instructions
-    this.add.image(300, 580, 'arrow-keys').setScale(0.2)
+    upDownPlatform = this.physics.add.image(600, 500, 'smallPlatform').setScale(0.4)
+    bridge = this.physics.add.image(1600, 380, 'smallPlatform').setScale(0.4)
+    bridge.body.allowGravity = false
+    bridge.body.immovable = true
+    bridge.disableBody(true, true)
+
+    upDownPlatform.body.allowGravity = false
+    upDownPlatform.body.velocity.y = 100
+    upDownPlatform.body.immovable = true
+
+    leftRightPlatform = this.physics.add.image(1050, 600, 'smallPlatform').setScale(0.4)
+
+    leftRightPlatform.body.allowGravity = false
+    leftRightPlatform.body.velocity.x = 100
+    leftRightPlatform.body.immovable = true
 
     // Amount of Lives display
     for (let i = 1; i < lives; i++) {
       let x = 400
       x = x + (i * 80)
-      life[i] = this.add.image(x, 30, 'lives').setScale(0.5)
+      life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)
     }
 
-    // Tutor
-    tutor = this.physics.add.sprite(1700, 535, 'idleLeft')
+    // Tuto
+    tutor = this.physics.add.sprite(1920, 100, 'idleLeft')
 
     // Tutor trigger
 
@@ -200,10 +202,9 @@ export default class ParallaxScene extends Phaser.Scene {
 
     // player sprite
 
-    player = this.physics.add.sprite(100, 580, 'idleRight')
-    player.body.setGravityY(80)
+    player = this.physics.add.sprite(100, 160, 'idleRight')
+    player.body.setGravityY(0)
     player.setCollideWorldBounds(false)
-    // player.onWorldBounds = true
     player.body.checkCollision.up = false
 
     this.anims.create({
@@ -314,23 +315,18 @@ export default class ParallaxScene extends Phaser.Scene {
 
     })
 
-    // coin and collection
-
-    react = this.physics.add.staticGroup()
-    react.create(550, 600, 'react').setScale(0.05).refreshBody()
+    // TRELLO CHECK MECHANICS
 
     check = this.physics.add.staticGroup()
-    check.create(1400, 550, 'check').setScale(0.08).refreshBody()
+    check.create(1850, 670, 'check').setScale(0.08).refreshBody()
+    check.create(150, 630, 'check').setScale(0.08).refreshBody()
+    check.create(1400, 530, 'check').setScale(0.08).refreshBody()
+    check.create(400, 120, 'check').setScale(0.08).refreshBody()
 
     this.physics.add.overlap(player, check, collectScore, null, this)
     this.physics.add.overlap(player, trigger, askQuestion, null, this)
-
-    badReact = this.physics.add.staticImage(700, 600, 'react').setScale(0.05).refreshBody()
-    winReact = this.physics.add.staticImage(850, 600, 'react').setScale(0.05).refreshBody()
-
-    this.physics.add.overlap(player, react, collectScore, null, this)
-    this.physics.add.overlap(player, badReact, this.loseHp, null, this)
-    this.physics.add.overlap(player, winReact, this.victory, null, this)
+    this.physics.add.collider(player, [upDownPlatform, leftRightPlatform])
+    this.physics.add.collider(trigger, [platforms, upDownPlatform, leftRightPlatform])
 
     // text
     this.cameras.main.setBounds(0, 0, worldWidth, 0)
@@ -358,13 +354,25 @@ export default class ParallaxScene extends Phaser.Scene {
     })
 
     // colliders
-    this.physics.add.collider(floor, [player, react, badReact])
-    this.physics.add.collider(player, [platforms, wall])
+    this.physics.add.collider(player, [platforms, wall, bridge])
+    this.physics.add.collider(tutor, platforms)
   }
 
   update () {
     const cam = this.cameras.main
     const speed = 15
+
+    if (upDownPlatform.body.position.y >= 650) {
+      upDownPlatform.body.velocity.y = -100
+    } else if (upDownPlatform.body.position.y <= 300) {
+      upDownPlatform.body.velocity.y = 100
+    }
+
+    if (leftRightPlatform.body.position.x >= 1550) {
+      leftRightPlatform.body.velocity.x = -100
+    } else if (leftRightPlatform.body.position.x <= 1050) {
+      leftRightPlatform.body.velocity.x = 100
+    }
 
     if (this.cursors.left.isDown) {
       // facing = 'left'
@@ -396,7 +404,7 @@ export default class ParallaxScene extends Phaser.Scene {
       player.anims.play('idleRight', true)
     }
     if (this.cursors.up.isDown && player.body.touching.down) {
-      player.setVelocityY(-300)
+      player.setVelocityY(-350)
       if (facing === 'left') {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
@@ -407,29 +415,25 @@ export default class ParallaxScene extends Phaser.Scene {
     healthBar.body.position.x = player.body.position.x + 15
     healthBar.body.position.y = player.body.position.y - 40
 
-    // DEATH ANIMATION
+    // KILL PLAYER WHEN THEY FALL OFF THE MAP
 
-    explode = this.add.sprite(player.body.position.x + 50, player.body.position.y + 45, 'explode')
-    explode.setScale(1.4)
+    if (player.body.position.y >= 800) {
+      this.loseHp()
+    }
+    // console.log(checkAmount === 4)
+    if (checkAmount === 4) {
+      bridge.enableBody(false, bridge.body.position.x, bridge.body.position.x, true, true)
+    }
 
-    this.anims.create({
-      key: 'death',
-      frames: this.anims.generateFrameNumbers('explode', {
-        start: 0,
-        end: 16
-      }),
-      frameRate: 24
+    // LEVEL COMPLETION
 
-    })
     if (paraLevelComplete) {
       this.scene.start('jump-scene', currentSceneScore)
     }
   }
 
   loseHp = () => {
-    badReact.disableBody(true, true)
-    health = health + 1
-    healthBar.anims.play(`health${health}`, true)
+    health = health + 4
     if (health === 4) {
       this.death()
     }
@@ -438,19 +442,17 @@ export default class ParallaxScene extends Phaser.Scene {
   death = () => {
     lives = lives - 1
     isAlive = false
-    healthBar.anims.play(`health${health}`, true)
-    explode.anims.play('death', true)
+    checkAmount = 0
     setTimeout(() => {
       player.disableBody(true, true)
       healthBar.disableBody(true, true)
     }, 100)
     setTimeout(() => {
       if (lives > 0) {
-        health = health - 1
+        health = 0
         life[lives].destroy()
         this.scene.restart()
       } else if (lives === 0) {
-        // scoreChanged(currentSceneScore)
         gameOver({ isAlive, wonGame, currentSceneScore })
       }
     }, 2000)
