@@ -105,7 +105,7 @@ const askQuestion = () => {
     noQuestion.setText('Congrats, you have completed your trello card!')
     setTimeout(() => {
       jumpSceneComplete = true
-    }, 1000)
+    }, 2000)
   } else {
     noQuestion.setText('Please come back with a complete trello card')
   }

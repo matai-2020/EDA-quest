@@ -77,7 +77,7 @@ const askQuestion = () => {
     noQuestion.setText('Congrats, you have completed your trello card!')
     setTimeout(() => {
       duskSceneComplete = true
-    }, 1000)
+    }, 2000)
   } else {
     noQuestion.setText('I can help you with that! \n\nHere, pick up the UpSkill token')
   }
