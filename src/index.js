@@ -8,11 +8,12 @@ import * as firebase from 'firebase'
 import App from './components/App.jsx'
 
 // Phaser Scenes
-import dusk from './phaser/scenes/DuskScene'
 import title from './phaser/scenes/TitleScene'
-import jumpLevel from './phaser/scenes/JumpLevel'
-import parallax from './phaser/scenes/ParallaxScene'
 import tutLevel from './phaser/scenes/TutLevel'
+import jumpLevel from './phaser/scenes/JumpLevel'
+import dusk from './phaser/scenes/DuskScene'
+import city from './phaser/scenes/CityScene'
+import parallax from './phaser/scenes/ParallaxScene'
 
 import questionOne from './phaser/scenes/textScenes/questionOne.js'
 import questionTwo from './phaser/scenes/textScenes/questionTwo.js'
@@ -44,13 +45,11 @@ const config = {
       debug: false
     }
   },
-  scene: [title, dusk, tutLevel, jumpLevel, parallax, questionOne, questionTwo, questionThree, questionFour]
+  scene: [title, tutLevel, jumpLevel, parallax, dusk, city, questionOne, questionTwo, questionThree, questionFour]
 }
 /*eslint-disable */
 const game = new Phaser.Game(config)
 /* eslint-enable */
-
-// Game Logo disappears on scroll
 
 ReactDOM.render(
   <App />,
