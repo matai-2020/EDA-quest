@@ -14,6 +14,7 @@ import jumpLevel from './phaser/scenes/JumpLevel'
 import dusk from './phaser/scenes/DuskScene'
 import city from './phaser/scenes/CityScene'
 import parallax from './phaser/scenes/ParallaxScene'
+import sky from './phaser/scenes/skyScene'
 
 var firebaseConfig = {
   apiKey: 'AIzaSyD5DEUiq_fXMfIJpiPH4HUvbXbPGPDP2-0',
@@ -40,7 +41,7 @@ const config = {
       debug: false
     }
   },
-  scene: [title, tutLevel, jumpLevel, parallax, dusk, city]
+  scene: [sky, tutLevel, jumpLevel, parallax, dusk, city]
 }
 /*eslint-disable */
 const game = new Phaser.Game(config)
