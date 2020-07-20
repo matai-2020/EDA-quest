@@ -28,10 +28,9 @@ let explode
 let healthBar
 let right = true
 let jumpUp = false
-let scoreJumpScene = 0
 let scoreText
 let canAsk = false
-let popUp = 0
+const popUp = 0
 let notYet
 let noQuestion
 let jumpSceneComplete = false
@@ -55,8 +54,8 @@ let bump
 let ent
 let game
 let keyText
-let keyAmount = 0
-let worldWidth = 2000
+const keyAmount = 0
+const worldWidth = 2000
 let GPSx = 0
 let GPSy = 0
 
@@ -78,17 +77,19 @@ const bounce = (player, spring) => {
 let checkText
 let checkAmount = 0
 const checksToPass = 1
-let currentSceneScore
+let currentSceneScore = 0
 
 const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
     type.disableBody(true, true)
     currentSceneScore += 10
+    scoreChanged(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
   } else {
     type.disableBody(true, true)
     currentSceneScore += 20
     checkAmount += 1
+    scoreChanged(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
     if (checkAmount === checksToPass) {
@@ -165,28 +166,28 @@ export default class JumpLevel extends Phaser.Scene {
 
     // player assets
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
-      frameWidth: 20,
-      frameHeight: 35
+      frameWidth: 60,
+      frameHeight: 105
     })
     this.load.spritesheet('jumpLeft', '/assets/man/jumpLeft.png', {
-      frameWidth: 20,
-      frameHeight: 35
+      frameWidth: 60,
+      frameHeight: 105
     })
     this.load.spritesheet('runLeft', '/assets/man/runLeft.png', {
-      frameWidth: 21,
-      frameHeight: 33
+      frameWidth: 63,
+      frameHeight: 99
     })
     this.load.spritesheet('runRight', '/assets/man/runRight.png', {
-      frameWidth: 21,
-      frameHeight: 33
+      frameWidth: 63,
+      frameHeight: 99
     })
     this.load.spritesheet('idleRight', '/assets/man/idleRight.png', {
-      frameWidth: 19,
-      frameHeight: 34
+      frameWidth: 57,
+      frameHeight: 102
     })
     this.load.spritesheet('idleLeft', '/assets/man/idleLeft.png', {
-      frameWidth: 19,
-      frameHeight: 34
+      frameWidth: 57,
+      frameHeight: 102
     })
     this.load.spritesheet('heart', '/assets/Game/Hearts/PNG/animated/border/heart_animated_2.png', {
       frameHeight: 17,
@@ -257,7 +258,6 @@ export default class JumpLevel extends Phaser.Scene {
 
     // Tutor
     tutor = this.physics.add.sprite(1700, 535, 'idleLeft')
-    tutor.setScale(3)
 
     // Tutor trigger
 
@@ -268,7 +268,6 @@ export default class JumpLevel extends Phaser.Scene {
     // Player sprite
 
     player = this.physics.add.sprite(100, 580, 'idleRight')
-    player.setScale(3)
     player.body.setGravityY(30)
     player.setCollideWorldBounds(false)
     // player.onWorldBounds = true
@@ -461,6 +460,7 @@ export default class JumpLevel extends Phaser.Scene {
         fill: '#000'
       })
       .setScrollFactor(0)
+
     noQuestion = this.add.text(spot.x - 250, spot.y - 10, '', {
       fontFamily: "'Press Start 2P', cursive",
       fontSize: '12px',
@@ -523,6 +523,10 @@ export default class JumpLevel extends Phaser.Scene {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
     }
+    // next level
+    if (jumpSceneComplete) {
+      this.scene.start('parallax-scene', currentSceneScore)
+    }
     // enemy ENT
     if (ent.body.touching.right || ent.body.blocked.right) {
       right = false
@@ -532,6 +536,10 @@ export default class JumpLevel extends Phaser.Scene {
     if (ent.body.touching.left || ent.body.blocked.left || right) {
       ent.body.velocity.x = 100
       ent.anims.play('entRight', true)
+    }
+    // Change Scene
+    if (jumpSceneComplete) {
+      this.scene.start('dusk-scene', currentSceneScore)
     }
 
     // HEALTHBAR ABOVE PLAYER

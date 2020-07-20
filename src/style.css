@@ -2,6 +2,24 @@
   margin: 0;
   padding: 0;
 }
+
+#logo {
+  visibility: visible;
+  width: 900px;
+  height: 400px;
+  padding: 40px 10px;
+  transition: 0.2s;
+  /* margin-top: 150px;
+  margin-bottom: 230px; */
+}
+
+.logoContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
 #phaser {
   display: flex;
   justify-content: center;
@@ -13,10 +31,6 @@ body {
   text-align: center;
   color: #fff;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-#logo {
-  padding: 40px 10px;
-  transition: 0.2s;
 }
 /* HIGHSCORE POP UP */
 .score-container {
@@ -63,8 +77,13 @@ body {
   padding: 2%;
 }
 
+<<<<<<< HEAD
 .name-input:focus{
   outline:none;
+=======
+.name-input:focus {
+  outline: none;
+>>>>>>> dev
 }
 
 .submit-button {
