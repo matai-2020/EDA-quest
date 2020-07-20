@@ -23,7 +23,7 @@ export class HighScore extends React.Component {
       })
       // Check if Player is alive and if game has been won
       subscribe(gameStatus => {
-        let { isAlive, wonGame, currentSceneScore } = gameStatus
+        const { isAlive, wonGame, currentSceneScore } = gameStatus
         this.setState({
           isAlive,
           wonGame,
