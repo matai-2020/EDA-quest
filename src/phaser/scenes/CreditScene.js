@@ -14,25 +14,21 @@ let wall
 let floor
 let tutors
 let player
-let credit1
-let credit2
-let credit3
-let credit4
-const worldWidth = 3500
+const worldWidth = 5000
 
 // GROUND LAYOUT
-const createAligned = (scene, totalWidth, texture, scrollFactor) => {
-  const getWidth = scene.textures.get(texture).getSourceImage().width
-  const count = Math.ceil(totalWidth / getWidth) * scrollFactor
-  let x = 0
-  for (let i = 0; i < count; ++i) {
-    const m = scene.add
-      .image(x, scene.scale.height, texture)
-      .setOrigin(0, 1)
-      .setScrollFactor(scrollFactor)
-    x += m.width
-  }
-}
+// const createAligned = (scene, totalWidth, texture, scrollFactor) => {
+//   const getWidth = scene.textures.get(texture).getSourceImage().width
+//   const count = Math.ceil(totalWidth / getWidth) * scrollFactor
+//   let x = 0
+//   for (let i = 0; i < count; ++i) {
+//     const m = scene.add
+//       .image(x, scene.scale.height, texture)
+//       .setOrigin(0, 1)
+//       .setScrollFactor(scrollFactor)
+//     x += m.width
+//   }
+// }
 
 // TUTOR TRIGGER
 // const askQuestion = () => {
@@ -54,7 +50,7 @@ export default class CreditScene extends Phaser.Scene {
   preload () {
     // WALLS & TRIGGERS
     this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
-    this.load.image('base', '/assets/blocksTriggers/base.png')
+    this.load.image('base', '/assets/blocksTriggers/baseC.png')
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
 
     // ENVIRONMENT
@@ -103,7 +99,6 @@ export default class CreditScene extends Phaser.Scene {
   create () {
     const width = this.scale.width
     const height = this.scale.height
-    const totalWidth = width * 10
 
     // PLAYER ORIENTATION
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {

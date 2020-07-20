@@ -72,7 +72,7 @@ let winReact
 let player
 let platforms
 let lives = 4
-let life = []
+const life = []
 let healthBar
 let health = 3
 let wonGame = false
