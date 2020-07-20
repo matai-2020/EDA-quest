@@ -1,19 +1,24 @@
-## EDA Quest for victory
+## EDA Quest
 
-## Create level
+A simple side scrolling platform game built with phaser.
 
-1. Create .js file in src/phaser, name it something unique (your name and level would be great)
-2. Copy staring code form boilerplate.js
-3. Head to src/index.js and import your level (import { youLevelNameHere } from './phaser/scene')
-4. In the config object change the scene key value to your level name
+https://eda-quest.netlify.app/
+
+Built by Isaac Bell, Jake Hurley, Keenen Leyson and Louis Fowler
+
 
 ## Available Commands
 
-| Command         | Description                                                                     |
-| --------------- | ------------------------------------------------------------------------------- |
-| `npm install`   | Install project dependencies                                                    |
-| `npm start`     | Build project and open web server running project                               |
+| Command | Description |
+|---------|-------------|
+| `npm install or npm i` | Install project dependencies |
+| `npm start` | Build project and open web server running project |
 | `npm run build` | Builds code bundle with production settings (minification, uglification, etc..) |
+| `npm run lint` | Run eslint config to find linting errors|
+| `npm run format` | Formats all .js and .jsx files based on eslint config |
+| `npm test` | Run all jest tests |
+| `npm run cypress` | Run cypress with Test Runner |
+| `npm run cypress:bg` | Run cypress headlessly in the Electron browser |
 
 ## Customizing Template
 
