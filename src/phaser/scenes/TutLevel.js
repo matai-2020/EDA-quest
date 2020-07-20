@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import { scoreChaged, scoreChanged } from '../score'
 
 /**
  *
@@ -21,7 +22,7 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   }
 }
 
-let scoreTut = 0
+let currentSceneScore = 0
 let scoreText
 
 let checkText
@@ -31,13 +32,17 @@ const checksToPass = 1
 const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
     type.disableBody(true, true)
-    scoreTut += 10
-    scoreText.setText('Score: ' + scoreTut)
+    currentSceneScore += 10
+    scoreChanged(currentSceneScore)
+    console.log(currentSceneScore)
+    scoreText.setText('Score: ' + currentSceneScore)
   } else {
     type.disableBody(true, true)
-    scoreTut += 20
+    currentSceneScore += 20
     checkAmount += 1
-    scoreText.setText('Score: ' + scoreTut)
+    scoreChanged(currentSceneScore)
+    console.log(currentSceneScore)
+    scoreText.setText('Score: ' + currentSceneScore)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
     if (checkAmount === checksToPass) {
       canAsk = true
@@ -347,7 +352,7 @@ export default class TutLevel extends Phaser.Scene {
       } else player.anims.play('jumpRight', true)
     }
     if (tutLevelComplete) {
-      this.scene.start('question-one', scoreTut)
+      this.scene.start('question-one', currentSceneScore)
     }
   }
 }

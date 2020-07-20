@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
 
 let qCorrect = false
+let currentSceneScore = 0
 
 export default class questionOne extends Phaser.Scene {
   constructor () {
@@ -16,7 +17,8 @@ export default class questionOne extends Phaser.Scene {
     this.load.script('rexdialogquest', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexdialogquest.min.js')
   }
 
-  create () {
+  create (prevScore) {
+    currentSceneScore = prevScore
     const print = this.add.text(0, 0, '')
 
     const dialog = CreateDialog(this)
@@ -73,7 +75,7 @@ export default class questionOne extends Phaser.Scene {
 
   update (score) {
     if (qCorrect) {
-      this.scene.start('parallax-scene')
+      this.scene.start('parallax-scene', currentSceneScore)
     }
   }
 }
