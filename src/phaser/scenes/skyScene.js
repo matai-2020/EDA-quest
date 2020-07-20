@@ -423,6 +423,7 @@ export default class SkyScene extends Phaser.Scene {
     // console.log(checkAmount === 4)
     if (checkAmount === 4) {
       bridge.enableBody(false, bridge.body.position.x, bridge.body.position.x, true, true)
+      this.victory({ isAlive, wonGame, currentSceneScore })
     }
 
     // LEVEL COMPLETION
@@ -460,6 +461,6 @@ export default class SkyScene extends Phaser.Scene {
 
   victory = () => {
     wonGame = true
-    setTimeout(() => { gameOver({ isAlive, wonGame }) }, 2000)
+    setTimeout(() => { gameOver({ isAlive, wonGame, currentSceneScore }) }, 2000)
   }
 }
