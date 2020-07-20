@@ -80,11 +80,11 @@ let tutLevelComplete = false
 const worldWidth = 2000
 
 export default class TutLevel extends Phaser.Scene {
-  constructor () {
+  constructor() {
     super('tut-level')
   }
 
-  preload () {
+  preload() {
     // invis walls/triggers
     this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
     this.load.image('base', '/assets/blocksTriggers/base.png')
@@ -140,7 +140,7 @@ export default class TutLevel extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create () {
+  create() {
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -270,7 +270,8 @@ export default class TutLevel extends Phaser.Scene {
 
     react = this.physics.add.staticGroup()
     react.create(550, 600, 'react').setScale(0.05).refreshBody()
-    react.create(850, 600, 'react').setScale(0.05).refreshBody()
+    react.create(750, 600, 'react').setScale(0.05).refreshBody()
+    react.create(950, 600, 'react').setScale(0.05).refreshBody()
 
     this.physics.add.overlap(player, react, collectScore, null, this)
     this.physics.add.overlap(player, trigger, askQuestion, null, this)
@@ -312,7 +313,7 @@ export default class TutLevel extends Phaser.Scene {
     this.physics.add.collider(player, [platforms, wall, bump])
   }
 
-  update () {
+  update() {
     const cam = this.cameras.main
     const speed = 15
 
