@@ -13,10 +13,6 @@
   margin-bottom: 230px; */
 }
 
-#scroll {
-  width: 20%;
-}
-
 #logoContainer{
   display: flex;
   flex-direction: column;
