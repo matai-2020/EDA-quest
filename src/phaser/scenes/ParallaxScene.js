@@ -22,9 +22,7 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
   }
 }
 
-let scorePara = 0
 let scoreText
-
 let checkText
 let checkAmount = 0
 const checksToPass = 1
@@ -64,34 +62,18 @@ const askQuestion = () => {
   }
 }
 
-const loseHp = () => {
-  badReact.disableBody(true, true)
-  health = health + 1
-  healthBar.anims.play(`health${health}`, true)
-  if (health === 4) {
-    death()
-  }
-}
-
-const death = () => {
-  isAlive = false
-  healthBar.anims.play(`health${health}`, true)
-  explode.anims.play('death', true)
-  setTimeout(() => {
-    player.disableBody(true, true)
-    healthBar.disableBody(true, true)
-  }, 100)
-  setTimeout(() => { gameOver(isAlive) }, 2000)
-}
-
 let wall
 let facing = ''
 let react
 let badReact
+let winReact
 let player
 let platforms
+let lives = 4
+let life = []
 let healthBar
 let health = 3
+let wonGame = false
 let floor
 let isAlive = true
 let explode
@@ -124,29 +106,34 @@ export default class ParallaxScene extends Phaser.Scene {
     this.load.image('platform', '/assets/airpack/PNG/Environment/ground_grass.png')
     this.load.image('plants', '/assets/Jungle/plant.png')
     this.load.image('arrow-keys', '/assets/Jungle/arrow-keys.png')
+    this.load.image('lives', '/assets/Game/lives-icon.png')
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
       frameWidth: 20,
       frameHeight: 35
     })
+    this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
+      frameWidth: 60,
+      frameHeight: 105
+    })
     this.load.spritesheet('jumpLeft', '/assets/man/jumpLeft.png', {
-      frameWidth: 20,
-      frameHeight: 35
+      frameWidth: 60,
+      frameHeight: 105
     })
     this.load.spritesheet('runLeft', '/assets/man/runLeft.png', {
-      frameWidth: 21,
-      frameHeight: 33
+      frameWidth: 63,
+      frameHeight: 99
     })
     this.load.spritesheet('runRight', '/assets/man/runRight.png', {
-      frameWidth: 21,
-      frameHeight: 33
+      frameWidth: 63,
+      frameHeight: 99
     })
     this.load.spritesheet('idleRight', '/assets/man/idleRight.png', {
-      frameWidth: 19,
-      frameHeight: 34
+      frameWidth: 57,
+      frameHeight: 102
     })
     this.load.spritesheet('idleLeft', '/assets/man/idleLeft.png', {
-      frameWidth: 19,
-      frameHeight: 34
+      frameWidth: 57,
+      frameHeight: 102
     })
 
     this.load.spritesheet('heart', '/assets/Game/Hearts/PNG/animated/border/heart_animated_2.png', {
@@ -195,11 +182,15 @@ export default class ParallaxScene extends Phaser.Scene {
     // Arrow Keys Instructions
     this.add.image(300, 580, 'arrow-keys').setScale(0.2)
 
-    // Player sprite
+    // Amount of Lives display
+    for (let i = 1; i < lives; i++) {
+      let x = 400
+      x = x + (i * 80)
+      life[i] = this.add.image(x, 30, 'lives').setScale(0.5)
+    }
 
     // Tutor
     tutor = this.physics.add.sprite(1700, 535, 'idleLeft')
-    tutor.setScale(3)
 
     // Tutor trigger
 
@@ -210,7 +201,6 @@ export default class ParallaxScene extends Phaser.Scene {
     // player sprite
 
     player = this.physics.add.sprite(100, 580, 'idleRight')
-    player.setScale(3)
     player.body.setGravityY(80)
     player.setCollideWorldBounds(false)
     // player.onWorldBounds = true
@@ -328,7 +318,6 @@ export default class ParallaxScene extends Phaser.Scene {
 
     react = this.physics.add.staticGroup()
     react.create(550, 600, 'react').setScale(0.05).refreshBody()
-    react.create(850, 600, 'react').setScale(0.05).refreshBody()
 
     check = this.physics.add.staticGroup()
     check.create(1400, 550, 'check').setScale(0.08).refreshBody()
@@ -337,9 +326,11 @@ export default class ParallaxScene extends Phaser.Scene {
     this.physics.add.overlap(player, trigger, askQuestion, null, this)
 
     badReact = this.physics.add.staticImage(700, 600, 'react').setScale(0.05).refreshBody()
+    winReact = this.physics.add.staticImage(850, 600, 'react').setScale(0.05).refreshBody()
 
     this.physics.add.overlap(player, react, collectScore, null, this)
-    this.physics.add.overlap(player, badReact, loseHp, null, this)
+    this.physics.add.overlap(player, badReact, this.loseHp, null, this)
+    this.physics.add.overlap(player, winReact, this.victory, null, this)
 
     // text
     this.cameras.main.setBounds(0, 0, worldWidth, 0)
@@ -431,7 +422,41 @@ export default class ParallaxScene extends Phaser.Scene {
 
     })
     if (paraLevelComplete) {
-      this.scene.start('jump-scene', scorePara)
+      this.scene.start('jump-scene', currentSceneScore)
     }
+  }
+
+  loseHp = () => {
+    badReact.disableBody(true, true)
+    health = health + 1
+    healthBar.anims.play(`health${health}`, true)
+    if (health === 4) {
+      this.death()
+    }
+  }
+
+  death = () => {
+    lives = lives - 1
+    isAlive = false
+    healthBar.anims.play(`health${health}`, true)
+    explode.anims.play('death', true)
+    setTimeout(() => {
+      player.disableBody(true, true)
+      healthBar.disableBody(true, true)
+    }, 100)
+    setTimeout(() => {
+      if (lives > 0) {
+        health = health - 1
+        life[lives].destroy()
+        this.scene.restart()
+      } else if (lives === 0) {
+        gameOver({ isAlive, wonGame })
+      }
+    }, 2000)
+  }
+
+  victory = () => {
+    wonGame = true
+    setTimeout(() => { gameOver({ isAlive, wonGame }) }, 2000)
   }
 }

@@ -86,6 +86,7 @@ export default class TutLevel extends Phaser.Scene {
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
 
     // assets
+    this.load.image('don', '/assets/man/lane.png')
     this.load.image('reactText', '/assets/coinsText.png')
     this.load.image('checkText', '/assets/checkText.png')
     this.load.image('check', '/assets/check.png')
@@ -107,28 +108,28 @@ export default class TutLevel extends Phaser.Scene {
 
     // player assets
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
-      frameWidth: 20,
-      frameHeight: 35
+      frameWidth: 60,
+      frameHeight: 105
     })
     this.load.spritesheet('jumpLeft', '/assets/man/jumpLeft.png', {
-      frameWidth: 20,
-      frameHeight: 35
+      frameWidth: 60,
+      frameHeight: 105
     })
     this.load.spritesheet('runLeft', '/assets/man/runLeft.png', {
-      frameWidth: 21,
-      frameHeight: 33
+      frameWidth: 63,
+      frameHeight: 99
     })
     this.load.spritesheet('runRight', '/assets/man/runRight.png', {
-      frameWidth: 21,
-      frameHeight: 33
+      frameWidth: 63,
+      frameHeight: 99
     })
     this.load.spritesheet('idleRight', '/assets/man/idleRight.png', {
-      frameWidth: 19,
-      frameHeight: 34
+      frameWidth: 57,
+      frameHeight: 102
     })
     this.load.spritesheet('idleLeft', '/assets/man/idleLeft.png', {
-      frameWidth: 19,
-      frameHeight: 34
+      frameWidth: 57,
+      frameHeight: 102
     })
 
     this.cursors = this.input.keyboard.createCursorKeys()
@@ -183,8 +184,8 @@ export default class TutLevel extends Phaser.Scene {
     // Character sprites
 
     // Tutor
-    tutor = this.physics.add.sprite(1700, 535, 'idleLeft')
-    tutor.setScale(3)
+    tutor = this.physics.add.sprite(1700, 535, 'don')
+    tutor.setScale(0.3)
 
     // Tutor trigger
 
@@ -195,7 +196,7 @@ export default class TutLevel extends Phaser.Scene {
     // Player sprite
 
     player = this.physics.add.sprite(100, 580, 'idleRight')
-    player.setScale(3)
+    // player.setScale(3)
     player.body.setGravityY(80)
     player.setCollideWorldBounds(false)
     // player.onWorldBounds = true
