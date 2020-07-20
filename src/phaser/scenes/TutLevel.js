@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { scoreChaged, scoreChanged } from '../score'
+import { scoreChanged } from '../score'
 
 /**
  *
@@ -74,23 +74,26 @@ let floor
 let wall
 let trigger
 let bump
+const lives = 4
+const life = []
 
 let tutLevelComplete = false
 
 const worldWidth = 2000
 
 export default class TutLevel extends Phaser.Scene {
-  constructor() {
+  constructor () {
     super('tut-level')
   }
 
-  preload() {
+  preload () {
     // invis walls/triggers
     this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
     this.load.image('base', '/assets/blocksTriggers/base.png')
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
 
     // assets
+    this.load.image('lives', '/assets/Game/lives-icon.png')
     this.load.image('lache', '/assets/man/lache.png')
     this.load.image('reactText', '/assets/coinsText.png')
     this.load.image('checkText', '/assets/checkText.png')
@@ -140,7 +143,7 @@ export default class TutLevel extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create() {
+  create () {
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -158,7 +161,6 @@ export default class TutLevel extends Phaser.Scene {
     createAligned(this, totalWidth, 'plateau', 0.5)
     createAligned(this, totalWidth, 'ground', 1)
     createAligned(this, totalWidth, 'plants', 1.25)
-    // this.add.image(width * 0.5, height * 1, 'platform').setScrollFactor(0)
 
     // Collider floor & platforms
 
@@ -171,20 +173,17 @@ export default class TutLevel extends Phaser.Scene {
 
     bump = this.physics.add.staticImage(1400, 620, 'bump')
 
-    // platforms = this.physics.add.staticGroup()
-    // platforms.create(800, 500, 'platform').setScale(0.4).refreshBody()
-
-    // platforms.children.entries.forEach(platform => {
-    //   ;(platform.body.checkCollision.left = false),
-    //     (platform.body.checkCollision.right = false),
-    //     (platform.body.checkCollision.down = false)
-    // })
-    // background images
-
     this.add.image(150, 475, 'arrow-keys').setScale(0.2)
     this.add.image(700, 450, 'reactText').setScale(0.6)
     this.add.image(1400, 400, 'checkText').setScale(0.6)
     this.add.image(1150, 475, 'up-key').setScale(0.2)
+
+    // lives
+    for (let i = 1; i < lives; i++) {
+      let x = 400
+      x = x + (i * 80)
+      life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)
+    }
 
     // Character sprites
 
@@ -201,10 +200,8 @@ export default class TutLevel extends Phaser.Scene {
     // Player sprite
 
     player = this.physics.add.sprite(100, 580, 'idleRight')
-    // player.setScale(3)
     player.body.setGravityY(80)
     player.setCollideWorldBounds(false)
-    // player.onWorldBounds = true
     player.body.checkCollision.up = false
 
     this.anims.create({
@@ -313,7 +310,7 @@ export default class TutLevel extends Phaser.Scene {
     this.physics.add.collider(player, [platforms, wall, bump])
   }
 
-  update() {
+  update () {
     const cam = this.cameras.main
     const speed = 15
 

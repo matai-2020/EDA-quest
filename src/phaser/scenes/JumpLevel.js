@@ -169,6 +169,7 @@ export default class JumpLevel extends Phaser.Scene {
     this.load.image('ground', '/assets/Jungle/ground.png')
     this.load.image('arrow-keys', '/assets/left-right-keys.png')
     this.load.image('up-key', '/assets/up-key.png')
+    this.load.image('tutor', '/assets/man/lane.png')
     this.load.image(
       'platform',
       '/assets/airpack/PNG/Environment/ground_grass.png'

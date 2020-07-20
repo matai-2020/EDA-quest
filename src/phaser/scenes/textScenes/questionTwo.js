@@ -4,11 +4,11 @@ let qCorrect = false
 let currentSceneScore = 0
 
 export default class questionTwo extends Phaser.Scene {
-  constructor() {
+  constructor () {
     super('question-two')
   }
 
-  preload() {
+  preload () {
     this.load.scenePlugin({
       key: 'rexuiplugin',
       url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
@@ -17,7 +17,7 @@ export default class questionTwo extends Phaser.Scene {
     this.load.script('rexdialogquest', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexdialogquest.min.js')
   }
 
-  create(prevScore) {
+  create (prevScore) {
     currentSceneScore = prevScore
     const print = this.add.text(0, 0, '')
 
@@ -30,7 +30,9 @@ export default class questionTwo extends Phaser.Scene {
       return dialog
     }
 
+    /*eslint-disable */
     const quest = new rexdialogquest({
+    /* eslint-enable */
       dialog: dialog,
       questions: Questions
     })
@@ -60,17 +62,15 @@ export default class questionTwo extends Phaser.Scene {
         if (action.text === 'Next') {
           const option = quest.getData('option')
           const nextKey = option.next
-          const optionKey = option.key
-          // print.text += ` --> |${optionKey}| ${nextKey}\n`;
 
           if (nextKey === true) {
-            dialog.getElement('title').setText(`Correct! +50 points`)
+            dialog.getElement('title').setText('Correct! +50 points')
             currentSceneScore += 50
             setTimeout(() => {
               qCorrect = true
             }, 1500)
           } else {
-            dialog.getElement('title').setText(`Try again, -20 points :(`)
+            dialog.getElement('title').setText('Try again, -20 points :(')
             currentSceneScore -= 20
             setTimeout(() => {
               qCorrect = 'again'
@@ -81,7 +81,7 @@ export default class questionTwo extends Phaser.Scene {
       .start()
   }
 
-  update() {
+  update () {
     if (qCorrect === true) {
       this.scene.start('dusk-scene', currentSceneScore)
     } else if (qCorrect === 'again') {
@@ -188,7 +188,7 @@ F --> |Z| L
 F --> |X| M
 */
 
-const sceneQuestion = `How cool is Louis?`
+const sceneQuestion = 'How cool is Louis?'
 const tutor = 'Lane'
 
 const Questions = `type,key,next,end
