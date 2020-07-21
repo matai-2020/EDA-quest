@@ -34,14 +34,14 @@ const collectScore = (player, type) => {
     type.disableBody(true, true)
     currentSceneScore += 10
     scoreChanged(currentSceneScore)
-    console.log(currentSceneScore)
+    // console.log(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
   } else {
     type.disableBody(true, true)
     currentSceneScore += 20
     checkAmount += 1
     scoreChanged(currentSceneScore)
-    console.log(currentSceneScore)
+    // console.log(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
     if (checkAmount === checksToPass) {

@@ -137,10 +137,9 @@ export default class SkyScene extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create (prevScore, prevLives) {
-    console.log(prevScore, prevLives)
-    currentSceneScore = prevScore
-    lives
+  create (prevLevel) {
+    currentSceneScore = prevLevel.currentSceneScore
+    lives = prevLevel.lives
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -423,7 +422,7 @@ export default class SkyScene extends Phaser.Scene {
     if (player.body.position.y >= 800) {
       this.loseHp()
     }
-    // console.log(checkAmount === 4)
+    
     if (checkAmount === 4) {
       bridge.enableBody(false, bridge.body.position.x, bridge.body.position.x, true, true)
     }
