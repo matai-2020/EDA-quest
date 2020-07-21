@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import { gameOver } from '../score'
 
 /**
  *
@@ -11,17 +12,44 @@ import Phaser from 'phaser'
 // ASSIGNMENTS
 let facing = ''
 let wall
+let creditTrigger
 let floor
 let tutors
 let player
 let diploma
+let credit1
+let specialThanks
+let credit2
+let credit3
+let credit4
+let currentSceneScore
 let graduate = false
+const isAlive = true
+let wonGame = false
 const worldWidth = 3000
 
 // COLLECT DIPLOMA
 const collectDiploma = (player, type) => {
   type.disableBody(true, true)
   graduate = true
+  victory()
+}
+
+const victory = () => {
+  wonGame = true
+  setTimeout(() => { gameOver({ isAlive, wonGame, currentSceneScore }) }, 2000)
+}
+
+// DISPLAY CREDITS
+const displayCredit = (player, type) => {
+  type.disableBody(true, true)
+  const axis = type.body.center.x
+  console.log(axis)
+  if (axis === 500) credit1.setText('\nDEVELOPERS:\n\nKeenen Leyson\nIsaac Bell\nJake Hurley\nLouis Fowler')
+  if (axis === 800) specialThanks.setText('\nSPECIAL\nTHANKS\nto:')
+  if (axis === 1000) credit2.setText('\nHUMAN SKILLS\n\nCarolyn Stott\nDougal Stott')
+  if (axis === 1400) credit3.setText('\nTECH SKILLS:\n\nDon Smith\nEmily Parkes\nLane Le Prevost-Smith\nLaché Melvin')
+  if (axis === 1800) credit4.setText('\nThe 2020\n  MATAI\n   Cohort')
 }
 
 export default class CreditScene extends Phaser.Scene {
@@ -34,6 +62,7 @@ export default class CreditScene extends Phaser.Scene {
     this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
     this.load.image('base', '/assets/blocksTriggers/base.png')
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
+    this.load.image('creditTrigger', '/assets/blocksTriggers/wallBlock.png')
 
     // ENVIRONMENT
     this.load.image('background', '/assets/Credits/sunset.jpg')
@@ -79,7 +108,8 @@ export default class CreditScene extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create () {
+  create (prevScore) {
+    currentSceneScore = prevScore
     const width = this.scale.width
     const height = this.scale.height
 
@@ -194,11 +224,44 @@ export default class CreditScene extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, worldWidth, 0)
     this.cameras.main.startFollow(player)
 
-    // credit1 = this.add.text(spot.x - 250, spot.y + 100, '', {
-    //   fontFamily: "'Press Start 2P', cursive",
-    //   fontSize: '12px',
-    //   fill: 'white'
-    // })
+    // CREDIT TRIGGER
+    creditTrigger = this.physics.add.staticGroup()
+    creditTrigger.create(500, 200, 'creditTrigger')
+    creditTrigger.create(800, 200, 'creditTrigger')
+    creditTrigger.create(1000, 200, 'creditTrigger')
+    creditTrigger.create(1400, 200, 'creditTrigger')
+    creditTrigger.create(1800, 200, 'creditTrigger')
+    this.physics.add.overlap(player, creditTrigger, displayCredit, null, this)
+
+    credit1 = this.add.text(350, 300, '', {
+      fontFamily: "'Press Start 2P', cursive",
+      fontSize: '20px',
+      fill: 'white'
+    })
+
+    specialThanks = this.add.text(670, 340, '', {
+      fontFamily: "'Press Start 2P', cursive",
+      fontSize: '15px',
+      fill: 'white'
+    })
+
+    credit2 = this.add.text(850, 320, '', {
+      fontFamily: "'Press Start 2P', cursive",
+      fontSize: '20px',
+      fill: 'white'
+    })
+
+    credit3 = this.add.text(1200, 300, '', {
+      fontFamily: "'Press Start 2P', cursive",
+      fontSize: '20px',
+      fill: 'white'
+    })
+
+    credit4 = this.add.text(1800, 320, '', {
+      fontFamily: "'Press Start 2P', cursive",
+      fontSize: '25px',
+      fill: 'white'
+    })
 
     // FRONT IMAGES - CURTAIN
     this.add.image(680, 350, 'curtain').setScale(1.3).setScrollFactor(0)
@@ -253,10 +316,10 @@ export default class CreditScene extends Phaser.Scene {
       } else player.anims.play('jumpRight', true)
     }
 
-    // GRADUATE => HIGHSCHORE
+    // VICTORY => HIGHSCHORE
     if (graduate) {
-      // victory
       player.setScale(2)
+      victory()
     }
   }
 }
