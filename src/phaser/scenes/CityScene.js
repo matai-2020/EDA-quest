@@ -156,7 +156,7 @@ export default class CityScene extends Phaser.Scene {
     const width = this.scale.width
 
     this.add.image(670, 505, 'far-buildings').setScale(5.3).setScrollFactor(0)
-    this.add.image(220, 500, 'near-buildings').setScale(5).setScrollFactor(0)
+    this.add.image(420, 500, 'near-buildings').setScale(2).setScrollFactor(0)
     this.add.image(600, 475, 'street').setScale(3.5).setScrollFactor(0)
     this.add.image(1830, 475, 'street').setScale(3.5).setScrollFactor(0)
 
@@ -167,7 +167,7 @@ export default class CityScene extends Phaser.Scene {
     wall.create(worldWidth, 0, 'wallBlock')
 
     floor = this.physics.add.staticGroup()
-    floor.create(2010, 780, 'base').setScrollFactor(0)
+    floor.create(2010, 700, 'base').setScrollFactor(0)
 
     // Platforms
 
@@ -263,7 +263,7 @@ export default class CityScene extends Phaser.Scene {
 
     // coin and collection
 
-    react = this.physics.add.sprite(550, 200, 'react')
+    react = this.physics.add.sprite(550, 300, 'react')
     react.setScale(0.2)
 
     this.physics.add.overlap(player, react, collectScore, null, this)
