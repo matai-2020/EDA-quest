@@ -142,14 +142,14 @@ export class HighScore extends React.Component {
               const indexKey = this.state.highScores.indexOf(player)
               if (indexKey < 10) {
                 return (
-                  <li className={`${this.state.level}rank`} key={indexKey}>
+                  <li className='Cityrank' key={indexKey}>
                     {player.name}: {player.score}
                   </li>
                 )
               }
             })}
           </ol>
-          <img src={`/assets/${this.state.level}/${this.state.level}Highscore.png`} className='jungle-background'/>
+          <img src={`/assets/Theatre/victoryBg.png`} className='hs-background'/>
         </div>
       )
     } else return <></>
