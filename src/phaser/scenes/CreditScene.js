@@ -23,6 +23,9 @@ let specialThanks
 let credit2
 let credit3
 let credit4
+let broughtToYouBy
+let edaQuest
+let team
 let currentSceneScore
 let graduate = false
 const isAlive = true
@@ -44,8 +47,13 @@ const displayCredit = (player, type) => {
   if (axis === 500) credit1.setText('\nDEVELOPERS:\n\nIsaac Bell\nJake Hurley\nKeenen Leyson\nLouis Fowler')
   if (axis === 800) specialThanks.setText('\nSPECIAL\nTHANKS\nto:')
   if (axis === 1000) credit2.setText('\nHUMAN SKILLS:\n\nCarolyn Stott\nDougal Stott')
-  if (axis === 1400) credit3.setText('\nTECH SKILLS:\n\nDon Smith\nEmily Parkes\nLane Le Prevost-Smith\nLaché Melvin')
-  if (axis === 1800) credit4.setText('\nThe 2020\n  MATAI\n  Cohort')
+  if (axis === 1400) credit3.setText('\nTECH TEAM:\n\nDon Smith\nEmily Parkes\nLane Le Prevost-Smith\nLaché Melvin')
+  if (axis === 1800) {
+    credit4.setText('\nThe 2020\n  MATAI\n  Cohort')
+    broughtToYouBy.setText('\nbrought to you by:')
+    edaQuest.setText('\nTHE EDA\n QUEST')
+    team.setText('\n team')
+  }
 }
 
 export default class CreditScene extends Phaser.Scene {
@@ -263,6 +271,24 @@ export default class CreditScene extends Phaser.Scene {
     credit4 = this.add.text(1800, 320, '', {
       fontFamily: "'Press Start 2P', cursive",
       fontSize: '25px',
+      fill: 'white'
+    })
+
+    broughtToYouBy = this.add.text(2600, 320, '', {
+      fontFamily: "'Press Start 2P', cursive",
+      fontSize: '18px',
+      fill: 'white'
+    })
+
+    edaQuest = this.add.text(2660, 350, '', {
+      fontFamily: "'Press Start 2P', cursive",
+      fontSize: '30px',
+      fill: 'green'
+    })
+
+    team = this.add.text(2700, 460, '', {
+      fontFamily: "'Press Start 2P', cursive",
+      fontSize: '18px',
       fill: 'white'
     })
 
