@@ -22,7 +22,6 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
 }
 
 const wonGame = false
-let lives = 4
 const life = []
 let tornado
 let health = 0

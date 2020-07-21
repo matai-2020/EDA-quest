@@ -66,7 +66,7 @@ let wall
 let facing = ''
 let player
 let platforms
-let lives = 4
+let lives
 const life = []
 let healthBar
 let health = 0
@@ -137,8 +137,10 @@ export default class SkyScene extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create (prevScore) {
+  create (prevScore, prevLives) {
+    console.log(prevScore, prevLives)
     currentSceneScore = prevScore
+    lives
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -429,7 +431,7 @@ export default class SkyScene extends Phaser.Scene {
     // LEVEL COMPLETION
 
     if (skySceneComplete) {
-      this.scene.start('question-three', currentSceneScore)
+      this.scene.start('question-three', currentSceneScore, lives)
     }
   }
 
@@ -461,6 +463,6 @@ export default class SkyScene extends Phaser.Scene {
 
   victory = () => {
     wonGame = true
-    setTimeout(() => { gameOver({ isAlive, wonGame }) }, 2000)
+    setTimeout(() => { gameOver({ isAlive, wonGame, currentSceneScore }) }, 2000)
   }
 }
