@@ -14,7 +14,15 @@ let wall
 let floor
 let tutors
 let player
+let diploma
+let graduate = false
 const worldWidth = 3000
+
+// COLLECT DIPLOMA
+const collectDiploma = (player, type) => {
+  type.disableBody(true, true)
+  graduate = true
+}
 
 export default class CreditScene extends Phaser.Scene {
   constructor () {
@@ -35,6 +43,7 @@ export default class CreditScene extends Phaser.Scene {
     this.load.image('stage', '/assets/Theatre/theatre-stage.png')
 
     // TOKENS
+    this.load.image('diploma', '/assets/Credits/diploma.png')
 
     // TUTOR SPRITE
     this.load.image('lache', '/assets/man/lache.png')
@@ -83,14 +92,15 @@ export default class CreditScene extends Phaser.Scene {
     })
 
     //  ------ ENVIRONMENT ------
-    this.add.image((width * 0.5) + 20, (height * 0.5) - 100, 'background').setScale(1.3).setScrollFactor(0.01)
-
-    // STAGE
-    // this.add.image(2000, 460, 'stage').setScale(2.8).setScrollFactor(0.35)
+    this.add.image((width * 0.5) + 20, (height * 0.5) - 100, 'background').setScale(1.3).setScrollFactor(0.09)
 
     // GROUND
     this.add.image(500, 830, 'floor').setScale(1).setScrollFactor(1)
     this.add.image(1500, 830, 'floor').setScale(1).setScrollFactor(1)
+    this.add.image(2500, 830, 'floor').setScale(1).setScrollFactor(1)
+
+    // STAGE
+    this.add.image(2350, 650, 'stage').setScale(0.4).setScrollFactor(1)
 
     // WALLS
     wall = this.physics.add.staticGroup()
@@ -101,15 +111,16 @@ export default class CreditScene extends Phaser.Scene {
     floor = this.physics.add.staticGroup()
     floor.create(700, 700, 'base').setScrollFactor(0)
     floor.create(1400, 700, 'base').setScrollFactor(0)
+    floor.create(2350, 600, 'base').setScale(0.1).refreshBody().setScrollFactor(1)
 
     //  ------ CHARACTERS ------
 
     // TUTOR SPRITE & TRIGGER
     tutors = this.physics.add.staticGroup()
-    tutors.create(1500, 620, 'lache').setScale(0.28)
-    tutors.create(1450, 620, 'lane').setScale(0.3)
-    tutors.create(1400, 620, 'emily').setScale(0.28)
-    tutors.create(1550, 620, 'don').setScale(1)
+    tutors.create(2220, 550, 'lache').setScale(0.25)
+    tutors.create(2270, 550, 'lane').setScale(0.3)
+    tutors.create(2440, 550, 'emily').setScale(0.25)
+    tutors.create(2490, 550, 'don').setScale(1)
     // const spot = tutor.body.position
     // trigger = this.physics.add.sprite(spot.x, spot.y, 'triggerBlock')
 
@@ -174,11 +185,10 @@ export default class CreditScene extends Phaser.Scene {
 
     //  ------ TOKENS ------
 
-    // REACT
-    // react = this.physics.add.staticGroup()
-    // react.create(550, 600, 'react').setScale(0.05).refreshBody()
-    // react.create(850, 600, 'react').setScale(0.05).refreshBody()
-    // this.physics.add.overlap(player, react, collectScore, null, this)
+    // DIPLOMA
+    diploma = this.physics.add.staticGroup()
+    diploma.create(2350, 400, 'diploma').setScale(0.2).refreshBody()
+    this.physics.add.overlap(player, diploma, collectDiploma, null, this)
 
     // PLAYER CAMERA MECHANICS
     this.cameras.main.setBounds(0, 0, worldWidth, 0)
@@ -241,6 +251,12 @@ export default class CreditScene extends Phaser.Scene {
       if (facing === 'left') {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
+    }
+
+    // GRADUATE => HIGHSCHORE
+    if (graduate) {
+      // victory
+      player.setScale(2)
     }
   }
 }
