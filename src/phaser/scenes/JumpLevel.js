@@ -24,11 +24,13 @@ let wall
 let enemyWall
 let trigger
 let ent
+let lives
 const worldWidth = 2000
 let checkText
 let checkAmount = 0
 const checksToPass = 2
 let currentSceneScore
+let startingScore
 
 const walkFalse = () => {
   right = false
@@ -201,8 +203,10 @@ export default class JumpLevel extends Phaser.Scene {
   }
 
   // ////////////////////////////////////CREATE/////////////////////////////////////////////////
-  create (prevScore) {
-    currentSceneScore = prevScore
+  create (prevLevel) {
+    currentSceneScore = prevLevel.currentSceneScore
+    startingScore = currentSceneScore
+    lives = prevLevel.lives
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -555,7 +559,7 @@ export default class JumpLevel extends Phaser.Scene {
     }
     // next level
     if (jumpSceneComplete) {
-      this.scene.start('question-two', currentSceneScore)
+      this.scene.start('question-two', { currentSceneScore, lives })
     }
     // enemy ENT
     if (ent.body.blocked.right || !right) {
@@ -595,7 +599,7 @@ export default class JumpLevel extends Phaser.Scene {
         if (lives > 0) {
           health = 0
           life[lives].destroy()
-          this.scene.restart()
+          this.scene.restart({ currentSceneScore: startingScore, lives })
         } else if (lives === 0) {
           gameOver({ isAlive, wonGame, currentSceneScore })
         }

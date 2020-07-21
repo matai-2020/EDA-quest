@@ -27,6 +27,7 @@ let checkText
 let checkAmount = 0
 const checksToPass = 4
 let currentSceneScore
+let startingScore
 
 const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
@@ -67,7 +68,7 @@ let facing = ''
 let player
 let platforms
 let lives
-const life = []
+let life = []
 let healthBar
 let health = 0
 let wonGame = false
@@ -139,7 +140,9 @@ export default class SkyScene extends Phaser.Scene {
 
   create (prevLevel) {
     currentSceneScore = prevLevel.currentSceneScore
+    startingScore = currentSceneScore
     lives = prevLevel.lives
+
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -422,7 +425,7 @@ export default class SkyScene extends Phaser.Scene {
     if (player.body.position.y >= 800) {
       this.loseHp()
     }
-    
+
     if (checkAmount === 4) {
       bridge.enableBody(false, bridge.body.position.x, bridge.body.position.x, true, true)
     }
@@ -430,7 +433,7 @@ export default class SkyScene extends Phaser.Scene {
     // LEVEL COMPLETION
 
     if (skySceneComplete) {
-      this.scene.start('question-three', currentSceneScore, lives)
+      this.scene.start('question-three', { currentSceneScore, lives })
     }
   }
 
@@ -453,7 +456,7 @@ export default class SkyScene extends Phaser.Scene {
       if (lives > 0) {
         health = 0
         life[lives].destroy()
-        this.scene.restart()
+        this.scene.restart({ currentSceneScore: startingScore, lives })
       } else if (lives === 0) {
         gameOver({ isAlive, wonGame, currentSceneScore })
       }

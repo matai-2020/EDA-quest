@@ -88,7 +88,7 @@ export default class questionOne extends Phaser.Scene {
   update () {
     if (qCorrect === true) {
       currentSceneScore += 50
-      this.scene.start('sky-scene', { currentSceneScore, lives })
+      this.scene.start('jump-scene', { currentSceneScore, lives })
     } else if (qCorrect === 'again') {
       currentSceneScore -= 20
       qCorrect = false

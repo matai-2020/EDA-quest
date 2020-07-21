@@ -11,6 +11,7 @@ import { scoreChanged } from '../score'
 
 // ASSIGNMENTS
 let currentSceneScore = 0
+let startingScore
 let scoreText
 let checkAmount = 0
 let checkText
@@ -28,6 +29,10 @@ let platforms
 let floor
 let wall
 let trigger
+let healthBar
+let health = 0
+const life = []
+let lives
 let bump
 let gravityBoost = false
 const worldWidth = 4000
@@ -120,6 +125,7 @@ export default class DuskScene extends Phaser.Scene {
     this.load.image('upskill', '/assets/Dusk/upskill.png')
     this.load.image('check', '/assets/check.png')
     this.load.image('react', '/assets/reactCoinP.png')
+    this.load.image('lives', '/assets/Game/lives-icon.png')
 
     // TUTOR SPRITE
     this.load.image('emily', '/assets/man/emily.png')
@@ -152,7 +158,7 @@ export default class DuskScene extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create (prevScore) {
+  create (prevLevel) {
     const width = this.scale.width
     const height = this.scale.height
     const totalWidth = width * 10
@@ -166,7 +172,9 @@ export default class DuskScene extends Phaser.Scene {
     })
 
     // CARRY OVER PREVIOUS SCORE
-    currentSceneScore = prevScore
+    currentSceneScore = prevLevel.currentSceneScore
+    startingScore = currentSceneScore
+    lives = prevLevel.lives
 
     //  ------ ENVIRONMENT ------
     this.add.image(width * 0.5, height * 0.5, 'background').setScale(5).setScrollFactor(0)
@@ -215,6 +223,13 @@ export default class DuskScene extends Phaser.Scene {
     player.body.setGravityY(1000)
     player.setCollideWorldBounds(false)
     player.body.checkCollision.up = false
+
+    // Amount of Lives display
+    for (let i = 1; i < lives; i++) {
+      let x = 400
+      x = x + (i * 80)
+      life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)
+    }
 
     // ANIMATIONS
     this.anims.create({
@@ -375,7 +390,33 @@ export default class DuskScene extends Phaser.Scene {
 
     // CHANGE SCENE
     if (duskSceneComplete) {
-      this.scene.start('question-four', currentSceneScore)
+      this.scene.start('question-four', { currentSceneScore, lives })
     }
   }
+
+  loseHp = () => {
+    health = health + 4
+    if (health === 4) {
+      this.death()
+    }
+  }
+
+  death = () => {
+    lives = lives - 1
+    isAlive = false
+    checkAmount = 0
+    setTimeout(() => {
+      player.disableBody(true, true)
+      healthBar.disableBody(true, true)
+    }, 100)
+    setTimeout(() => {
+      if (lives > 0) {
+        health = 0
+        life[lives].destroy()
+        this.scene.restart({ currentSceneScore: startingScore, lives })
+      } else if (lives === 0) {
+        gameOver({ isAlive, wonGame, currentSceneScore })
+      }
+    }, 2000)
+}
 }
