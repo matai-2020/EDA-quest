@@ -122,11 +122,11 @@ export class HighScore extends React.Component {
     } else if (this.state.wonGame === true) {
       return (
         <div className="score-container reveal">
-          {/* <img
+          <img
             className="game-over"
-            src="/assets/Game/game-over.png"
+            src="/assets/Game/victory-crest.png"
             alt="Quest Logo"
-          /> */}
+          />
           <p>You Win!</p>
           <input
             type="text"
