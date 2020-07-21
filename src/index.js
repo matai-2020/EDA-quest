@@ -46,7 +46,7 @@ const config = {
       debug: false
     }
   },
-  scene: [title, questionOne, tutLevel, jumpLevel, dusk, sky, city, questionTwo, questionThree, questionFour]
+  scene: [title, tutLevel, questionOne, jumpLevel, questionTwo, sky, questionThree, dusk, questionFour, city, credit]
   // scene: [credit]
 }
 /*eslint-disable */
