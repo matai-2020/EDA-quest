@@ -78,6 +78,7 @@ let check
 let upDownPlatform
 let leftRightPlatform
 let bridge
+let fakeBridge
 
 const worldWidth = 2000
 
@@ -99,6 +100,7 @@ export default class SkyScene extends Phaser.Scene {
     this.load.image('smallPlatform', '/assets/Sky/platformSml1.png')
     this.load.image('block', '/assets/man/base.png')
     this.load.image('sky', '/assets/Jungle/sky.png')
+    this.load.image('fakeCloud', '/assets/Sky/cloudDashed.png')
     this.load.image('bgClouds', '/assets/Sky/bgClouds.png')
     this.load.image('mgClouds', '/assets/Sky/mgClouds.png')
     this.load.image('fgClouds', '/assets/Sky/fgClouds.png')
@@ -165,14 +167,24 @@ export default class SkyScene extends Phaser.Scene {
     platforms.create(150, 700, 'smallPlatform').setScale(0.4).refreshBody()
     platforms.create(900, 700, 'smallPlatform').setScale(0.4).refreshBody()
     platforms.create(1850, 730, 'smallPlatform').setScale(0.4).refreshBody()
+
     platforms.create(1000, 300, 'medPlatform').setScale(0.4).refreshBody()
     platforms.create(1850, 300, 'medPlatform').setScale(0.4).refreshBody()
 
     upDownPlatform = this.physics.add.image(600, 500, 'smallPlatform').setScale(0.4)
+
+    // BRIDGE THAT IS REVEALED WHEN ALL TRELLOS ARE COLLECTED.
+
     bridge = this.physics.add.image(1600, 380, 'smallPlatform').setScale(0.4)
+
     bridge.body.allowGravity = false
     bridge.body.immovable = true
     bridge.disableBody(true, true)
+
+    // FAKE BRIDGE
+
+    fakeBridge = this.physics.add.image(1450, 280, 'fakeCloud').setScale(0.4)
+    fakeBridge.body.allowGravity = false
 
     upDownPlatform.body.allowGravity = false
     upDownPlatform.body.velocity.y = 100
@@ -420,10 +432,12 @@ export default class SkyScene extends Phaser.Scene {
     if (player.body.position.y >= 800) {
       this.loseHp()
     }
-    // console.log(checkAmount === 4)
+
+    // REVEALS BRIDGE WHEN ALL TRELLOS ARE COLLECTEDW
+
     if (checkAmount === 4) {
       bridge.enableBody(false, bridge.body.position.x, bridge.body.position.x, true, true)
-      this.victory({ isAlive, wonGame, currentSceneScore })
+      fakeBridge.disableBody(true, true)
     }
 
     // LEVEL COMPLETION
