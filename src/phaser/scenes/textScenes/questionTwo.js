@@ -189,7 +189,7 @@ F --> |X| M
 */
 
 const sceneQuestion = `const add = (x,y) => {
-  x + y
+  return x + y
 }
 
 add(5, 10)`
