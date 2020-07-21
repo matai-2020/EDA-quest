@@ -47,9 +47,9 @@ const displayCredit = (player, type) => {
   if (axis === 500) credit1.setText('\nDEVELOPERS:\n\nIsaac Bell\nJake Hurley\nKeenen Leyson\nLouis Fowler')
   if (axis === 800) specialThanks.setText('\nSPECIAL\nTHANKS\nto:')
   if (axis === 1000) credit2.setText('\nHUMAN SKILLS:\n\nCarolyn Stott\nDougal Stott')
-  if (axis === 1400) credit3.setText('\nTECH TEAM:\n\nDon Smith\nEmily Parkes\nLane Le Prevost-Smith\nLaché Melvin')
+  if (axis === 1400) credit3.setText('\nTECH TEAM:\n\nDon Smith\nEmily Parkes\nLane Le Prevost-Smith\nLaché Melvin\nPhoenix Zerin')
   if (axis === 1800) {
-    credit4.setText('\nThe 2020\n  MATAI\n  Cohort')
+    credit4.setText('\nThe 2020\n  MATAI\n Cohort')
     broughtToYouBy.setText('\nbrought to you by:')
     edaQuest.setText('\nTHE EDA\n QUEST')
     team.setText('\n team')
@@ -115,6 +115,7 @@ export default class CreditScene extends Phaser.Scene {
   create (prevScore) {
     currentSceneScore = prevScore
     const width = this.scale.width
+    console.log(width)
     const height = this.scale.height
 
     // PLAYER ORIENTATION
