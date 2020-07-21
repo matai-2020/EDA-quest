@@ -1,0 +1,2 @@
+import { setAnimation } from './TutLevel'
+

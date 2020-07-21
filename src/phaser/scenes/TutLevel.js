@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import { scoreChanged } from '../score'
+import { playerAnimations } from '../../assets/animations/playerAnimation'
 
 /**
  *
@@ -29,14 +30,14 @@ let checkText
 let checkAmount = 0
 const checksToPass = 1
 
-const collectScore = (player, type) => {
+export const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
     type.disableBody(true, true)
     currentSceneScore += 10
     scoreChanged(currentSceneScore)
     console.log(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
-  } else {
+  } else if (type.texture.key === 'check') {
     type.disableBody(true, true)
     currentSceneScore += 20
     checkAmount += 1
@@ -53,7 +54,7 @@ const collectScore = (player, type) => {
 let canAsk = false
 let noQuestion
 
-const askQuestion = () => {
+export const askQuestion = () => {
   if (canAsk) {
     noQuestion.setText('Congrats, you have \n\ncompleted your trello card!')
     setTimeout(() => {
@@ -82,11 +83,11 @@ let tutLevelComplete = false
 const worldWidth = 2000
 
 export default class TutLevel extends Phaser.Scene {
-  constructor () {
+  constructor() {
     super('tut-level')
   }
 
-  preload () {
+  preload() {
     // invis walls/triggers
     this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
     this.load.image('base', '/assets/blocksTriggers/base.png')
@@ -115,35 +116,23 @@ export default class TutLevel extends Phaser.Scene {
     this.load.image('spring', '/assets/airpack/PNG/Items/spring.png')
 
     // player assets
-    this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
-      frameWidth: 60,
-      frameHeight: 105
-    })
-    this.load.spritesheet('jumpLeft', '/assets/man/jumpLeft.png', {
-      frameWidth: 60,
-      frameHeight: 105
-    })
-    this.load.spritesheet('runLeft', '/assets/man/runLeft.png', {
-      frameWidth: 63,
-      frameHeight: 99
-    })
-    this.load.spritesheet('runRight', '/assets/man/runRight.png', {
-      frameWidth: 63,
-      frameHeight: 99
-    })
-    this.load.spritesheet('idleRight', '/assets/man/idleRight.png', {
-      frameWidth: 57,
-      frameHeight: 102
-    })
-    this.load.spritesheet('idleLeft', '/assets/man/idleLeft.png', {
-      frameWidth: 57,
-      frameHeight: 102
-    })
+    const setAnimation = (thing) => {
+      if (thing === 'player') {
+        playerAnimations.forEach(animation => {
+          return this.load.spritesheet(animation.cycle, animation.img, { frameWidth: animation.width, frameHeight: animation.height })
+        })
+      }
+    }
+
+    setAnimation('player')
 
     this.cursors = this.input.keyboard.createCursorKeys()
+    module.exports = {
+      setAnimation
+    }
   }
 
-  create () {
+  create() {
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -310,7 +299,7 @@ export default class TutLevel extends Phaser.Scene {
     this.physics.add.collider(player, [platforms, wall, bump])
   }
 
-  update () {
+  update() {
     const cam = this.cameras.main
     const speed = 15
 

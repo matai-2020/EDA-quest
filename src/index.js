@@ -34,7 +34,7 @@ var firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig)
 
-const config = {
+export const config = {
   parent: 'phaser',
   type: Phaser.AUTO,
   width: window.innerWidth - 100,
