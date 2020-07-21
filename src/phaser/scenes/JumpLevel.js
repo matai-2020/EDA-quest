@@ -601,7 +601,7 @@ export default class JumpLevel extends Phaser.Scene {
           life[lives].destroy()
           this.scene.restart({ currentSceneScore: startingScore, lives })
         } else if (lives === 0) {
-          gameOver({ isAlive, wonGame, currentSceneScore })
+          gameOver({ isAlive, wonGame, currentSceneScore, level: 'Jungle' })
         }
       }, 2000)
     }

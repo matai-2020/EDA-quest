@@ -415,7 +415,7 @@ export default class DuskScene extends Phaser.Scene {
         life[lives].destroy()
         this.scene.restart({ currentSceneScore: startingScore, lives })
       } else if (lives === 0) {
-        gameOver({ isAlive, wonGame, currentSceneScore })
+        gameOver({ isAlive, wonGame, currentSceneScore, level: 'Dusk' })
       }
     }, 2000)
 }

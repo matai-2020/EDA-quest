@@ -458,7 +458,7 @@ export default class SkyScene extends Phaser.Scene {
         life[lives].destroy()
         this.scene.restart({ currentSceneScore: startingScore, lives })
       } else if (lives === 0) {
-        gameOver({ isAlive, wonGame, currentSceneScore })
+        gameOver({ isAlive, wonGame, currentSceneScore, level: 'Sky' })
       }
     }, 2000)
   }
