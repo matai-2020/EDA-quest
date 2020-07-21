@@ -24,7 +24,6 @@ export default class questionOne extends Phaser.Scene {
     currentSceneScore = prevLevel.currentSceneScore
     lives = prevLevel.lives
 
-   
     const print = this.add.text(0, 0, '')
 
     const dialog = CreateDialog(this)
