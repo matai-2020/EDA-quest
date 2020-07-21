@@ -1,5 +1,67 @@
 import Phaser from 'phaser'
 import { scoreChanged, gameOver } from '../score'
+
+const wonGame = false
+let lives = 4
+const life = []
+let tornado
+let health = 0
+let isAlive = true
+let healthBar
+let right = true
+let jumpUp = false
+let scoreText
+let canAsk = false
+let noQuestion
+let jumpSceneComplete = false
+let facing = ''
+let react
+let check
+let tutor
+let player
+let platforms
+let floor
+let wall
+let enemyWall
+let trigger
+let ent
+const worldWidth = 2000
+let checkText
+let checkAmount = 0
+const checksToPass = 2
+let currentSceneScore
+
+const walkFalse = () => {
+  right = false
+}
+const walkRight = () => {
+  setTimeout(walkFalse, 5000)
+}
+
+const walkTrue = () => {
+  right = true
+}
+const walkLeft = () => {
+  setTimeout(walkTrue, 5000)
+}
+
+const airUp = () => {
+  if (!jumpUp) {
+    jumpUp = true
+  }
+}
+
+const airDown = () => {
+  jumpUp = false
+}
+
+const bounce = () => {
+  airUp()
+  setTimeout(airDown, 500)
+  setTimeout(() => {
+  }, 2500)
+}
+
 /**
  *
  * @param {Phaser.Scene} scene
@@ -20,74 +82,17 @@ const createAligned = (scene, totalWidth, texture, scrollFactor) => {
     x += m.width
   }
 }
-
-const wonGame = false
-let lives = 4
-const life = []
-let tornado
-let health = 0
-let isAlive = true
-let explode
-let healthBar
-let right = true
-let jumpUp = false
-let tornadoHit = false
-
-let scoreText
-let canAsk = false
-let noQuestion
-let jumpSceneComplete = false
-let facing = ''
-let react
-let check
-let tutor
-let player
-let platforms
-let floor
-let wall
-let enemyWall
-let trigger
-let ent
-let game
-const worldWidth = 2000
-
-const airUp = () => {
-  if (!jumpUp) {
-    jumpUp = true
-    tornadoHit = true
-  }
-}
-
-const airDown = () => {
-  jumpUp = false
-}
-
-const bounce = () => {
-  airUp()
-  setTimeout(airDown, 500)
-  setTimeout(() => {
-    tornadoHit = false
-  }, 2500)
-}
-
-let checkText
-let checkAmount = 0
-const checksToPass = 2
-let currentSceneScore
-
 const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
     type.disableBody(true, true)
     currentSceneScore += 10
     scoreChanged(currentSceneScore)
-    console.log(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
   } else {
     type.disableBody(true, true)
     currentSceneScore += 20
     checkAmount += 1
     scoreChanged(currentSceneScore)
-    console.log(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
     if (checkAmount === checksToPass) {
@@ -95,10 +100,6 @@ const collectScore = (player, type) => {
     }
   }
 }
-
-// const explosion = () => {
-
-// }
 
 const askQuestion = () => {
   if (canAsk) {
@@ -116,6 +117,7 @@ export default class JumpLevel extends Phaser.Scene {
     super('jump-scene')
   }
 
+  /// ////////////////////////////////////PRELOAD/////////////////////////////////////////////////
   preload () {
     // invis walls/triggers
     this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
@@ -199,6 +201,7 @@ export default class JumpLevel extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
+  /// ////////////////////////////////////CREATE/////////////////////////////////////////////////
   create (prevScore) {
     currentSceneScore = prevScore
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
@@ -218,7 +221,6 @@ export default class JumpLevel extends Phaser.Scene {
     createAligned(this, totalWidth, 'plateau', 0.5)
     createAligned(this, totalWidth, 'ground', 1)
     createAligned(this, totalWidth, 'plants', 1.25)
-    // this.add.image(width * 0.5, height * 1, 'platform').setScrollFactor(0)
 
     // Collider floor & platforms
 
@@ -233,20 +235,12 @@ export default class JumpLevel extends Phaser.Scene {
     floor = this.physics.add.staticGroup()
     floor.create(2010, 648, 'base').setScrollFactor(0)
 
-    // platforms = this.physics.add.staticGroup()
-    // platforms.create(800, 500, 'platform').setScale(0.4).refreshBody()
-
-    // platforms.children.entries.forEach(platform => {
-    //   ;(platform.body.checkCollision.left = false),
-    //     (platform.body.checkCollision.right = false),
-    //     (platform.body.checkCollision.down = false)
-    // })
     // background images
     this.add.image(250, 275, 'information').setScale(0.4)
     // Character sprites
 
     // Tutor
-    tutor = this.physics.add.staticImage(1700, 588, 'lane').setScale(0.3).refreshBody()
+    tutor = this.physics.add.staticImage(1800, 588, 'lane').setScale(0.3).refreshBody()
 
     // Tutor trigger
 
@@ -379,7 +373,7 @@ export default class JumpLevel extends Phaser.Scene {
 
     // Enemy Sprites
     ent = this.physics.add.sprite(800, 400, 'walkRight')
-    ent.setScale(3)
+    ent.setScale(3.7)
     ent.body.setGravityY(80)
     // ent.setCollideWorldBounds(true)
     ent.onWorldBounds = true
@@ -388,6 +382,7 @@ export default class JumpLevel extends Phaser.Scene {
     ent.body.checkCollision.right = true
     // this.physics.add.overlap(ent, player, bounce, null, this)
     this.physics.add.overlap(ent, player, this.loseHp, null, this)
+    // this.physics.add.collider(ent, floor, walk, null, this)
 
     this.anims.create({
       key: 'entLeft',
@@ -502,9 +497,8 @@ export default class JumpLevel extends Phaser.Scene {
     this.physics.add.collider(tornado, [platforms, enemyWall, wall, tornado])
   }
 
+  /// ////////////////////////////////////UPDATE/////////////////////////////////////////////////
   update () {
-    const gps = player.body.position
-
     const cam = this.cameras.main
     const speed = 15
 
@@ -539,12 +533,11 @@ export default class JumpLevel extends Phaser.Scene {
       player.anims.play('idleRight', true)
     }
     if (this.cursors.up.isDown && player.body.touching.down) {
-      player.setVelocityY(-300)
+      player.setVelocityY(-150)
       if (facing === 'left') {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
     }
-    // console.log('y', gps.y, 'x', gps.x)
     // Tornado
     if (jumpUp) {
       player.setVelocityY(-500)
@@ -566,13 +559,13 @@ export default class JumpLevel extends Phaser.Scene {
       this.scene.start('question-two', currentSceneScore)
     }
     // enemy ENT
-    if (ent.body.touching.right || ent.body.blocked.right) {
-      right = false 
+    if (ent.body.blocked.right || !right) {
+      walkLeft()
       ent.body.velocity.x = -100
       ent.anims.play('entLeft', true)
     }
-
-    if (ent.body.touching.left || ent.body.blocked.left || right) {
+    if (right) {
+      walkRight()
       ent.body.velocity.x = 100
       ent.anims.play('entRight', true)
     }
@@ -594,7 +587,6 @@ export default class JumpLevel extends Phaser.Scene {
     death = () => {
       lives = lives - 1
       isAlive = false
-      right = true
       checkAmount = 0
       setTimeout(() => {
         player.disableBody(true, true)
