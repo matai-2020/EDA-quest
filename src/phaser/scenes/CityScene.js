@@ -8,25 +8,10 @@ import Phaser from 'phaser'
  * @param {number} scrollFactor
  */
 
-const createAligned = (scene, totalWidth, texture, scrollFactor) => {
-  const getWidth = scene.textures.get(texture).getSourceImage().width
-  const count = Math.ceil(totalWidth / getWidth) * scrollFactor
-  let x = 0
-  for (let i = 0; i < count; ++i) {
-    const m = scene.add
-      .image(x, scene.scale.height, texture)
-      .setOrigin(0, 1)
-      .setScrollFactor(scrollFactor)
-
-    x += m.width
-  }
-}
-
-const score = 0
 let scoreText
 let currentSceneScore = 0
 let checkAmount = 0
-let check
+
 let checkText
 const checksToPass = '1'
 
@@ -41,7 +26,7 @@ const collectScore = (player, type) => {
     checkAmount += 1
     scoreText.setText('Score: ' + currentSceneScore)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
-    if (checkAmount == checksToPass) {
+    if (checkAmount === checksToPass) {
       canAsk = true
     }
   }
@@ -50,8 +35,6 @@ const collectScore = (player, type) => {
 let canAsk = false
 let noQuestion
 let citySceneComplete = false
-const popUp = 0
-let notYet
 
 const askQuestion = () => {
   if (canAsk) {
@@ -70,21 +53,13 @@ let react
 let tutor
 let player
 let platforms
-let platform
-let cursors
-
-let ground
-let base
 let floor
 let wall
 let trigger
+let bombCreate
+let bomb
 
-let game
-
-let keyText
-const keyAmount = 0
-
-const worldWidth = window.innerWidth - 100
+const worldWidth = 2400
 
 export default class CityScene extends Phaser.Scene {
   constructor () {
@@ -98,6 +73,7 @@ export default class CityScene extends Phaser.Scene {
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
 
     // city assets
+    this.load.image('bomb', '/assets/blocksTriggers/triggerBlockC.png')
     this.load.image('react', '/assets/react.svg')
     this.load.image('street', '/assets/City/street.png')
     this.load.image('near-buildings', '/assets/City/near-buildings.png')
@@ -155,10 +131,10 @@ export default class CityScene extends Phaser.Scene {
 
     const width = this.scale.width
 
-    this.add.image(670, 505, 'far-buildings').setScale(5.3).setScrollFactor(0)
-    this.add.image(420, 500, 'near-buildings').setScale(2).setScrollFactor(0)
-    this.add.image(600, 475, 'street').setScale(3.5).setScrollFactor(0)
-    this.add.image(1830, 475, 'street').setScale(3.5).setScrollFactor(0)
+    this.add.image(670, 505, 'far-buildings').setScale(5.3)
+    this.add.image(420, 500, 'near-buildings').setScale(2)
+    this.add.image(600, 475, 'street').setScale(3.5)
+    this.add.image(1830, 475, 'street').setScale(3.5)
 
     // Collider floor
 
@@ -261,6 +237,16 @@ export default class CityScene extends Phaser.Scene {
       repeat: -1
     })
 
+    // Bombs
+    bombCreate = (x) => {
+      bomb = this.physics.add.image(x, -50, 'bomb')
+      this.physics.add.overlap(player, bomb, this.death, null, this)
+    }
+    window.setInterval(() => {
+      const randomNum = Math.floor(Math.random() * 2000)
+      bombCreate(randomNum)
+    }, 800)
+
     // coin and collection
 
     react = this.physics.add.sprite(550, 300, 'react')
@@ -343,5 +329,10 @@ export default class CityScene extends Phaser.Scene {
     if (citySceneComplete) {
       // do something
     }
+  }
+
+  death = (player, type) => {
+    console.log('ded')
+    player.disableBody(true, true)
   }
 }
