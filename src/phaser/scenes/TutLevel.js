@@ -29,7 +29,7 @@ let checkText
 let checkAmount = 0
 const checksToPass = 1
 
-const collectScore = (player, type) => {
+export const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
     type.disableBody(true, true)
     currentSceneScore += 10
@@ -53,7 +53,7 @@ const collectScore = (player, type) => {
 let canAsk = false
 let noQuestion
 
-const askQuestion = () => {
+export const askQuestion = () => {
   if (canAsk) {
     noQuestion.setText('Congrats, you have \n\ncompleted your trello card!')
     setTimeout(() => {
@@ -82,11 +82,11 @@ let tutLevelComplete = false
 const worldWidth = 2000
 
 export default class TutLevel extends Phaser.Scene {
-  constructor () {
+  constructor() {
     super('tut-level')
   }
 
-  preload () {
+  preload() {
     // invis walls/triggers
     this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
     this.load.image('base', '/assets/blocksTriggers/base.png')
@@ -143,7 +143,7 @@ export default class TutLevel extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create () {
+  create() {
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -310,7 +310,7 @@ export default class TutLevel extends Phaser.Scene {
     this.physics.add.collider(player, [platforms, wall, bump])
   }
 
-  update () {
+  update() {
     const cam = this.cameras.main
     const speed = 15
 
@@ -354,3 +354,4 @@ export default class TutLevel extends Phaser.Scene {
     }
   }
 }
+
