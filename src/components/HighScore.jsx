@@ -23,7 +23,7 @@ export class HighScore extends React.Component {
       })
       // Check if Player is alive and if game has been won
       subscribe(gameStatus => {
-        let { isAlive, wonGame, currentSceneScore } = gameStatus
+        const { isAlive, wonGame, currentSceneScore } = gameStatus
         this.setState({
           isAlive,
           wonGame,
@@ -134,7 +134,7 @@ export class HighScore extends React.Component {
           <button className="submit-button" onClick={() => this.clickHandler()}>
             Submit Score
           </button>
-          <p>Final Score: {this.state.score}</p>
+          <p>Final Score: {this.state.currentSceneScore}</p>
           <ol className="score-list">
             {this.state.highScores.map(player => {
               const indexKey = this.state.highScores.indexOf(player)

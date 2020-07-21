@@ -14,6 +14,7 @@ import jumpLevel from './phaser/scenes/JumpLevel'
 import dusk from './phaser/scenes/DuskScene'
 import city from './phaser/scenes/CityScene'
 import parallax from './phaser/scenes/ParallaxScene'
+import sky from './phaser/scenes/skyScene'
 
 import questionOne from './phaser/scenes/textScenes/questionOne.js'
 import questionTwo from './phaser/scenes/textScenes/questionTwo.js'
@@ -45,7 +46,7 @@ const config = {
       debug: false
     }
   },
-  scene: [title, questionOne, tutLevel, jumpLevel, parallax, dusk, city, questionTwo, questionThree, questionFour]
+  scene: [title, questionOne, tutLevel, jumpLevel, dusk, sky, city, questionTwo, questionThree, questionFour]
 }
 /*eslint-disable */
 const game = new Phaser.Game(config)
