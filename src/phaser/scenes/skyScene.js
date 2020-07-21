@@ -49,14 +49,14 @@ const collectScore = (player, type) => {
 
 let canAsk = false
 let noQuestion
-let paraLevelComplete = false
+let skySceneComplete = false
 
 const askQuestion = () => {
   if (canAsk) {
     noQuestion.setText('Congrats, you have completed your trello card!')
     setTimeout(() => {
-      paraLevelComplete = true
-    }, 1000)
+      skySceneComplete = true
+    }, 2000)
   } else {
     noQuestion.setText('Please come back with a complete trello card')
   }
@@ -67,7 +67,7 @@ let facing = ''
 let player
 let platforms
 let lives = 4
-let life = []
+const life = []
 let healthBar
 let health = 0
 let wonGame = false
@@ -103,6 +103,7 @@ export default class SkyScene extends Phaser.Scene {
     this.load.image('mgClouds', '/assets/Sky/mgClouds.png')
     this.load.image('fgClouds', '/assets/Sky/fgClouds.png')
     this.load.image('lives', '/assets/Game/lives-icon.png')
+    this.load.image('emily', '/assets/man/emily.png')
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
       frameWidth: 60,
       frameHeight: 105
@@ -192,13 +193,13 @@ export default class SkyScene extends Phaser.Scene {
     }
 
     // Tuto
-    tutor = this.physics.add.sprite(1920, 100, 'idleLeft')
+    tutor = this.physics.add.sprite(1920, 100, 'emily').setScale(0.3)
 
     // Tutor trigger
 
     const spot = tutor.body.position
 
-    trigger = this.physics.add.sprite(spot.x, spot.y, 'triggerBlock')
+    trigger = this.physics.add.sprite(spot.x - 10, spot.y, 'triggerBlock')
 
     // player sprite
 
@@ -347,7 +348,7 @@ export default class SkyScene extends Phaser.Scene {
         fill: '#000'
       })
       .setScrollFactor(0)
-    noQuestion = this.add.text(spot.x - 250, spot.y - 10, '', {
+    noQuestion = this.add.text(1300, 100, '', {
       fontFamily: "'Press Start 2P', cursive",
       fontSize: '12px',
       fill: '#000'
@@ -427,8 +428,8 @@ export default class SkyScene extends Phaser.Scene {
 
     // LEVEL COMPLETION
 
-    if (paraLevelComplete) {
-      this.scene.start('jump-scene', currentSceneScore)
+    if (skySceneComplete) {
+      this.scene.start('question-three', currentSceneScore)
     }
   }
 

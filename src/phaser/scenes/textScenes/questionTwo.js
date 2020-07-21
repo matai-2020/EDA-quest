@@ -42,7 +42,7 @@ export default class questionTwo extends Phaser.Scene {
           .setData('option', option)
       })
       .on('update-dialog', function (dialog, question, quest) {
-        dialog.getElement('title').setText(`${tutor} asks:`)
+        dialog.getElement('title').setText(`${tutor} asks: What will this output?`)
         dialog.getElement('actions')[0].setText((question.end) ? 'End' : 'Next')
         quest.setData('nextKey', null)
         dialog
@@ -83,7 +83,7 @@ export default class questionTwo extends Phaser.Scene {
 
   update () {
     if (qCorrect === true) {
-      this.scene.start('dusk-scene', currentSceneScore)
+      this.scene.start('sky-scene', currentSceneScore)
     } else if (qCorrect === 'again') {
       qCorrect = false
       this.scene.start('question-two', currentSceneScore)
@@ -188,11 +188,16 @@ F --> |Z| L
 F --> |X| M
 */
 
-const sceneQuestion = 'How cool is Louis?'
+const sceneQuestion = `const add = (x,y) => {
+  return x + y
+}
+
+add(5, 10)`
+
 const tutor = 'Lane'
 
 const Questions = `type,key,next,end
 q,Question,,
-,Not at all,false,
-,Just a little bit,false,
-,EXTREMELY,true`
+,7,false,
+,16,false,
+,15,true`
