@@ -22,7 +22,7 @@ let specialThanks
 let credit2
 let credit3
 let credit4
-const currentSceneScore = 500
+let currentSceneScore
 let graduate = false
 const isAlive = true
 let wonGame = false
@@ -38,12 +38,11 @@ const collectDiploma = (player, type) => {
 const displayCredit = (player, type) => {
   type.disableBody(true, true)
   const axis = type.body.center.x
-  console.log(axis)
   if (axis === 500) credit1.setText('\nDEVELOPERS:\n\nIsaac Bell\nJake Hurley\nKeenen Leyson\nLouis Fowler')
   if (axis === 800) specialThanks.setText('\nSPECIAL\nTHANKS\nto:')
   if (axis === 1000) credit2.setText('\nHUMAN SKILLS\n\nCarolyn Stott\nDougal Stott')
-  if (axis === 1400) credit3.setText('\nTECH SKILLS:\n\nDon Smith\nEmily Parkes\nLane Le Prevost-Smith\nLaché Melvin')
-  if (axis === 1800) credit4.setText('\nThe 2020\n  MATAI\n   Cohort')
+  if (axis === 1400) credit3.setText('\nTECH SKILLS:\n\nDon Smith\nEmily Parkes\nLane Le Prevost-Smith\nLaché Melvin\nPhoenix Zerin')
+  if (axis === 1800) credit4.setText('\nThe 2020\n  MATAI\n  Cohort')
 }
 
 export default class CreditScene extends Phaser.Scene {
@@ -59,7 +58,7 @@ export default class CreditScene extends Phaser.Scene {
     this.load.image('creditTrigger', '/assets/blocksTriggers/wallBlock.png')
 
     // ENVIRONMENT
-    this.load.image('background', '/assets/Credits/sunset.jpg')
+    this.load.image('background', '/assets/Theatre/theatre-sunset.jpg')
     this.load.image('curtain', '/assets/Theatre/theatre-curtain.png')
     this.load.image('lighting', '/assets/Theatre/theatre-lighting.png')
     this.load.image('floor', '/assets/Theatre/theatre-floor.png')
@@ -103,7 +102,7 @@ export default class CreditScene extends Phaser.Scene {
   }
 
   create (prevScore) {
-    // currentSceneScore = prevScore
+    currentSceneScore = prevScore
     const width = this.scale.width
     const height = this.scale.height
 
