@@ -189,12 +189,12 @@ F --> |Z| L
 F --> |X| M
 */
 
-const sceneQuestion = `What brackets do handlebars
-predominately us?`
+const sceneQuestion = `How do we use expressions
+in handlebars?`
 const tutor = 'Lache'
 
 const Questions = `type,key,next,end
 q,Question,,
-,},true,
-,],false,
-,),false`
+,{{name}},true,
+,{name},false,
+,((name)),false`

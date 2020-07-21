@@ -106,7 +106,7 @@ const askQuestion = () => {
     noQuestion.setText('Congrats, you have completed your trello card!')
     setTimeout(() => {
       jumpSceneComplete = true
-    }, 1000)
+    }, 2000)
   } else {
     noQuestion.setText('Please come back with a complete trello card')
   }
@@ -117,7 +117,7 @@ export default class JumpLevel extends Phaser.Scene {
     super('jump-scene')
   }
 
-  /// ////////////////////////////////////PRELOAD/////////////////////////////////////////////////
+  // ////////////////////////////////////PRELOAD/////////////////////////////////////////////////
   preload () {
     // invis walls/triggers
     this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
@@ -201,7 +201,7 @@ export default class JumpLevel extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  /// ////////////////////////////////////CREATE/////////////////////////////////////////////////
+  // ////////////////////////////////////CREATE/////////////////////////////////////////////////
   create (prevScore) {
     currentSceneScore = prevScore
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
@@ -497,7 +497,7 @@ export default class JumpLevel extends Phaser.Scene {
     this.physics.add.collider(tornado, [platforms, enemyWall, wall, tornado])
   }
 
-  /// ////////////////////////////////////UPDATE/////////////////////////////////////////////////
+  // ////////////////////////////////////UPDATE/////////////////////////////////////////////////
   update () {
     const cam = this.cameras.main
     const speed = 15
