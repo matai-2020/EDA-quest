@@ -22,7 +22,7 @@ let specialThanks
 let credit2
 let credit3
 let credit4
-let currentSceneScore
+const currentSceneScore = 500
 let graduate = false
 const isAlive = true
 let wonGame = false
@@ -32,12 +32,6 @@ const worldWidth = 3000
 const collectDiploma = (player, type) => {
   type.disableBody(true, true)
   graduate = true
-  victory()
-}
-
-const victory = () => {
-  wonGame = true
-  setTimeout(() => { gameOver({ isAlive, wonGame, currentSceneScore }) }, 2000)
 }
 
 // DISPLAY CREDITS
@@ -45,7 +39,7 @@ const displayCredit = (player, type) => {
   type.disableBody(true, true)
   const axis = type.body.center.x
   console.log(axis)
-  if (axis === 500) credit1.setText('\nDEVELOPERS:\n\nKeenen Leyson\nIsaac Bell\nJake Hurley\nLouis Fowler')
+  if (axis === 500) credit1.setText('\nDEVELOPERS:\n\nIsaac Bell\nJake Hurley\nKeenen Leyson\nLouis Fowler')
   if (axis === 800) specialThanks.setText('\nSPECIAL\nTHANKS\nto:')
   if (axis === 1000) credit2.setText('\nHUMAN SKILLS\n\nCarolyn Stott\nDougal Stott')
   if (axis === 1400) credit3.setText('\nTECH SKILLS:\n\nDon Smith\nEmily Parkes\nLane Le Prevost-Smith\nLaché Melvin')
@@ -109,7 +103,7 @@ export default class CreditScene extends Phaser.Scene {
   }
 
   create (prevScore) {
-    currentSceneScore = prevScore
+    // currentSceneScore = prevScore
     const width = this.scale.width
     const height = this.scale.height
 
@@ -319,7 +313,12 @@ export default class CreditScene extends Phaser.Scene {
     // VICTORY => HIGHSCHORE
     if (graduate) {
       player.setScale(2)
-      victory()
+      this.victory()
     }
+  }
+
+  victory = () => {
+    wonGame = true
+    setTimeout(() => { gameOver({ isAlive, wonGame, currentSceneScore }) }, 2000)
   }
 }
