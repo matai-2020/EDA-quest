@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 
 let qCorrect = false
 let currentSceneScore = 0
+let lives = 0
 
 export default class questionOne extends Phaser.Scene {
   constructor () {
@@ -17,8 +18,13 @@ export default class questionOne extends Phaser.Scene {
     this.load.script('rexdialogquest', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexdialogquest.min.js')
   }
 
-  create (prevScore) {
-    currentSceneScore = prevScore
+  create (prevLevel) {
+    console.log(prevLevel.lives)
+    console.log(prevLevel.currentSceneScore)
+    currentSceneScore = prevLevel.currentSceneScore
+    lives = prevLevel.lives
+
+   
     const print = this.add.text(0, 0, '')
 
     const dialog = CreateDialog(this)
@@ -65,7 +71,6 @@ export default class questionOne extends Phaser.Scene {
 
           if (nextKey === true) {
             dialog.getElement('title').setText('Correct! +50 points')
-            console.log(currentSceneScore)
             setTimeout(() => {
               qCorrect = true
             }, 1500)
@@ -83,11 +88,11 @@ export default class questionOne extends Phaser.Scene {
   update () {
     if (qCorrect === true) {
       currentSceneScore += 50
-      this.scene.start('jump-scene', currentSceneScore)
+      this.scene.start('jump-scene', { currentSceneScore, lives })
     } else if (qCorrect === 'again') {
       currentSceneScore -= 20
       qCorrect = false
-      this.scene.start('question-one', currentSceneScore)
+      this.scene.start('question-one', { currentSceneScore, lives })
     }
   }
 }

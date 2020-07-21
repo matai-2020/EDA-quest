@@ -23,7 +23,7 @@ let specialThanks
 let credit2
 let credit3
 let credit4
-const currentSceneScore = 500
+let currentSceneScore
 let graduate = false
 const isAlive = true
 let wonGame = false
@@ -105,7 +105,7 @@ export default class CreditScene extends Phaser.Scene {
   }
 
   create (prevScore) {
-    // currentSceneScore = prevScore
+    currentSceneScore = prevScore
     const width = this.scale.width
     const height = this.scale.height
 

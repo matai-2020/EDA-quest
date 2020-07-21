@@ -27,6 +27,7 @@ let scoreText
 let currentSceneScore = 0
 let checkAmount = 0
 let check
+let lives
 let checkText
 const checksToPass = '1'
 
@@ -144,8 +145,9 @@ export default class CityScene extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create (prevScore) {
-    currentSceneScore = prevScore
+  create (prevLevel) {
+    currentSceneScore = prevLevel.currentSceneScore
+    lives = prevLevel.lives
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
