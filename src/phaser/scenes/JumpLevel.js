@@ -538,7 +538,7 @@ export default class JumpLevel extends Phaser.Scene {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
     }
-    // Tornado
+    //   Tornado
     if (jumpUp) {
       player.setVelocityY(-500)
       if (facing === 'left') {
