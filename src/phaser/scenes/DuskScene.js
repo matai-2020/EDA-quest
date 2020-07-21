@@ -128,7 +128,7 @@ export default class DuskScene extends Phaser.Scene {
     this.load.image('lives', '/assets/Game/lives-icon.png')
 
     // TUTOR SPRITE
-    this.load.image('emily', '/assets/man/emily.png')
+    this.load.image('don', '/assets/man/don.png')
 
     // PLAYER SPRITESHEETS
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
@@ -155,6 +155,7 @@ export default class DuskScene extends Phaser.Scene {
       frameWidth: 57,
       frameHeight: 102
     })
+
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
@@ -213,8 +214,7 @@ export default class DuskScene extends Phaser.Scene {
     //  ------ CHARACTERS ------
 
     // TUTOR SPRITE & TRIGGER
-    tutor = this.physics.add.sprite(3600, 535, 'emily')
-    tutor.setScale(0.3)
+    tutor = this.physics.add.sprite(3600, 535, 'don')
     const spot = tutor.body.position
     trigger = this.physics.add.sprite(spot.x, spot.y, 'triggerBlock')
 
@@ -327,7 +327,7 @@ export default class DuskScene extends Phaser.Scene {
         fill: 'white'
       })
       .setScrollFactor(0)
-    noQuestion = this.add.text(spot.x - 250, spot.y + 100, '', {
+    noQuestion = this.add.text(spot.x - 250, spot.y, '', {
       fontFamily: "'Press Start 2P', cursive",
       fontSize: '12px',
       fill: 'white'

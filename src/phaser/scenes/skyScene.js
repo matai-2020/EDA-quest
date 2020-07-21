@@ -68,7 +68,7 @@ let facing = ''
 let player
 let platforms
 let lives
-let life = []
+const life = []
 let healthBar
 let health = 0
 let wonGame = false
