@@ -23,10 +23,10 @@ export default class App extends React.Component {
   render () {
     return (
       <div style={{ textAlign: 'center' }}>
-        <div id="logoContainer">
+        {/* <div id="logoContainer">
           <img id="logo" src="/assets/Game/eda-quest-logo.png" alt="Quest Logo" />
         </div>
-        <img id="arrow" src="/assets/Game/scroll-prompt.png" alt="Scroll Prompt" />
+        <img id="arrow" src="/assets/Game/scroll-prompt.png" alt="Scroll Prompt" /> */}
         <HighScore />
       </div>
     )
