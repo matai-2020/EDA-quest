@@ -5,8 +5,6 @@ import * as firebase from 'firebase'
 import 'regenerator-runtime/runtime'
 import { StateMock } from '@react-mock/state'
 
-// import '@testing-library/extend-expect'
-
 import HighScore from './HighScore'
 
 var firebaseConfig = {
