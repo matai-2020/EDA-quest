@@ -158,6 +158,7 @@ export default class TutLevel extends Phaser.Scene {
 
     createAligned(this, totalWidth, 'mountain', 0.15)
     createAligned(this, totalWidth, 'plateau', 0.5)
+    bump = this.physics.add.staticImage(1400, 620, 'bump')
     createAligned(this, totalWidth, 'ground', 1)
     createAligned(this, totalWidth, 'plants', 1.25)
 
@@ -169,8 +170,6 @@ export default class TutLevel extends Phaser.Scene {
 
     floor = this.physics.add.staticGroup()
     floor.create(2010, 648, 'base').setScrollFactor(0)
-
-    bump = this.physics.add.staticImage(1400, 620, 'bump')
 
     this.add.image(150, 475, 'arrow-keys').setScale(0.2)
     this.add.image(700, 450, 'reactText').setScale(0.6)
