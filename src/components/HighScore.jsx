@@ -10,7 +10,8 @@ export class HighScore extends React.Component {
     isAlive: true,
     wonGame: false,
     level: 'Jungle',
-    currentSceneScore: 0
+    currentSceneScore: 0,
+    clicked: false
   }
 
   componentDidMount () {
@@ -66,16 +67,19 @@ export class HighScore extends React.Component {
   // Score submission
 
   clickHandler () {
-    const childName = this.state.highScores.length
-    const queryData = firebase.database().ref('highScores/').child(childName)
-    if (this.state.name.length > 0) {
-      queryData.set({
-        name: this.state.name,
-        score: this.state.currentSceneScore
-      })
-      this.updateData()
-      this.getHighScores()
-    } else alert('Please enter your Name before submitting your Score!')
+    if (!this.state.clicked) {
+      const childName = this.state.highScores.length
+      const queryData = firebase.database().ref('highScores/').child(childName)
+      if (this.state.name.length > 0) {
+        queryData.set({
+          name: this.state.name,
+          score: this.state.currentSceneScore
+        })
+        this.updateData()
+        this.getHighScores()
+        this.setState({ clicked: true })
+      } else alert('Please enter your Name before submitting your Score!')
+    }
   }
 
   nameChange = e => {
