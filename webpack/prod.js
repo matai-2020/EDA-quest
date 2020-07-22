@@ -1,12 +1,14 @@
-const merge = require("webpack-merge");
-const path = require("path");
-const base = require("./base");
-const TerserPlugin = require("terser-webpack-plugin");
+const path = require('path')
+const merge = require('webpack-merge')
+const base = require('./base')
+const CopyPlugin = require('copy-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
 
 module.exports = merge(base, {
-  mode: "production",
+  mode: 'production',
   output: {
-    filename: "bundle.min.js"
+    path: path.resolve('dist'),
+    filename: 'bundle.js'
   },
   devtool: false,
   performance: {
@@ -23,5 +25,16 @@ module.exports = merge(base, {
         }
       })
     ]
-  }
-});
+  },
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        'src/index.html',
+        'src/style.css',
+        { from: 'src/assets', to: 'assets' }
+        // { from: 'src/index.html', to: 'dist/' },
+        // { from: 'src/style.css', to: 'dist/' },
+      ]
+    })
+  ]
+})

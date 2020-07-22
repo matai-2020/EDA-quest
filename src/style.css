@@ -1,0 +1,190 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+#logoContainer{
+  /* display: flex; */
+  justify-content: center;
+  align-items: center;
+  /* height: 100vh; */
+}
+
+#logo {
+  visibility: visible;
+  width: 900px;
+  height: 400px;
+  padding: 40px 10px;
+  transition: 0.5s;
+  margin-top: 60px;
+}
+
+#arrow {
+  visibility: visible;
+  transition: 0.2s;
+  width: 400px;
+  margin-bottom: 100px;
+}
+
+#phaser {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+  background-color: #16303c;
+  text-align: center;
+  color: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+/* HIGHSCORE POP UP */
+.score-container {
+  position: fixed;
+  padding: 5%;
+  left:35%;
+  bottom: 4%;
+  width: 20%;
+  font-size: 1.5em;
+  border-radius: 15px;
+}
+.hs-background {
+  position: fixed;
+  left: 29.5%;
+  bottom: 4%;
+  width: 40%;
+  font-size: 1.5em;
+  border-radius: 15px;
+  z-index: -1;
+}
+.game-over {
+  width:80%;
+  padding-top: 1%;
+}
+.statement {
+  padding: 2% 0;
+}
+
+/* JUNGLE HIGHSCORE */
+.Junglerank {
+  color: #fff;
+  background: #a2be30;
+  padding: 1%;
+  width: 60%;
+  border-radius: 15px;
+  margin: 2% auto;
+}
+
+.Jungle-submit {
+  color: #fff;
+  display: block;
+  margin:2% auto;
+  width: 60%;
+  background: #303a07;
+  padding: 2%;
+  border-radius: 15px;
+  border:none;
+}
+
+/* SKY HIGHSCORE */
+
+.Skyrank {
+  color: #fff;
+  background: #00afb9;
+  padding: 1%;
+  width: 60%;
+  border-radius: 15px;
+  margin: 2% auto;
+}
+
+.Sky-submit {
+  color: #fff;
+  display: block;
+  margin:2% auto;
+  width: 60%;
+  background: #073a38;
+  padding: 2%;
+  border-radius: 15px;
+  border:none;
+}
+
+/* DUSK HIGHSCORE */
+
+.Duskrank {
+  color: #fff;
+  background: #622780;
+  padding: 1%;
+  width: 60%;
+  border-radius: 15px;
+  margin: 2% auto;
+}
+
+.Dusk-submit {
+  color: #fff;
+  display: block;
+  margin:2% auto;
+  width: 60%;
+  background: #303a07;
+  padding: 2%;
+  border-radius: 15px;
+  border:none;
+}
+
+/* CITY HIGHSCORE */
+
+.Cityrank {
+  color: #fff;
+  background: #d49825;
+  padding: 1%;
+  width: 60%;
+  border-radius: 15px;
+  margin: 2% auto;
+}
+
+.City-submit {
+  color: #fff;
+  display: block;
+  margin:2% auto;
+  width: 60%;
+  background: #ab4893;
+  padding: 2%;
+  border-radius: 15px;
+  border:none;
+}
+
+
+.name-input {
+  font-size: 1em;
+  color: #fff;
+  background: grey;
+  text-align: center;
+  border: none;
+  width:70%;
+  border-radius: 15px;
+  padding: 2%;
+}
+
+.name-input:focus {
+  outline: none;
+}
+
+button:hover {
+  filter: brightness(75%)
+}
+button:focus {
+  border: none;
+  outline: none;
+}
+.reveal {
+  animation-name: reveal;
+  animation-duration: 3s;
+  animation-fill-mode: forwards;
+}
+@keyframes reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

@@ -1,9 +1,9 @@
-const { config } = require("../src/index.js");
+const { config } = require('../src/index.js')
 
-test("string is a string", () => {
-	expect(typeof "string").toBe("string");
-});
+test('config has correct number of levels', () => {
+  expect(config.scene).toHaveLength(12)
+})
 
-test("config is an object", () => {
-	expect(typeof config).toBe("object");
-});
+test('config is an object', () => {
+  expect(typeof config).toBe('object')
+})
