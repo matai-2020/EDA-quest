@@ -80,7 +80,7 @@ const collectScore = (player, type) => {
 // TUTOR TRIGGER
 const askQuestion = () => {
   if (canAsk) {
-    noQuestion.setText('Congrats, you have completed your trello card!')
+    noQuestion.setText('Congrats, you have \n\ncompleted your trello card!')
     setTimeout(() => {
       duskSceneComplete = true
     }, 2000)
