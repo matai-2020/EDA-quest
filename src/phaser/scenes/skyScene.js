@@ -69,7 +69,9 @@ let player
 let platforms
 let lives
 const life = []
+/*eslint-disable */
 let healthBar
+/* eslint-enable */
 let health = 0
 let wonGame = false
 let isAlive = true

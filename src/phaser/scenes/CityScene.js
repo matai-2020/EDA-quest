@@ -223,8 +223,6 @@ export default class CityScene extends Phaser.Scene {
     player.setCollideWorldBounds(false)
     player.body.checkCollision.up = false
 
-    
-
     this.anims.create({
       key: 'death',
       frames: this.anims.generateFrameNumbers('explode', {
@@ -328,7 +326,7 @@ export default class CityScene extends Phaser.Scene {
       .text(16, 16, 'Score: ' + currentSceneScore, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
-        fill: '#000'
+        fill: 'white'
       })
       .setScrollFactor(0)
 
@@ -336,7 +334,7 @@ export default class CityScene extends Phaser.Scene {
       .text(width - 300, 16, 'Trello: 0 / ' + checksToPass, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
-        fill: '#000'
+        fill: 'white'
       })
       .setScrollFactor(0)
     noQuestion = this.add.text(tutorAxisX - 250, tutorAxisY - 65, '', {
@@ -407,7 +405,6 @@ export default class CityScene extends Phaser.Scene {
 
     explode = this.add.sprite(player.body.position.x + 50, player.body.position.y + 45, 'explode')
     explode.setScale(1.4)
-    
   }
 
   getLivesCount = () => {
