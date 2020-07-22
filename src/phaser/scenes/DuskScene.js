@@ -105,6 +105,10 @@ export default class DuskScene extends Phaser.Scene {
     this.load.image('base', '/assets/blocksTriggers/base.png')
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
 
+    // BUBBLES
+    this.load.image('bubble1', '/assets/Dusk/dusk-instruction.png')
+    this.load.image('bubble2', '/assets/Dusk/dusk-help.png')
+
     // ENVIRONMENT
     this.load.image('background', '/assets/Dusk/dusk-bg.png')
     this.load.image('far-mount', '/assets/Dusk/dusk-far-mount.png')
@@ -186,6 +190,10 @@ export default class DuskScene extends Phaser.Scene {
     this.add.image(3000, 300, 'far-trees').setScale(4.5).setScrollFactor(0.4)
     this.add.image(1200, 250, 'near-trees').setScale(5).setScrollFactor(0.7)
     this.add.image(3000, 250, 'near-trees').setScale(5).setScrollFactor(0.7)
+
+    // BUBBLES
+    this.add.image(300, 200, 'bubble1').setScale(0.5).setScrollFactor(1)
+    this.add.image(3100, 300, 'bubble2').setScale(0.5).setScrollFactor(1)
 
     // GROUND
     createAligned(this, totalWidth, 'dusk-ground', 1)
@@ -327,7 +335,7 @@ export default class DuskScene extends Phaser.Scene {
         fill: 'white'
       })
       .setScrollFactor(0)
-    noQuestion = this.add.text(spot.x - 250, spot.y, '', {
+    noQuestion = this.add.text(spot.x - 230, spot.y - 50, '', {
       fontFamily: "'Press Start 2P', cursive",
       fontSize: '12px',
       fill: 'white'
