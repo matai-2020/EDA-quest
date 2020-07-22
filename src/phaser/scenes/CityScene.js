@@ -434,6 +434,7 @@ export default class CityScene extends Phaser.Scene {
     setTimeout(() => {
       if (lives > 0) {
         this.getLivesCount()
+        clearInterval(bombInterval)
         this.scene.restart({ currentSceneScore: startingScore, lives })
       } else if (lives === 0) {
         life[lives].destroy()
