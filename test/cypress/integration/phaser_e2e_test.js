@@ -1,5 +1,5 @@
 it('Successfully loads the home page', () => {
-  cy.visit('/')
+  cy.visit('http://localhost:8080')
   cy.get('img').should('have.attr', 'src', '/assets/Game/eda-quest-logo.png')
 
   cy.get('#phaser')
