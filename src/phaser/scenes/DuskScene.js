@@ -31,6 +31,7 @@ let wall
 let trigger
 let healthBar
 let health = 0
+let showToken = false
 const life = []
 let lives
 let bump
@@ -83,15 +84,22 @@ const askQuestion = () => {
     setTimeout(() => {
       duskSceneComplete = true
     }, 2000)
-  } else {
+  }
+  if (!canAsk && !showToken && !gravityBoost) {
     noQuestion.setText('I can help you with that! \n\nHere, pick up the UpSkill token')
+    setTimeout(() => showToken = true, 3000)
+  }
+  if (!canAsk && gravityBoost) {
+    noQuestion.setText('Don\'t forget to collect \n\nall Trello cards')
+    showToken = false
   }
 }
 
 // SKILL COLLECTOR
-const collectSkill = (player, type) => {
-  type.disableBody(true, true)
+const collectSkill = () => {
+  upskill.disableBody(true, true)
   gravityBoost = true
+  showToken = false
 }
 
 export default class DuskScene extends Phaser.Scene {
@@ -104,6 +112,10 @@ export default class DuskScene extends Phaser.Scene {
     this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
     this.load.image('base', '/assets/blocksTriggers/base.png')
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
+
+    // BUBBLES
+    this.load.image('bubble1', '/assets/Dusk/dusk-instruction.png')
+    this.load.image('bubble2', '/assets/Dusk/dusk-help.png')
 
     // ENVIRONMENT
     this.load.image('background', '/assets/Dusk/dusk-bg.png')
@@ -186,6 +198,10 @@ export default class DuskScene extends Phaser.Scene {
     this.add.image(3000, 300, 'far-trees').setScale(4.5).setScrollFactor(0.4)
     this.add.image(1200, 250, 'near-trees').setScale(5).setScrollFactor(0.7)
     this.add.image(3000, 250, 'near-trees').setScale(5).setScrollFactor(0.7)
+
+    // BUBBLES
+    this.add.image(300, 200, 'bubble1').setScale(0.5).setScrollFactor(1)
+    this.add.image(3100, 300, 'bubble2').setScale(0.5).setScrollFactor(1)
 
     // GROUND
     createAligned(this, totalWidth, 'dusk-ground', 1)
@@ -287,8 +303,9 @@ export default class DuskScene extends Phaser.Scene {
     //  ------ TOKENS ------
 
     // UPSKILL
-    upskill = this.physics.add.staticGroup()
-    upskill.create(3800, 575, 'upskill').setScale(0.18).refreshBody()
+    upskill = this.physics.add.staticImage(3800, 575, 'upskill').setScale(0.18).refreshBody()
+    // upskill.create(3800, 575, 'upskill').setScale(0.18).refreshBody()
+    upskill.disableBody(true, true)
     this.physics.add.overlap(player, upskill, collectSkill, null, this)
 
     // REACT
@@ -327,7 +344,7 @@ export default class DuskScene extends Phaser.Scene {
         fill: 'white'
       })
       .setScrollFactor(0)
-    noQuestion = this.add.text(spot.x - 250, spot.y, '', {
+    noQuestion = this.add.text(spot.x - 230, spot.y - 50, '', {
       fontFamily: "'Press Start 2P', cursive",
       fontSize: '12px',
       fill: 'white'
@@ -381,6 +398,13 @@ export default class DuskScene extends Phaser.Scene {
       if (facing === 'left') {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
+    }
+
+    // SHOW TOKEN
+    if (showToken) {
+      upskill.enableBody(false, upskill.body.position.x, upskill.body.position.y, true, true)
+    } else {
+      upskill.disableBody(true, true)
     }
 
     // GRAVITY BOOST

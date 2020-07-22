@@ -93,6 +93,9 @@ export default class SkyScene extends Phaser.Scene {
     this.load.image('base', '/assets/blocksTriggers/base.png')
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
 
+    // BUBBLES
+    this.load.image('bubble1', '/assets/Sky/sky-bubble.png')
+
     // assets
     this.load.image('check', '/assets/check.png')
     this.load.image('platform', '/assets/Sky/platform.png')
@@ -158,6 +161,9 @@ export default class SkyScene extends Phaser.Scene {
     createAligned(this, totalWidth, 'bgClouds', 0.15)
     createAligned(this, totalWidth, 'mgClouds', 0.3)
     createAligned(this, totalWidth, 'fgClouds', 0.5)
+
+    // BUBBLES
+    this.add.image(1410, 200, 'bubble1').setScale(0.5).setScrollFactor(1)
 
     // Collider floor & platforms
 
