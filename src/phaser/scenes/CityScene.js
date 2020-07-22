@@ -63,7 +63,7 @@ const bombTimer = 1200
 let platforms
 let secondPlatforms
 let isAlive = true
-let wonGame = false
+const wonGame = false
 let lives
 const life = []
 let explode
