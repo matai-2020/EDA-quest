@@ -29,13 +29,12 @@ let platforms
 let floor
 let wall
 let trigger
-let healthBar
-let health = 0
+let showToken = false
 const life = []
 let lives
 let bump
 let gravityBoost = false
-const worldWidth = 4000
+const worldWidth = 3000
 
 // GROUND LAYOUT
 const createAligned = (scene, totalWidth, texture, scrollFactor) => {
@@ -79,19 +78,26 @@ const collectScore = (player, type) => {
 // TUTOR TRIGGER
 const askQuestion = () => {
   if (canAsk) {
-    noQuestion.setText('Congrats, you have completed your trello card!')
+    noQuestion.setText('Congrats, you have \n\ncompleted your trello card!')
     setTimeout(() => {
       duskSceneComplete = true
     }, 2000)
-  } else {
-    noQuestion.setText('I can help you with that! \n\nHere, pick up the UpSkill token')
+  }
+  if (!canAsk && !showToken && !gravityBoost) {
+    noQuestion.setText('  I can help you with that! \n\nHere, pick up the UpSkill token')
+    setTimeout(() => showToken = true, 1000)
+  }
+  if (!canAsk && gravityBoost) {
+    noQuestion.setText('Try JUMPING now!')
+    showToken = false
   }
 }
 
 // SKILL COLLECTOR
-const collectSkill = (player, type) => {
-  type.disableBody(true, true)
+const collectSkill = () => {
+  upskill.disableBody(true, true)
   gravityBoost = true
+  showToken = false
 }
 
 export default class DuskScene extends Phaser.Scene {
@@ -104,6 +110,10 @@ export default class DuskScene extends Phaser.Scene {
     this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
     this.load.image('base', '/assets/blocksTriggers/base.png')
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
+
+    // BUBBLES
+    this.load.image('instruction', '/assets/Dusk/dusk-instruction.png')
+    this.load.image('help', '/assets/Dusk/dusk-help.png')
 
     // ENVIRONMENT
     this.load.image('background', '/assets/Dusk/dusk-bg.png')
@@ -181,11 +191,15 @@ export default class DuskScene extends Phaser.Scene {
     this.add.image(width * 0.5, height * 0.5, 'background').setScale(5).setScrollFactor(0)
     this.add.image(800, 300, 'far-mount').setScale(4).setScrollFactor(0.01)
     this.add.image(700, 400, 'near-mount').setScale(3).setScrollFactor(0.05)
-    this.add.image(2000, 460, 'near-buildings').setScale(2.8).setScrollFactor(0.35)
+    this.add.image(1880, 460, 'near-buildings').setScale(2.8).setScrollFactor(0.5)
     this.add.image(800, 300, 'far-trees').setScale(4.5).setScrollFactor(0.4)
     this.add.image(3000, 300, 'far-trees').setScale(4.5).setScrollFactor(0.4)
     this.add.image(1200, 250, 'near-trees').setScale(5).setScrollFactor(0.7)
     this.add.image(3000, 250, 'near-trees').setScale(5).setScrollFactor(0.7)
+
+    // BUBBLES
+    this.add.image(300, 200, 'instruction').setScale(0.5).setScrollFactor(1)
+    this.add.image(2200, 300, 'help').setScale(0.5).setScrollFactor(1)
 
     // GROUND
     createAligned(this, totalWidth, 'dusk-ground', 1)
@@ -201,9 +215,9 @@ export default class DuskScene extends Phaser.Scene {
 
     // PLATFORMS
     platforms = this.physics.add.staticGroup()
-    platforms.create(800, 380, 'platformLrg').setScale(0.4).refreshBody()
     platforms.create(100, 250, 'platformSml1').setScale(0.4).refreshBody()
-    platforms.create(2500, 600, 'platformMed1').setScale(0.4).refreshBody()
+    platforms.create(900, 400, 'platformLrg').setScale(0.4).refreshBody()
+    platforms.create(1500, 480, 'platformMed1').setScale(0.4).refreshBody()
     platforms.children.entries.forEach(platform => {
       return (
         (platform.body.checkCollision.left = false),
@@ -214,22 +228,18 @@ export default class DuskScene extends Phaser.Scene {
     //  ------ CHARACTERS ------
 
     // TUTOR SPRITE & TRIGGER
-    tutor = this.physics.add.sprite(3600, 535, 'don')
+    tutor = this.physics.add.sprite(2700, 535, 'don')
     const spot = tutor.body.position
     trigger = this.physics.add.sprite(spot.x, spot.y, 'triggerBlock')
 
     // PLAYER SPRITE & MECHANICS
     player = this.physics.add.sprite(100, 580, 'idleRight')
-    player.body.setGravityY(1000)
+    player.body.setGravityY(450)
     player.setCollideWorldBounds(false)
     player.body.checkCollision.up = false
 
     // Amount of Lives display
-    for (let i = 1; i < lives; i++) {
-      let x = 400
-      x = x + (i * 80)
-      life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)
-    }
+    this.getLivesCount()
 
     // ANIMATIONS
     this.anims.create({
@@ -287,8 +297,8 @@ export default class DuskScene extends Phaser.Scene {
     //  ------ TOKENS ------
 
     // UPSKILL
-    upskill = this.physics.add.staticGroup()
-    upskill.create(3800, 575, 'upskill').setScale(0.18).refreshBody()
+    upskill = this.physics.add.staticImage(2860, 575, 'upskill').setScale(0.18).refreshBody()
+    upskill.disableBody(true, true)
     this.physics.add.overlap(player, upskill, collectSkill, null, this)
 
     // REACT
@@ -299,12 +309,11 @@ export default class DuskScene extends Phaser.Scene {
 
     // TRELLO
     check = this.physics.add.staticGroup()
-    react.create(100, 180, 'check').setScale(0.08).refreshBody()
-    check.create(2500, 530, 'check').setScale(0.08).refreshBody()
+    check.create(100, 170, 'check').setScale(0.08).refreshBody()
+    check.create(890, 310, 'check').setScale(0.08).refreshBody()
+    check.create(1500, 390, 'check').setScale(0.08).refreshBody()
     this.physics.add.overlap(player, check, collectScore, null, this)
     this.physics.add.overlap(player, trigger, askQuestion, null, this)
-    check = this.physics.add.staticGroup()
-    check.create(1400, 600, 'check').setScale(0.08).refreshBody()
     this.physics.add.overlap(player, check, collectScore, null, this)
     this.physics.add.overlap(player, trigger, askQuestion, null, this)
 
@@ -327,9 +336,9 @@ export default class DuskScene extends Phaser.Scene {
         fill: 'white'
       })
       .setScrollFactor(0)
-    noQuestion = this.add.text(spot.x - 250, spot.y, '', {
+    noQuestion = this.add.text(spot.x - 230, spot.y - 50, '', {
       fontFamily: "'Press Start 2P', cursive",
-      fontSize: '12px',
+      fontSize: '15px',
       fill: 'white'
     })
 
@@ -383,9 +392,16 @@ export default class DuskScene extends Phaser.Scene {
       } else player.anims.play('jumpRight', true)
     }
 
+    // SHOW TOKEN
+    if (showToken && !gravityBoost) {
+      upskill.enableBody(false, upskill.body.position.x, upskill.body.position.y, true, true)
+    } else if (!showToken && gravityBoost) {
+      upskill.disableBody(true, true)
+    }
+
     // GRAVITY BOOST
     if (gravityBoost) {
-      player.body.setGravityY(100)
+      player.body.setGravityY(150)
     }
 
     // CHANGE SCENE
@@ -394,12 +410,15 @@ export default class DuskScene extends Phaser.Scene {
     }
   }
 
-  loseHp = () => {
-    health = health + 4
-    if (health === 4) {
-      this.death()
+  getLivesCount = () => {
+    for (let i = 0; i < lives; i++) {
+      let x = 400
+      x = x + (i * 80)
+      life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)
     }
   }
+
+ 
 
   death = () => {
     lives = lives - 1
@@ -407,15 +426,16 @@ export default class DuskScene extends Phaser.Scene {
     checkAmount = 0
     setTimeout(() => {
       player.disableBody(true, true)
-      healthBar.disableBody(true, true)
     }, 100)
     setTimeout(() => {
       if (lives > 0) {
-        health = 0
-        life[lives].destroy()
+        life[lives - 1].destroy()
+        this.getLivesCount()
         this.scene.restart({ currentSceneScore: startingScore, lives })
       } else if (lives === 0) {
-        gameOver({ isAlive, wonGame, currentSceneScore })
+        life[lives - 1].destroy()
+        this.getLivesCount()
+        gameOver({ isAlive, wonGame, currentSceneScore, level: 'Dusk' })
       }
     }, 2000)
 }

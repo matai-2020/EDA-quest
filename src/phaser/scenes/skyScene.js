@@ -54,12 +54,12 @@ let skySceneComplete = false
 
 const askQuestion = () => {
   if (canAsk) {
-    noQuestion.setText('Congrats, you have completed your trello card!')
+    noQuestion.setText('Congrats, you have completed\n\nyour trello card!')
     setTimeout(() => {
       skySceneComplete = true
     }, 2000)
   } else {
-    noQuestion.setText('Please come back with a complete trello card')
+    noQuestion.setText('Please come back with\n\na complete trello card')
   }
 }
 
@@ -69,7 +69,9 @@ let player
 let platforms
 let lives
 const life = []
+/*eslint-disable */
 let healthBar
+/* eslint-enable */
 let health = 0
 let wonGame = false
 let isAlive = true
@@ -92,6 +94,9 @@ export default class SkyScene extends Phaser.Scene {
     this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
     this.load.image('base', '/assets/blocksTriggers/base.png')
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
+
+    // BUBBLES
+    this.load.image('bubble1', '/assets/Sky/sky-bubble.png')
 
     // assets
     this.load.image('check', '/assets/check.png')
@@ -143,6 +148,9 @@ export default class SkyScene extends Phaser.Scene {
     startingScore = currentSceneScore
     lives = prevLevel.lives
 
+    // DISPLAY AMOUNT OF LIVES
+    this.getLivesCount()
+
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -158,6 +166,9 @@ export default class SkyScene extends Phaser.Scene {
     createAligned(this, totalWidth, 'bgClouds', 0.15)
     createAligned(this, totalWidth, 'mgClouds', 0.3)
     createAligned(this, totalWidth, 'fgClouds', 0.5)
+
+    // BUBBLES
+    this.add.image(1410, 200, 'bubble1').setScale(0.5).setScrollFactor(1)
 
     // Collider floor & platforms
 
@@ -190,7 +201,7 @@ export default class SkyScene extends Phaser.Scene {
     leftRightPlatform.body.immovable = true
 
     // Amount of Lives display
-    for (let i = 1; i < lives; i++) {
+    for (let i = 0; i < lives; i++) {
       let x = 400
       x = x + (i * 80)
       life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)
@@ -269,57 +280,6 @@ export default class SkyScene extends Phaser.Scene {
       repeat: -1
     })
 
-    // HEALTH BAR
-    healthBar = this.physics.add.sprite(player.body.position.x + 15, player.body.position.y - 40, 'heart')
-    healthBar.setScale(2)
-
-    this.anims.create({
-      key: 'health1',
-      frames: this.anims.generateFrameNumbers('heart', {
-        start: 0,
-        end: 1
-      }),
-      frameRate: 10
-
-    })
-
-    this.anims.create({
-      key: 'health2',
-      frames: this.anims.generateFrameNumbers('heart', {
-        start: 1,
-        end: 2
-      }),
-      frameRate: 10
-
-    })
-    this.anims.create({
-      key: 'health3',
-      frames: this.anims.generateFrameNumbers('heart', {
-        start: 2,
-        end: 3
-      }),
-      frameRate: 10
-
-    })
-    this.anims.create({
-      key: 'health4',
-      frames: this.anims.generateFrameNumbers('heart', {
-        start: 3,
-        end: 4
-      }),
-      frameRate: 10
-
-    })
-    this.anims.create({
-      key: 'health5',
-      frames: this.anims.generateFrameNumbers('heart', {
-        start: 4,
-        end: 5
-      }),
-      frameRate: 10
-
-    })
-
     // TRELLO CHECK MECHANICS
 
     check = this.physics.add.staticGroup()
@@ -352,7 +312,7 @@ export default class SkyScene extends Phaser.Scene {
         fill: '#000'
       })
       .setScrollFactor(0)
-    noQuestion = this.add.text(1300, 100, '', {
+    noQuestion = this.add.text(1600, 80, '', {
       fontFamily: "'Press Start 2P', cursive",
       fontSize: '12px',
       fill: '#000'
@@ -415,11 +375,6 @@ export default class SkyScene extends Phaser.Scene {
       } else player.anims.play('jumpRight', true)
     }
 
-    // HEALTHBAR ABOVE PLAYER
-
-    healthBar.body.position.x = player.body.position.x + 15
-    healthBar.body.position.y = player.body.position.y - 40
-
     // KILL PLAYER WHEN THEY FALL OFF THE MAP
 
     if (player.body.position.y >= 800) {
@@ -437,6 +392,14 @@ export default class SkyScene extends Phaser.Scene {
     }
   }
 
+  getLivesCount = () => {
+    for (let i = 0; i < lives; i++) {
+      let x = 400
+      x = x + (i * 80)
+      life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)
+    }
+  }
+
   loseHp = () => {
     health = health + 4
     if (health === 4) {
@@ -450,15 +413,16 @@ export default class SkyScene extends Phaser.Scene {
     checkAmount = 0
     setTimeout(() => {
       player.disableBody(true, true)
-      healthBar.disableBody(true, true)
+      life[lives].destroy()
     }, 100)
     setTimeout(() => {
       if (lives > 0) {
         health = 0
-        life[lives].destroy()
+        this.getLivesCount()
         this.scene.restart({ currentSceneScore: startingScore, lives })
       } else if (lives === 0) {
-        gameOver({ isAlive, wonGame, currentSceneScore })
+        this.getLivesCount()
+        gameOver({ isAlive, wonGame, currentSceneScore, level: 'Sky' })
       }
     }, 2000)
   }

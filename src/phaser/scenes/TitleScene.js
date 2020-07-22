@@ -21,8 +21,8 @@ export default class TitleScene extends Phaser.Scene {
   }
 
   create () {
-    this.add.image(500, 300, 'dark-forest').setScale(2.5)
-    this.add.image((window.innerWidth / 2.1), 400, 'click-here').setScale(0.5)
+    this.add.image(this.scale.width / 2, 300, 'dark-forest').setScale(2.5)
+    this.add.image(this.scale.width / 2, 400, 'click-here').setScale(0.5)
 
     this.input.once(
       'pointerdown',
