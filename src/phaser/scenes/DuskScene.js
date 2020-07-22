@@ -397,9 +397,9 @@ export default class DuskScene extends Phaser.Scene {
     }
 
     // SHOW TOKEN
-    if (showToken) {
+    if (showToken && !gravityBoost) {
       upskill.enableBody(false, upskill.body.position.x, upskill.body.position.y, true, true)
-    } else {
+    } else if (!showToken && gravityBoost) {
       upskill.disableBody(true, true)
     }
 
