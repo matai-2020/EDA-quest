@@ -1,0 +1,19 @@
+name: testAll
+
+on:
+  pull_request:
+    branches: [master, dev]
+  push:
+    branches: [master, dev]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install modules
+        run: npm i
+      - name: testWithJest
+        run: npm run test
+      - name: Run lint
+        run: npm run lint
