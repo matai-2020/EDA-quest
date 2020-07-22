@@ -201,7 +201,7 @@ export default class DuskScene extends Phaser.Scene {
 
     // BUBBLES
     this.add.image(300, 200, 'instruction').setScale(0.5).setScrollFactor(1)
-    this.add.image(3100, 300, 'help').setScale(0.5).setScrollFactor(1)
+    this.add.image(2200, 300, 'help').setScale(0.5).setScrollFactor(1)
 
     // GROUND
     createAligned(this, totalWidth, 'dusk-ground', 1)
