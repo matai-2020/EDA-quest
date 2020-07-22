@@ -113,7 +113,7 @@ export class HighScore extends React.Component {
               const indexKey = this.state.highScores.indexOf(player)
               if (indexKey < 10) {
                 return (
-                  <li className={`${this.state.level}rank`} key={indexKey}>
+                  <li role='rankScore' className={`${this.state.level}rank`} key={indexKey}>
                     {player.name}: {player.score}
                   </li>
                 )
@@ -147,7 +147,7 @@ export class HighScore extends React.Component {
               const indexKey = this.state.highScores.indexOf(player)
               if (indexKey < 10) {
                 return (
-                  <li className='Cityrank' key={indexKey}>
+                  <li role='victoryScore' className='Cityrank' key={indexKey}>
                     {player.name}: {player.score}
                   </li>
                 )
