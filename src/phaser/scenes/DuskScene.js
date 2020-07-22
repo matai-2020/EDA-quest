@@ -90,7 +90,7 @@ const askQuestion = () => {
     setTimeout(() => showToken = true, 3000)
   }
   if (!canAsk && gravityBoost) {
-    noQuestion.setText('Don\'t forget to collect \n\nall Trello cards')
+    noQuestion.setText('Try JUMPING now!')
     showToken = false
   }
 }
@@ -114,8 +114,8 @@ export default class DuskScene extends Phaser.Scene {
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
 
     // BUBBLES
-    this.load.image('bubble1', '/assets/Dusk/dusk-instruction.png')
-    this.load.image('bubble2', '/assets/Dusk/dusk-help.png')
+    this.load.image('instruction', '/assets/Dusk/dusk-instruction.png')
+    this.load.image('help', '/assets/Dusk/dusk-help.png')
 
     // ENVIRONMENT
     this.load.image('background', '/assets/Dusk/dusk-bg.png')
@@ -200,8 +200,8 @@ export default class DuskScene extends Phaser.Scene {
     this.add.image(3000, 250, 'near-trees').setScale(5).setScrollFactor(0.7)
 
     // BUBBLES
-    this.add.image(300, 200, 'bubble1').setScale(0.5).setScrollFactor(1)
-    this.add.image(3100, 300, 'bubble2').setScale(0.5).setScrollFactor(1)
+    this.add.image(300, 200, 'instruction').setScale(0.5).setScrollFactor(1)
+    this.add.image(3100, 300, 'help').setScale(0.5).setScrollFactor(1)
 
     // GROUND
     createAligned(this, totalWidth, 'dusk-ground', 1)
