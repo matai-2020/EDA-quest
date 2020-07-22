@@ -91,7 +91,6 @@ export default class TutLevel extends Phaser.Scene {
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
 
     // assets
-    this.load.image('bomb', '/assets/blockTriggers/triggerBlockC')
     this.load.image('lives', '/assets/Game/lives-icon.png')
     this.load.image('lache', '/assets/man/lache.png')
     this.load.image('reactText', '/assets/coinsText.png')

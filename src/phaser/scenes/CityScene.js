@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { scoreChanged } from '../score'
+import { scoreChanged, gameOver } from '../score'
 
 /**
  *
@@ -62,7 +62,10 @@ let scoreText
 const bombTimer = 1200
 let platforms
 let secondPlatforms
-let lives = 3
+let isAlive = true
+let wonGame = false
+let lives
+const life = []
 
 let cityLevelComplete = false
 
@@ -98,6 +101,7 @@ export default class CityScene extends Phaser.Scene {
     this.load.image('plateau', '/assets/Jungle/plateau.png')
     this.load.image('ground', '/assets/Jungle/ground.png')
     this.load.image('arrow-keys', '/assets/Jungle/arrow-keys.png')
+    this.load.image('lives', '/assets/Game/lives-icon.png')
     this.load.image(
       'platform',
       '/assets/airpack/PNG/Environment/ground_grass.png'
@@ -194,6 +198,9 @@ export default class CityScene extends Phaser.Scene {
       platform.body.checkCollision.right = false
       platform.body.checkCollision.down = false
     })
+
+    // DISPLAY AMOUNT OF LIVES
+    this.getLivesCount()
 
     // Character sprites
 
@@ -384,9 +391,32 @@ export default class CityScene extends Phaser.Scene {
     }
   }
 
-  death = (player, type) => {
-    console.log('ded')
-    // player.disableBody(true, true)
+  getLivesCount = () => {
+    for (let i = 0; i < lives; i++) {
+      let x = 400
+      x = x + (i * 80)
+      life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)
+    }
+  }
+
+  death = () => {
+    lives = lives - 1
+    player.disableBody(true, true)
+    isAlive = false
+    checkAmount = 0
+    setTimeout(() => {
+      life[lives].destroy()
+    }, 100)
+    setTimeout(() => {
+      if (lives > 0) {
+        this.getLivesCount()
+        this.scene.restart({ currentSceneScore: startingScore, lives })
+      } else if (lives === 0) {
+        life[lives].destroy()
+        this.getLivesCount()
+        gameOver({ isAlive, wonGame, currentSceneScore, level: 'City' })
+      }
+    }, 2000)
   }
 }
 const platformsLocal = [
