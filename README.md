@@ -21,5 +21,3 @@ Built by Isaac Bell, Jake Hurley, Keenen Leyson and Louis Fowler
 | `npm test` | Run all jest tests |
 | `npm run cypress` | Run cypress with Test Runner |
 | `npm run cypress:bg` | Run cypress headlessly in the Electron browser |
-| `npm run format` | Formats all .js and .jsx files based on eslint config|
-| `npm test` | Run all jest tests |
