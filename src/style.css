@@ -43,28 +43,30 @@ body {
   position: fixed;
   padding: 5%;
   left:35%;
-  bottom: 2%;
+  bottom: 4%;
   width: 20%;
   font-size: 1.5em;
   border-radius: 15px;
 }
-.jungle-background {
+.hs-background {
   position: fixed;
-  left:35%;
-  bottom: 7%;
-  width: 30%;
+  left: 29.5%;
+  bottom: 4%;
+  width: 40%;
   font-size: 1.5em;
   border-radius: 15px;
   z-index: -1;
 }
 .game-over {
-  width:60%;
+  width:80%;
   padding-top: 1%;
 }
 .statement {
   padding: 2% 0;
 }
-.rank {
+
+/* JUNGLE HIGHSCORE */
+.Junglerank {
   color: #fff;
   background: #a2be30;
   padding: 1%;
@@ -72,6 +74,85 @@ body {
   border-radius: 15px;
   margin: 2% auto;
 }
+
+.Jungle-submit {
+  color: #fff;
+  display: block;
+  margin:2% auto;
+  width: 60%;
+  background: #303a07;
+  padding: 2%;
+  border-radius: 15px;
+  border:none;
+}
+
+/* SKY HIGHSCORE */
+
+.Skyrank {
+  color: #fff;
+  background: #00afb9;
+  padding: 1%;
+  width: 60%;
+  border-radius: 15px;
+  margin: 2% auto;
+}
+
+.Sky-submit {
+  color: #fff;
+  display: block;
+  margin:2% auto;
+  width: 60%;
+  background: #073a38;
+  padding: 2%;
+  border-radius: 15px;
+  border:none;
+}
+
+/* DUSK HIGHSCORE */
+
+.Duskrank {
+  color: #fff;
+  background: #622780;
+  padding: 1%;
+  width: 60%;
+  border-radius: 15px;
+  margin: 2% auto;
+}
+
+.Dusk-submit {
+  color: #fff;
+  display: block;
+  margin:2% auto;
+  width: 60%;
+  background: #303a07;
+  padding: 2%;
+  border-radius: 15px;
+  border:none;
+}
+
+/* CITY HIGHSCORE */
+
+.Cityrank {
+  color: #fff;
+  background: #d49825;
+  padding: 1%;
+  width: 60%;
+  border-radius: 15px;
+  margin: 2% auto;
+}
+
+.City-submit {
+  color: #fff;
+  display: block;
+  margin:2% auto;
+  width: 60%;
+  background: #ab4893;
+  padding: 2%;
+  border-radius: 15px;
+  border:none;
+}
+
+
 .name-input {
   font-size: 1em;
   color: #fff;
@@ -87,20 +168,10 @@ body {
   outline: none;
 }
 
-.submit-button {
-  color: #fff;
-  display: block;
-  margin:2% auto;
-  width: 60%;
-  background: #303a07;
-  padding: 2%;
-  border-radius: 15px;
-  border:none;
+button:hover {
+  filter: brightness(75%)
 }
-.submit-button:hover {
-  background: #1f2505;
-}
-.submit-button:focus {
+button:focus {
   border: none;
   outline: none;
 }

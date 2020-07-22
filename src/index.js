@@ -13,13 +13,15 @@ import tutLevel from './phaser/scenes/TutLevel'
 import jumpLevel from './phaser/scenes/JumpLevel'
 import dusk from './phaser/scenes/DuskScene'
 import city from './phaser/scenes/CityScene'
-import parallax from './phaser/scenes/ParallaxScene'
 import sky from './phaser/scenes/skyScene'
-
+// Question Scenes
 import questionOne from './phaser/scenes/textScenes/questionOne.js'
 import questionTwo from './phaser/scenes/textScenes/questionTwo.js'
 import questionThree from './phaser/scenes/textScenes/questionThree.js'
 import questionFour from './phaser/scenes/textScenes/questionFour.js'
+// Credit Scene
+import victory from './phaser/scenes/textScenes/victory.js'
+import credit from './phaser/scenes/CreditScene.js'
 
 var firebaseConfig = {
   apiKey: 'AIzaSyD5DEUiq_fXMfIJpiPH4HUvbXbPGPDP2-0',
@@ -34,10 +36,10 @@ var firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig)
 
-const config = {
+export const config = {
   parent: 'phaser',
   type: Phaser.AUTO,
-  width: window.innerWidth - 100,
+  width: 1340,
   height: 800,
   physics: {
     default: 'arcade',
@@ -46,7 +48,7 @@ const config = {
       debug: false
     }
   },
-  scene: [title, questionOne, tutLevel, jumpLevel, dusk, sky, city, questionTwo, questionThree, questionFour]
+  scene: [title, tutLevel, questionOne, jumpLevel, questionTwo, sky, questionThree, dusk, questionFour, city, victory, credit]
 }
 /*eslint-disable */
 const game = new Phaser.Game(config)
