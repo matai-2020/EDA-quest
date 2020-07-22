@@ -72,7 +72,7 @@ let floor
 let wall
 let trigger
 let bump
-const lives = 4
+const lives = 3
 const life = []
 
 let tutLevelComplete = false
@@ -177,7 +177,7 @@ export default class TutLevel extends Phaser.Scene {
     this.add.image(1150, 475, 'up-key').setScale(0.2)
 
     // lives
-    for (let i = 1; i < lives; i++) {
+    for (let i = 0; i < lives; i++) {
       let x = 400
       x = x + (i * 80)
       life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)

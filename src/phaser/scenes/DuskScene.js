@@ -241,11 +241,7 @@ export default class DuskScene extends Phaser.Scene {
     player.body.checkCollision.up = false
 
     // Amount of Lives display
-    for (let i = 1; i < lives; i++) {
-      let x = 400
-      x = x + (i * 80)
-      life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)
-    }
+    this.getLivesCount()
 
     // ANIMATIONS
     this.anims.create({
@@ -418,6 +414,14 @@ export default class DuskScene extends Phaser.Scene {
     }
   }
 
+  getLivesCount = () => {
+    for (let i = 0; i < lives; i++) {
+      let x = 400
+      x = x + (i * 80)
+      life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)
+    }
+  }
+
   loseHp = () => {
     health = health + 4
     if (health === 4) {
@@ -436,9 +440,12 @@ export default class DuskScene extends Phaser.Scene {
     setTimeout(() => {
       if (lives > 0) {
         health = 0
-        life[lives].destroy()
+        life[lives - 1].destroy()
+        this.getLivesCount()
         this.scene.restart({ currentSceneScore: startingScore, lives })
       } else if (lives === 0) {
+        life[lives - 1].destroy()
+        this.getLivesCount()
         gameOver({ isAlive, wonGame, currentSceneScore, level: 'Dusk' })
       }
     }, 2000)

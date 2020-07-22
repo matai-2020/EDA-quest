@@ -196,11 +196,7 @@ export default class SkyScene extends Phaser.Scene {
     leftRightPlatform.body.immovable = true
 
     // Amount of Lives display
-    for (let i = 1; i < lives; i++) {
-      let x = 400
-      x = x + (i * 80)
-      life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)
-    }
+    this.getLivesCount()
 
     // Tuto
     tutor = this.physics.add.sprite(1920, 100, 'emily').setScale(0.3)
@@ -443,6 +439,14 @@ export default class SkyScene extends Phaser.Scene {
     }
   }
 
+  getLivesCount = () => {
+    for (let i = 0; i < lives; i++) {
+      let x = 400
+      x = x + (i * 80)
+      life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)
+    }
+  }
+
   loseHp = () => {
     health = health + 4
     if (health === 4) {
@@ -450,24 +454,27 @@ export default class SkyScene extends Phaser.Scene {
     }
   }
 
-  death = () => {
-    lives = lives - 1
-    isAlive = false
-    checkAmount = 0
-    setTimeout(() => {
-      player.disableBody(true, true)
-      healthBar.disableBody(true, true)
-    }, 100)
-    setTimeout(() => {
-      if (lives > 0) {
-        health = 0
-        life[lives].destroy()
-        this.scene.restart({ currentSceneScore: startingScore, lives })
-      } else if (lives === 0) {
-        gameOver({ isAlive, wonGame, currentSceneScore, level: 'Sky' })
-      }
-    }, 2000)
-  }
+   death = () => {
+     lives = lives - 1
+     isAlive = false
+     checkAmount = 0
+     setTimeout(() => {
+       player.disableBody(true, true)
+       healthBar.disableBody(true, true)
+       life[lives].destroy()
+     }, 100)
+     setTimeout(() => {
+       if (lives > 0) {
+         health = 0
+         this.getLivesCount()
+         this.scene.restart({ currentSceneScore: startingScore, lives })
+       } else if (lives === 0) {
+         life[lives].destroy()
+         this.getLivesCount()
+         gameOver({ isAlive, wonGame, currentSceneScore, level: 'Sky' })
+       }
+     }, 2000)
+   }
 
   victory = () => {
     wonGame = true

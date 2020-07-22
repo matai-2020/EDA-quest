@@ -316,11 +316,8 @@ export default class JumpLevel extends Phaser.Scene {
       repeat: -1
     })
     // Amount of Lives display
-    for (let i = 1; i < lives; i++) {
-      let x = 400
-      x = x + (i * 80)
-      life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)
-    }
+    this.getLivesCount()
+
     // HEALTH BAR
     healthBar = this.physics.add.sprite(player.body.position.x + 15, player.body.position.y - 40, 'heart')
     healthBar.setScale(2)
@@ -578,6 +575,14 @@ export default class JumpLevel extends Phaser.Scene {
     healthBar.body.position.y = player.body.position.y - 40
   }
 
+      getLivesCount = () => {
+        for (let i = 0; i < lives; i++) {
+          let x = 400
+          x = x + (i * 80)
+          life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)
+        }
+      }
+
       loseHp = () => {
         health = health + 1
         healthBar.anims.play(`health${health}`, true)
@@ -594,13 +599,16 @@ export default class JumpLevel extends Phaser.Scene {
       setTimeout(() => {
         player.disableBody(true, true)
         healthBar.disableBody(true, true)
+        life[lives].destroy()
       }, 100)
       setTimeout(() => {
         if (lives > 0) {
           health = 0
-          life[lives].destroy()
+          this.getLivesCount()
           this.scene.restart({ currentSceneScore: startingScore, lives })
         } else if (lives === 0) {
+          life[lives].destroy()
+          this.getLivesCount()
           gameOver({ isAlive, wonGame, currentSceneScore, level: 'Jungle' })
         }
       }, 2000)

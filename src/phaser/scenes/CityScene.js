@@ -10,6 +10,7 @@ import { scoreChanged } from '../score'
  */
 
 let currentSceneScore = 0
+let startingScore
 let checkAmount = 0
 let check
 let checkText
@@ -61,6 +62,7 @@ let scoreText
 const bombTimer = 1200
 let platforms
 let secondPlatforms
+let lives = 3
 
 let cityLevelComplete = false
 
@@ -131,8 +133,9 @@ export default class CityScene extends Phaser.Scene {
   }
 
   create (prevLevel) {
-    // currentSceneScore = prevLevel.currentSceneScore
-    // lives = prevLevel.lives
+    currentSceneScore = prevLevel.currentSceneScore
+    startingScore = currentSceneScore
+    lives = prevLevel.lives
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
