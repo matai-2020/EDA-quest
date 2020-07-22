@@ -53,7 +53,7 @@ let noQuestion
 
 const askQuestion = () => {
   if (canAsk) {
-    noQuestion.setText('Congrats, you have \n\ncompleted your trello card!')
+    noQuestion.setText('  Congrats, you have \n\ncompleted your trello card!')
     setTimeout(() => {
       tutLevelComplete = true
     }, 2000)

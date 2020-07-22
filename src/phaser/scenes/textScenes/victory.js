@@ -36,7 +36,7 @@ export default class VictoryScene extends Phaser.Scene {
     }, 500)
     setTimeout(() => {
       this.add.image(width * 0.5, 650, 'credits').setScale(0.4).setScrollFactor(0)
-    }, 1500)
+    }, 1800)
 
     this.input.once(
       'pointerdown',

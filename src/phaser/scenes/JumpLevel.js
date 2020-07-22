@@ -103,12 +103,12 @@ const collectScore = (player, type) => {
 
 const askQuestion = () => {
   if (canAsk) {
-    noQuestion.setText('Congrats, you have completed your trello card!')
+    noQuestion.setText('  Congrats, you have\n\ncompleted your trello card!')
     setTimeout(() => {
       jumpSceneComplete = true
     }, 2000)
   } else {
-    noQuestion.setText('Please come back with a complete trello card')
+    noQuestion.setText('Please come back with\n\n a complete trello card')
   }
 }
 
@@ -383,8 +383,6 @@ export default class JumpLevel extends Phaser.Scene {
     })
 
     this.physics.add.overlap(player, tornado, bounce, null, this)
-    // this.physics.add.overlap(spring, player, bounce, null, this)
-    // console.log(spring)
 
     // coin and collection
 
@@ -397,7 +395,6 @@ export default class JumpLevel extends Phaser.Scene {
     react.create(536, 350, 'react').setScale(0.05).refreshBody()
     react.create(536, 400, 'react').setScale(0.05).refreshBody()
     react.create(536, 450, 'react').setScale(0.05).refreshBody()
-    // react.create(395, 342, 'react').setScale(0.05).refreshBody()
     react.create(1000, 550, 'react').setScale(0.05).refreshBody()
     react.create(1200, 550, 'react').setScale(0.05).refreshBody()
     react.create(1400, 550, 'react').setScale(0.05).refreshBody()
@@ -440,9 +437,9 @@ export default class JumpLevel extends Phaser.Scene {
       })
       .setScrollFactor(0)
 
-    noQuestion = this.add.text(spot.x - 250, spot.y - 10, '', {
+    noQuestion = this.add.text(spot.x - 200, spot.y - 120, '', {
       fontFamily: "'Press Start 2P', cursive",
-      fontSize: '12px',
+      fontSize: '15px',
       fill: 'white'
     })
 
