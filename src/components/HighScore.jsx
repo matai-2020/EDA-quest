@@ -128,7 +128,7 @@ export class HighScore extends React.Component {
         <div className="score-container reveal">
           <img
             className="game-over"
-            src="/assets/Game/victory-crest.png"
+            src="/assets/Victory/victory-crest.png"
             alt="Quest Logo"
           />
           <p>You Win!</p>
