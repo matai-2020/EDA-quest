@@ -72,9 +72,9 @@ const mockData = [
 
 firebase.initializeApp(firebaseConfig)
 
-test('Lists through Highscores on GameOver', async () => {
-  const sortedData = mockData.sort((a, b) => b.score - a.score)
+const sortedData = mockData.sort((a, b) => b.score - a.score)
 
+test('Lists through Highscores on GameOver', async () => {
   render(
     <StateMock state={{ isAlive: false, wonGame: false, highScores: sortedData }}>
       <HighScore />
@@ -92,8 +92,6 @@ test('Lists through Highscores on GameOver', async () => {
 })
 
 test('Lists through Highscore on Victory', async () => {
-  const sortedData = mockData.sort((a, b) => b.score - a.score)
-
   render(
     <StateMock state={{ isAlive: true, wonGame: true, highScores: sortedData }}>
       <HighScore />
