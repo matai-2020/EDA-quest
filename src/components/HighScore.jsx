@@ -149,7 +149,7 @@ export class HighScore extends React.Component {
               }
             })}
           </ol>
-          <img src={`/assets/Theatre/victoryBg.png`} className='hs-background'/>
+          <img src='/assets/Theatre/victoryBG.png' className='hs-background'/>
         </div>
       )
     } else return <></>
