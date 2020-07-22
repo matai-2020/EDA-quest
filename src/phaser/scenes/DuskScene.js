@@ -31,6 +31,7 @@ let wall
 let trigger
 let healthBar
 let health = 0
+let showToken = false
 const life = []
 let lives
 let bump
@@ -83,15 +84,22 @@ const askQuestion = () => {
     setTimeout(() => {
       duskSceneComplete = true
     }, 2000)
-  } else {
+  }
+  if (!canAsk && !showToken && !gravityBoost) {
     noQuestion.setText('I can help you with that! \n\nHere, pick up the UpSkill token')
+    setTimeout(() => showToken = true, 3000)
+  }
+  if (!canAsk && gravityBoost) {
+    noQuestion.setText('Don\'t forget to collect \n\nall Trello cards')
+    showToken = false
   }
 }
 
 // SKILL COLLECTOR
-const collectSkill = (player, type) => {
-  type.disableBody(true, true)
+const collectSkill = () => {
+  upskill.disableBody(true, true)
   gravityBoost = true
+  showToken = false
 }
 
 export default class DuskScene extends Phaser.Scene {
@@ -295,8 +303,9 @@ export default class DuskScene extends Phaser.Scene {
     //  ------ TOKENS ------
 
     // UPSKILL
-    upskill = this.physics.add.staticGroup()
-    upskill.create(3800, 575, 'upskill').setScale(0.18).refreshBody()
+    upskill = this.physics.add.staticImage(3800, 575, 'upskill').setScale(0.18).refreshBody()
+    // upskill.create(3800, 575, 'upskill').setScale(0.18).refreshBody()
+    upskill.disableBody(true, true)
     this.physics.add.overlap(player, upskill, collectSkill, null, this)
 
     // REACT
@@ -389,6 +398,13 @@ export default class DuskScene extends Phaser.Scene {
       if (facing === 'left') {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
+    }
+
+    // SHOW TOKEN
+    if (showToken) {
+      upskill.enableBody(false, upskill.body.position.x, upskill.body.position.y, true, true)
+    } else {
+      upskill.disableBody(true, true)
     }
 
     // GRAVITY BOOST
