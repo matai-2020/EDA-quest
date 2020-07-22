@@ -66,6 +66,7 @@ let isAlive = true
 let wonGame = false
 let lives
 const life = []
+let explode
 
 let cityLevelComplete = false
 
@@ -131,6 +132,11 @@ export default class CityScene extends Phaser.Scene {
     this.load.spritesheet('idleLeft', '/assets/man/idleLeft.png', {
       frameWidth: 57,
       frameHeight: 102
+    })
+
+    this.load.spritesheet('explode', '/assets/Game/explosion.png', {
+      frameWidth: 125.4,
+      frameHeight: 107
     })
 
     this.cursors = this.input.keyboard.createCursorKeys()
@@ -220,6 +226,17 @@ export default class CityScene extends Phaser.Scene {
     player.body.setGravityY(80)
     player.setCollideWorldBounds(false)
     player.body.checkCollision.up = false
+
+    
+
+    this.anims.create({
+      key: 'death',
+      frames: this.anims.generateFrameNumbers('explode', {
+        start: 0,
+        end: 16
+      }),
+      frameRate: 24
+    })
 
     this.anims.create({
       key: 'left',
@@ -312,7 +329,7 @@ export default class CityScene extends Phaser.Scene {
 
     // text
     scoreText = this.add
-      .text(16, 16, 'Score: 0', {
+      .text(16, 16, 'Score: ' + currentSceneScore, {
         fontFamily: "'Press Start 2P', cursive",
         fontSize: '20px',
         fill: '#000'
@@ -389,6 +406,12 @@ export default class CityScene extends Phaser.Scene {
       clearInterval(bombInterval)
       this.scene.start('victory-scene', currentSceneScore)
     }
+
+    // DEATH ANIMATION
+
+    explode = this.add.sprite(player.body.position.x + 50, player.body.position.y + 45, 'explode')
+    explode.setScale(1.4)
+    
   }
 
   getLivesCount = () => {
@@ -401,6 +424,7 @@ export default class CityScene extends Phaser.Scene {
 
   death = () => {
     lives = lives - 1
+    explode.anims.play('death', true)
     player.disableBody(true, true)
     isAlive = false
     checkAmount = 0

@@ -29,8 +29,6 @@ let platforms
 let floor
 let wall
 let trigger
-let healthBar
-let health = 0
 let showToken = false
 const life = []
 let lives
@@ -422,12 +420,7 @@ export default class DuskScene extends Phaser.Scene {
     }
   }
 
-  loseHp = () => {
-    health = health + 4
-    if (health === 4) {
-      this.death()
-    }
-  }
+ 
 
   death = () => {
     lives = lives - 1
@@ -435,11 +428,9 @@ export default class DuskScene extends Phaser.Scene {
     checkAmount = 0
     setTimeout(() => {
       player.disableBody(true, true)
-      healthBar.disableBody(true, true)
     }, 100)
     setTimeout(() => {
       if (lives > 0) {
-        health = 0
         life[lives - 1].destroy()
         this.getLivesCount()
         this.scene.restart({ currentSceneScore: startingScore, lives })

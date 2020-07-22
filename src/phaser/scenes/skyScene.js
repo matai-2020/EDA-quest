@@ -146,6 +146,9 @@ export default class SkyScene extends Phaser.Scene {
     startingScore = currentSceneScore
     lives = prevLevel.lives
 
+    // DISPLAY AMOUNT OF LIVES
+    this.getLivesCount()
+
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -196,7 +199,11 @@ export default class SkyScene extends Phaser.Scene {
     leftRightPlatform.body.immovable = true
 
     // Amount of Lives display
-    this.getLivesCount()
+    for (let i = 0; i < lives; i++) {
+      let x = 400
+      x = x + (i * 80)
+      life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)
+    }
 
     // Tuto
     tutor = this.physics.add.sprite(1920, 100, 'emily').setScale(0.3)
@@ -269,57 +276,6 @@ export default class SkyScene extends Phaser.Scene {
       }),
       frameRate: 5,
       repeat: -1
-    })
-
-    // HEALTH BAR
-    healthBar = this.physics.add.sprite(player.body.position.x + 15, player.body.position.y - 40, 'heart')
-    healthBar.setScale(2)
-
-    this.anims.create({
-      key: 'health1',
-      frames: this.anims.generateFrameNumbers('heart', {
-        start: 0,
-        end: 1
-      }),
-      frameRate: 10
-
-    })
-
-    this.anims.create({
-      key: 'health2',
-      frames: this.anims.generateFrameNumbers('heart', {
-        start: 1,
-        end: 2
-      }),
-      frameRate: 10
-
-    })
-    this.anims.create({
-      key: 'health3',
-      frames: this.anims.generateFrameNumbers('heart', {
-        start: 2,
-        end: 3
-      }),
-      frameRate: 10
-
-    })
-    this.anims.create({
-      key: 'health4',
-      frames: this.anims.generateFrameNumbers('heart', {
-        start: 3,
-        end: 4
-      }),
-      frameRate: 10
-
-    })
-    this.anims.create({
-      key: 'health5',
-      frames: this.anims.generateFrameNumbers('heart', {
-        start: 4,
-        end: 5
-      }),
-      frameRate: 10
-
     })
 
     // TRELLO CHECK MECHANICS
@@ -417,11 +373,6 @@ export default class SkyScene extends Phaser.Scene {
       } else player.anims.play('jumpRight', true)
     }
 
-    // HEALTHBAR ABOVE PLAYER
-
-    healthBar.body.position.x = player.body.position.x + 15
-    healthBar.body.position.y = player.body.position.y - 40
-
     // KILL PLAYER WHEN THEY FALL OFF THE MAP
 
     if (player.body.position.y >= 800) {
@@ -454,27 +405,25 @@ export default class SkyScene extends Phaser.Scene {
     }
   }
 
-   death = () => {
-     lives = lives - 1
-     isAlive = false
-     checkAmount = 0
-     setTimeout(() => {
-       player.disableBody(true, true)
-       healthBar.disableBody(true, true)
-       life[lives].destroy()
-     }, 100)
-     setTimeout(() => {
-       if (lives > 0) {
-         health = 0
-         this.getLivesCount()
-         this.scene.restart({ currentSceneScore: startingScore, lives })
-       } else if (lives === 0) {
-         life[lives].destroy()
-         this.getLivesCount()
-         gameOver({ isAlive, wonGame, currentSceneScore, level: 'Sky' })
-       }
-     }, 2000)
-   }
+  death = () => {
+    lives = lives - 1
+    isAlive = false
+    checkAmount = 0
+    setTimeout(() => {
+      player.disableBody(true, true)
+      life[lives].destroy()
+    }, 100)
+    setTimeout(() => {
+      if (lives > 0) {
+        health = 0
+        this.getLivesCount()
+        this.scene.restart({ currentSceneScore: startingScore, lives })
+      } else if (lives === 0) {
+        this.getLivesCount()
+        gameOver({ isAlive, wonGame, currentSceneScore, level: 'Sky' })
+      }
+    }, 2000)
+  }
 
   victory = () => {
     wonGame = true
