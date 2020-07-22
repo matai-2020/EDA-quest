@@ -96,10 +96,6 @@ export default class CityScene extends Phaser.Scene {
     this.load.image('plateau', '/assets/Jungle/plateau.png')
     this.load.image('ground', '/assets/Jungle/ground.png')
     this.load.image('arrow-keys', '/assets/Jungle/arrow-keys.png')
-    this.load.image(
-      'platform',
-      '/assets/airpack/PNG/Environment/ground_grass.png'
-    )
 
     // player assets
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
