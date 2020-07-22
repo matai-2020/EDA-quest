@@ -104,7 +104,7 @@ const collectScore = (player, type) => {
 
 const askQuestion = () => {
   if (canAsk) {
-    noQuestion.setText('Congrats, you have\n\ncompleted your trello card!')
+    noQuestion.setText('  Congrats, you have\n\ncompleted your trello card!')
     setTimeout(() => {
       jumpSceneComplete = true
     }, 2000)
@@ -484,7 +484,7 @@ export default class JumpLevel extends Phaser.Scene {
       })
       .setScrollFactor(0)
 
-    noQuestion = this.add.text(spot.x - 180, spot.y - 100, '', {
+    noQuestion = this.add.text(spot.x - 200, spot.y - 120, '', {
       fontFamily: "'Press Start 2P', cursive",
       fontSize: '15px',
       fill: 'white'
