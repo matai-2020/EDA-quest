@@ -121,6 +121,7 @@ export class HighScore extends React.Component {
             })}
           </ol>
           <img src={`/assets/${this.state.level}/${this.state.level}Highscore.png`} className='hs-background'/>
+          <button className={`${this.state.level}-submit`} onClick={() => location.reload() }>Play Again!</button>
         </div>
       )
     } else if (this.state.wonGame === true) {
@@ -137,7 +138,7 @@ export class HighScore extends React.Component {
             placeholder="Your Name"
             className="name-input"
             onChange={this.nameChange}></input>
-          <button className="submit-button" onClick={() => this.clickHandler()}>
+          <button className="City-button" onClick={() => this.clickHandler()}>
             Submit Score
           </button>
           <p>Final Score: {this.state.currentSceneScore}</p>
@@ -154,6 +155,7 @@ export class HighScore extends React.Component {
             })}
           </ol>
           <img src='/assets/Theatre/victoryBG.png' className='hs-background'/>
+          <button className='City-submit' onClick={() => location.reload() }>Play Again!</button>
         </div>
       )
     } else return <></>

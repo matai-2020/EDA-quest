@@ -103,6 +103,7 @@ export default class SkyScene extends Phaser.Scene {
     this.load.image('platform', '/assets/Sky/platform.png')
     this.load.image('medPlatform', '/assets/Sky/platformMed2.png')
     this.load.image('smallPlatform', '/assets/Sky/platformSml1.png')
+    this.load.image('pinkBridge', '/assets/Sky/platformSml1Pink.png')
     this.load.image('block', '/assets/man/base.png')
     this.load.image('sky', '/assets/Jungle/sky.png')
     this.load.image('bgClouds', '/assets/Sky/bgClouds.png')
@@ -185,7 +186,7 @@ export default class SkyScene extends Phaser.Scene {
     platforms.create(1850, 300, 'medPlatform').setScale(0.4).refreshBody()
 
     upDownPlatform = this.physics.add.image(600, 500, 'smallPlatform').setScale(0.4)
-    bridge = this.physics.add.image(1600, 380, 'smallPlatform').setScale(0.4)
+    bridge = this.physics.add.image(1600, 380, 'pinkBridge').setScale(0.4)
     bridge.body.allowGravity = false
     bridge.body.immovable = true
     bridge.disableBody(true, true)
