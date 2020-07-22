@@ -1,6 +1,8 @@
 ## EDA Quest
 
-A simple side scrolling platform game built with phaser.
+A multi-level side scrolling platform game built with phaser.
+
+To run locally, run `npm start` and head to http://localhost:8080/
 
 https://eda-quest.netlify.app/
 
