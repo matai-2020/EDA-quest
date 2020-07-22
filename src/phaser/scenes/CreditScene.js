@@ -17,12 +17,16 @@ let floor
 let tutors
 let player
 let diploma
+let credits
 let credit1
 let specialThanks
 let credit2
 let credit3
 let credit4
-const currentSceneScore = 500
+let broughtToYouBy
+let edaQuest
+let team
+let currentSceneScore
 let graduate = false
 const isAlive = true
 let wonGame = false
@@ -39,11 +43,17 @@ const displayCredit = (player, type) => {
   type.disableBody(true, true)
   const axis = type.body.center.x
   console.log(axis)
+  if (axis === 250) credits.setText('\nC\nR\nE\nD\nI\nT\nS\n')
   if (axis === 500) credit1.setText('\nDEVELOPERS:\n\nIsaac Bell\nJake Hurley\nKeenen Leyson\nLouis Fowler')
   if (axis === 800) specialThanks.setText('\nSPECIAL\nTHANKS\nto:')
-  if (axis === 1000) credit2.setText('\nHUMAN SKILLS\n\nCarolyn Stott\nDougal Stott')
-  if (axis === 1400) credit3.setText('\nTECH SKILLS:\n\nDon Smith\nEmily Parkes\nLane Le Prevost-Smith\nLaché Melvin')
-  if (axis === 1800) credit4.setText('\nThe 2020\n  MATAI\n   Cohort')
+  if (axis === 1000) credit2.setText('\nHUMAN SKILLS:\n\nCarolyn Stott\nDougal Stott')
+  if (axis === 1400) credit3.setText('\nTECH TEAM:\n\nDon Smith\nEmily Parkes\nLane Le Prevost-Smith\nLaché Melvin\nPhoenix Zerin')
+  if (axis === 1800) {
+    credit4.setText('\nThe 2020\n  MATAI\n Cohort')
+    broughtToYouBy.setText('\nbrought to you by:')
+    edaQuest.setText('\nTHE EDA\n QUEST')
+    team.setText('\n team')
+  }
 }
 
 export default class CreditScene extends Phaser.Scene {
@@ -59,7 +69,7 @@ export default class CreditScene extends Phaser.Scene {
     this.load.image('creditTrigger', '/assets/blocksTriggers/wallBlock.png')
 
     // ENVIRONMENT
-    this.load.image('background', '/assets/Credits/sunset.jpg')
+    this.load.image('sunset', '/assets/Credits/sunset.jpg')
     this.load.image('curtain', '/assets/Theatre/theatre-curtain.png')
     this.load.image('lighting', '/assets/Theatre/theatre-lighting.png')
     this.load.image('floor', '/assets/Theatre/theatre-floor.png')
@@ -103,8 +113,9 @@ export default class CreditScene extends Phaser.Scene {
   }
 
   create (prevScore) {
-    // currentSceneScore = prevScore
+    currentSceneScore = prevScore
     const width = this.scale.width
+    console.log(width)
     const height = this.scale.height
 
     // PLAYER ORIENTATION
@@ -116,7 +127,7 @@ export default class CreditScene extends Phaser.Scene {
     })
 
     //  ------ ENVIRONMENT ------
-    this.add.image((width * 0.5) + 20, (height * 0.5) - 100, 'background').setScale(1.3).setScrollFactor(0.09)
+    this.add.image((width * 0.5) + 20, (height * 0.5) - 100, 'sunset').setScale(1.3).setScrollFactor(0.09)
 
     // GROUND
     this.add.image(500, 830, 'floor').setScale(1).setScrollFactor(1)
@@ -220,12 +231,19 @@ export default class CreditScene extends Phaser.Scene {
 
     // CREDIT TRIGGER
     creditTrigger = this.physics.add.staticGroup()
+    creditTrigger.create(250, 200, 'creditTrigger')
     creditTrigger.create(500, 200, 'creditTrigger')
     creditTrigger.create(800, 200, 'creditTrigger')
     creditTrigger.create(1000, 200, 'creditTrigger')
     creditTrigger.create(1400, 200, 'creditTrigger')
     creditTrigger.create(1800, 200, 'creditTrigger')
     this.physics.add.overlap(player, creditTrigger, displayCredit, null, this)
+
+    credits = this.add.text(250, 280, '', {
+      fontFamily: "'Press Start 2P', cursive",
+      fontSize: '25px',
+      fill: 'white'
+    })
 
     credit1 = this.add.text(350, 300, '', {
       fontFamily: "'Press Start 2P', cursive",
@@ -254,6 +272,24 @@ export default class CreditScene extends Phaser.Scene {
     credit4 = this.add.text(1800, 320, '', {
       fontFamily: "'Press Start 2P', cursive",
       fontSize: '25px',
+      fill: 'white'
+    })
+
+    broughtToYouBy = this.add.text(2600, 320, '', {
+      fontFamily: "'Press Start 2P', cursive",
+      fontSize: '18px',
+      fill: 'white'
+    })
+
+    edaQuest = this.add.text(2660, 350, '', {
+      fontFamily: "'Press Start 2P', cursive",
+      fontSize: '30px',
+      fill: 'green'
+    })
+
+    team = this.add.text(2700, 460, '', {
+      fontFamily: "'Press Start 2P', cursive",
+      fontSize: '18px',
       fill: 'white'
     })
 

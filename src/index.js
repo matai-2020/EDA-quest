@@ -19,6 +19,8 @@ import questionOne from './phaser/scenes/textScenes/questionOne.js'
 import questionTwo from './phaser/scenes/textScenes/questionTwo.js'
 import questionThree from './phaser/scenes/textScenes/questionThree.js'
 import questionFour from './phaser/scenes/textScenes/questionFour.js'
+// Credit Scene
+import victory from './phaser/scenes/textScenes/victory.js'
 import credit from './phaser/scenes/CreditScene.js'
 
 var firebaseConfig = {
@@ -46,8 +48,8 @@ const config = {
       debug: false
     }
   },
-  scene: [city, title, tutLevel, questionOne, jumpLevel, questionTwo, sky, questionThree, dusk, questionFour, credit]
-  // scene: [city]
+  scene: [title, tutLevel, questionOne, jumpLevel, questionTwo, sky, questionThree, dusk, questionFour, city, victory, credit]
+  // scene: [victory, credit]
 }
 /*eslint-disable */
 const game = new Phaser.Game(config)

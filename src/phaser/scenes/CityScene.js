@@ -10,10 +10,9 @@ import { scoreChanged } from '../score'
  */
 
 let currentSceneScore = 0
-let scoreText
-
-let checkText
 let checkAmount = 0
+let check
+let checkText
 const checksToPass = 4
 const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
@@ -49,9 +48,7 @@ const askQuestion = () => {
 }
 
 let facing = ''
-
 let react
-let check
 let tutor
 let player
 let floor
@@ -60,6 +57,7 @@ let trigger
 let bombCreate
 let bomb
 let bombInterval
+let scoreText
 const bombTimer = 1200
 let platforms
 let secondPlatforms
@@ -132,8 +130,9 @@ export default class CityScene extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
-  create (prevScore) {
-    currentSceneScore = prevScore
+  create (prevLevel) {
+    // currentSceneScore = prevLevel.currentSceneScore
+    // lives = prevLevel.lives
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
     })
@@ -378,7 +377,7 @@ export default class CityScene extends Phaser.Scene {
     }
     if (cityLevelComplete) {
       clearInterval(bombInterval)
-      this.scene.start('credit-scene', currentSceneScore)
+      this.scene.start('victory-scene', currentSceneScore)
     }
   }
 
