@@ -138,7 +138,7 @@ export class HighScore extends React.Component {
             placeholder="Your Name"
             className="name-input"
             onChange={this.nameChange}></input>
-          <button className="City-button" onClick={() => this.clickHandler()}>
+          <button className="City-submit" onClick={() => this.clickHandler()}>
             Submit Score
           </button>
           <p>Final Score: {this.state.currentSceneScore}</p>
