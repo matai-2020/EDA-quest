@@ -34,14 +34,12 @@ const collectScore = (player, type) => {
     type.disableBody(true, true)
     currentSceneScore += 10
     scoreChanged(currentSceneScore)
-    console.log(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
   } else {
     type.disableBody(true, true)
     currentSceneScore += 20
     checkAmount += 1
     scoreChanged(currentSceneScore)
-    console.log(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
     if (checkAmount === checksToPass) {
@@ -93,6 +91,7 @@ export default class TutLevel extends Phaser.Scene {
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
 
     // assets
+    this.load.image('bomb', '/assets/blockTriggers/triggerBlockC')
     this.load.image('lives', '/assets/Game/lives-icon.png')
     this.load.image('lache', '/assets/man/lache.png')
     this.load.image('reactText', '/assets/coinsText.png')

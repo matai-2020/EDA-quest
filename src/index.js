@@ -37,7 +37,7 @@ firebase.initializeApp(firebaseConfig)
 const config = {
   parent: 'phaser',
   type: Phaser.AUTO,
-  width: window.innerWidth - 100,
+  width: 1340,
   height: 800,
   physics: {
     default: 'arcade',
@@ -46,8 +46,8 @@ const config = {
       debug: false
     }
   },
-  // scene: [title, tutLevel, questionOne, jumpLevel, questionTwo, sky, questionThree, dusk, questionFour, city, credit]
-  scene: [city]
+  scene: [city, title, tutLevel, questionOne, jumpLevel, questionTwo, sky, questionThree, dusk, questionFour, credit]
+  // scene: [city]
 }
 /*eslint-disable */
 const game = new Phaser.Game(config)
