@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import { scoreChanged, gameOver } from '../score'
 
 /**
  *
@@ -8,41 +9,26 @@ import Phaser from 'phaser'
  * @param {number} scrollFactor
  */
 
-const createAligned = (scene, totalWidth, texture, scrollFactor) => {
-  const getWidth = scene.textures.get(texture).getSourceImage().width
-  const count = Math.ceil(totalWidth / getWidth) * scrollFactor
-  let x = 0
-  for (let i = 0; i < count; ++i) {
-    const m = scene.add
-      .image(x, scene.scale.height, texture)
-      .setOrigin(0, 1)
-      .setScrollFactor(scrollFactor)
-
-    x += m.width
-  }
-}
-
-const score = 0
-let scoreText
 let currentSceneScore = 0
+let startingScore
 let checkAmount = 0
 let check
-let lives
 let checkText
-const checksToPass = '1'
-
+const checksToPass = 4
 const collectScore = (player, type) => {
   if (type.texture.key === 'react') {
     type.disableBody(true, true)
     currentSceneScore += 10
+    scoreChanged(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
   } else {
     type.disableBody(true, true)
     currentSceneScore += 20
     checkAmount += 1
+    scoreChanged(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
-    if (checkAmount == checksToPass) {
+    if (checkAmount === checksToPass) {
       canAsk = true
     }
   }
@@ -50,42 +36,41 @@ const collectScore = (player, type) => {
 
 let canAsk = false
 let noQuestion
-let citySceneComplete = false
-const popUp = 0
-let notYet
 
 const askQuestion = () => {
   if (canAsk) {
-    noQuestion.setText('Congrats, you have completed your trello card!')
+    noQuestion.setText('Congrats, you have \n\ncompleted your trello card!')
     setTimeout(() => {
-      citySceneComplete = true
-    }, 1000)
+      cityLevelComplete = true
+    }, 2000)
   } else {
-    noQuestion.setText('Please come back with a complete trello card')
+    noQuestion.setText('Please come back with \n\na complete trello card')
   }
 }
 
 let facing = ''
-
 let react
 let tutor
 let player
-let platforms
-let platform
-let cursors
-
-let ground
-let base
 let floor
 let wall
 let trigger
+let bombCreate
+let bomb
+let bombInterval
+let scoreText
+const bombTimer = 1200
+let platforms
+let secondPlatforms
+let isAlive = true
+const wonGame = false
+let lives
+const life = []
+let explode
 
-let game
+let cityLevelComplete = false
 
-let keyText
-const keyAmount = 0
-
-const worldWidth = window.innerWidth - 100
+const worldWidth = 1600
 
 export default class CityScene extends Phaser.Scene {
   constructor () {
@@ -97,24 +82,27 @@ export default class CityScene extends Phaser.Scene {
     this.load.image('triggerBlock', 'assets/blocksTriggers/triggerBlock.png')
     this.load.image('base', '/assets/blocksTriggers/base.png')
     this.load.image('wallBlock', '/assets/blocksTriggers/wallBlock.png')
-
+    // tutor
+    this.load.image('don', '/assets/man/don.png')
     // city assets
-    this.load.image('react', '/assets/react.svg')
+    this.load.image('bomb', '/assets/Jungle/bomb.png')
+    this.load.image('react', '/assets/reactCoinP.png')
     this.load.image('street', '/assets/City/street.png')
     this.load.image('near-buildings', '/assets/City/near-buildings.png')
     this.load.image('far-buildings', '/assets/City/far-buildings.png')
     // assets
     this.load.image('react', '/assets/react.svg')
-    this.load.image('platform', '/assets/Jungle/platform.png')
+    this.load.image('check', '/assets/check.png')
+    this.load.image('platformMetal', '/assets/Jungle/platformMetal.png')
+    this.load.image('platformMetalMed', '/assets/Jungle/platformMetalMed1.png')
+    this.load.image('platformMetalSml', '/assets/Jungle/platformMetalSml1.png')
+    this.load.image('outline', '/assets/Jungle/outlineMetal.png')
     this.load.image('sky', '/assets/Jungle/sky.png')
     this.load.image('mountain', '/assets/Jungle/mountains.png')
     this.load.image('plateau', '/assets/Jungle/plateau.png')
     this.load.image('ground', '/assets/Jungle/ground.png')
     this.load.image('arrow-keys', '/assets/Jungle/arrow-keys.png')
-    this.load.image(
-      'platform',
-      '/assets/airpack/PNG/Environment/ground_grass.png'
-    )
+    this.load.image('lives', '/assets/Game/lives-icon.png')
 
     // player assets
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
@@ -142,11 +130,17 @@ export default class CityScene extends Phaser.Scene {
       frameHeight: 102
     })
 
+    this.load.spritesheet('explode', '/assets/Game/explosion.png', {
+      frameWidth: 125.4,
+      frameHeight: 107
+    })
+
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
   create (prevLevel) {
     currentSceneScore = prevLevel.currentSceneScore
+    startingScore = currentSceneScore
     lives = prevLevel.lives
     this.input.keyboard.on('keydown-' + 'LEFT', function (event) {
       facing = 'left'
@@ -156,11 +150,12 @@ export default class CityScene extends Phaser.Scene {
     })
 
     const width = this.scale.width
+    const height = this.scale.height
 
-    this.add.image(670, 505, 'far-buildings').setScale(5.3).setScrollFactor(0)
-    this.add.image(420, 500, 'near-buildings').setScale(2).setScrollFactor(0)
-    this.add.image(600, 475, 'street').setScale(3.5).setScrollFactor(0)
-    this.add.image(1830, 475, 'street').setScale(3.5).setScrollFactor(0)
+    this.add.image(worldWidth / 2, height / 2, 'far-buildings').setDisplaySize(worldWidth, height)
+    this.add.image(420, 500, 'near-buildings').setScale(2)
+    this.add.image(600, 475, 'street').setScale(3.5)
+    this.add.image(1830, 475, 'street').setScale(3.5)
 
     // Collider floor
 
@@ -169,45 +164,73 @@ export default class CityScene extends Phaser.Scene {
     wall.create(worldWidth, 0, 'wallBlock')
 
     floor = this.physics.add.staticGroup()
-    floor.create(2010, 700, 'base').setScrollFactor(0)
+    floor.create(2010, 770, 'base').setScrollFactor(0)
 
     // Platforms
 
-    // let platforms = this.physics.add.staticGroup()
-    // platforms.create(500, 510, 'platform').setScale(0.4).refreshBody()
-    // platforms.create(600, 600, 'platform').setScale(0.4).refreshBody()
+    this.add.image(400, 375, 'outline').setScale(0.4)
+    this.add.image(100, 270, 'outline').setScale(0.4)
 
-    // platforms.children.entries.forEach(platform => {
-    //   platform.body.checkCollision.left = false
-    //   platform.body.checkCollision.right = false
-    //   platform.body.checkCollision.down = false
-    // })
+    platforms = this.physics.add.staticGroup()
+    platforms.create(900, 680, 'platformMetal').setScale(0.4).refreshBody()
+    platforms.create(950, 570, 'platformMetalMed').setScale(0.4).refreshBody()
+    platforms.create(620, 480, 'platformMetalSml').setScale(0.4).refreshBody()
+    platforms.create(620, 375, 'platformMetalSml').setScale(0.4).refreshBody()
+    platforms.create(950, 280, 'platformMetalMed').setScale(0.4).refreshBody()
+    platforms.create(1300, 200, 'platformMetalSml').setScale(0.4).refreshBody()
 
-    // let platform3 = this.physics.add.staticGroup()
-    // platform3.create(800, 450, 'platform').setScale(0.4).refreshBody()
+    secondPlatforms = this.physics.add.staticGroup()
+    secondPlatforms.create(1300, 680, 'platformMetalSml').setScale(0.4).refreshBody()
+    secondPlatforms.create(1000, 570, 'platformMetalSml').setScale(0.4).refreshBody()
+    secondPlatforms.create(700, 480, 'platformMetalSml').setScale(0.4).refreshBody()
+    secondPlatforms.create(400, 375, 'platformMetalSml').setScale(0.4).refreshBody()
+    secondPlatforms.create(100, 270, 'platformMetalSml').setScale(0.4).refreshBody()
+
+    secondPlatforms.children.entries.forEach(platform => {
+      platform.disableBody(true, true)
+    })
+
+    platforms.children.entries.forEach(platform => {
+      platform.body.checkCollision.left = false
+      platform.body.checkCollision.right = false
+      platform.body.checkCollision.down = false
+    })
+    secondPlatforms.children.entries.forEach(platform => {
+      platform.body.checkCollision.left = false
+      platform.body.checkCollision.right = false
+      platform.body.checkCollision.down = false
+    })
+
+    // DISPLAY AMOUNT OF LIVES
+    this.getLivesCount()
 
     // Character sprites
 
     // Tutor
-    // let tutorAxisX = 2900
-    // let tutorAxisY = 535
+    const tutorAxisX = 1500
+    const tutorAxisY = 690
 
-    // tutor = this.physics.add.sprite(tutorAxisX, tutorAxisY, 'idleLeft')
-    // tutor.setScale(3)
+    tutor = this.physics.add.sprite(tutorAxisX, tutorAxisY, 'don')
 
     // Tutor trigger
 
-    // trigger = this.physics.add.sprite(tutorAxisX, tutorAxisY, 'triggerBlock')
+    trigger = this.physics.add.sprite(tutorAxisX, tutorAxisY, 'triggerBlock')
 
     // Player sprite
 
-    player = this.physics.add.sprite(100, 500, 'idle')
-    player.body.setGravityY(60)
-
-    // player.setBounce(0.05)
+    player = this.physics.add.sprite(100, 670, 'idleRight')
+    player.body.setGravityY(80)
     player.setCollideWorldBounds(false)
-    player.onWorldBounds = true
     player.body.checkCollision.up = false
+
+    this.anims.create({
+      key: 'death',
+      frames: this.anims.generateFrameNumbers('explode', {
+        start: 0,
+        end: 16
+      }),
+      frameRate: 24
+    })
 
     this.anims.create({
       key: 'left',
@@ -263,12 +286,35 @@ export default class CityScene extends Phaser.Scene {
       repeat: -1
     })
 
+    // Bombs
+    bombCreate = (x) => {
+      bomb = this.physics.add.image(x, -50, 'bomb').setScale(0.09)
+      this.physics.add.overlap(player, bomb, this.death, null, this)
+    }
+    bombInterval = setInterval(function () {
+      const randomNum = Math.floor(Math.random() * 1340)
+      bombCreate(randomNum)
+    }, bombTimer)
+
     // coin and collection
 
-    react = this.physics.add.sprite(550, 300, 'react')
-    react.setScale(0.2)
+    react = this.physics.add.staticGroup()
+    react.create(950, 615, 'react').setScale(0.05).refreshBody()
+    react.create(950, 505, 'react').setScale(0.05).refreshBody()
+    react.create(950, 405, 'react').setScale(0.05).refreshBody()
+    react.create(620, 300, 'react').setScale(0.05).refreshBody()
+    react.create(620, 300, 'react').setScale(0.05).refreshBody()
+    react.create(890, 200, 'react').setScale(0.05).refreshBody()
+    react.create(1000, 200, 'react').setScale(0.05).refreshBody()
+
+    check = this.physics.add.staticGroup()
+    check.create(800, 615, 'check').setScale(0.08).refreshBody()
+    check.create(620, 150, 'check').setScale(0.08).refreshBody()
+    check.create(1300, 100, 'check').setScale(0.08).refreshBody()
+    check.create(100, 100, 'check').setScale(0.08).refreshBody()
 
     this.physics.add.overlap(player, react, collectScore, null, this)
+    this.physics.add.overlap(player, check, collectScore, null, this)
     this.physics.add.overlap(player, trigger, askQuestion, null, this)
 
     // camera follow
@@ -291,16 +337,16 @@ export default class CityScene extends Phaser.Scene {
         fill: 'white'
       })
       .setScrollFactor(0)
-
-    // noQuestion = this.add.text(tutorAxisX - 480, tutorAxisY - 250, '', {
-    //   fontSize: '18px',
-    //   fill: '#000'
-    // })
+    noQuestion = this.add.text(tutorAxisX - 250, tutorAxisY - 65, '', {
+      fontFamily: "'Press Start 2P', cursive",
+      fontSize: '14px',
+      fill: 'white'
+    })
 
     // colliders
     this.physics.add.collider(floor, [player, react, tutor, trigger])
     this.physics.add.collider(react, [platforms])
-    this.physics.add.collider(player, [platforms, wall])
+    this.physics.add.collider(player, [platforms, wall, floor, secondPlatforms])
   }
 
   update () {
@@ -337,13 +383,64 @@ export default class CityScene extends Phaser.Scene {
       player.anims.play('idleRight', true)
     }
     if (this.cursors.up.isDown && player.body.touching.down) {
-      player.setVelocityY(-300)
+      player.setVelocityY(-340)
       if (facing === 'left') {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
     }
-    if (citySceneComplete) {
-      // do something
+    if (checkAmount === 3) {
+      platforms.children.entries.forEach(platform => {
+        platform.disableBody(true, true)
+      })
+      for (let x = 0; x < platformsLocal.length; x++) {
+        secondPlatforms.children.entries[x].enableBody(false, platformsLocal[x].x, platformsLocal[x].y, true, true)
+      }
+    }
+    if (cityLevelComplete) {
+      clearInterval(bombInterval)
+      this.scene.start('victory-scene', currentSceneScore)
+    }
+
+    // DEATH ANIMATION
+
+    explode = this.add.sprite(player.body.position.x + 50, player.body.position.y + 45, 'explode')
+    explode.setScale(1.4)
+  }
+
+  getLivesCount = () => {
+    for (let i = 0; i < lives; i++) {
+      let x = 400
+      x = x + (i * 80)
+      life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)
     }
   }
+
+  death = () => {
+    lives = lives - 1
+    explode.anims.play('death', true)
+    player.disableBody(true, true)
+    isAlive = false
+    checkAmount = 0
+    setTimeout(() => {
+      life[lives].destroy()
+    }, 100)
+    setTimeout(() => {
+      if (lives > 0) {
+        this.getLivesCount()
+        clearInterval(bombInterval)
+        this.scene.restart({ currentSceneScore: startingScore, lives })
+      } else if (lives === 0) {
+        life[lives].destroy()
+        this.getLivesCount()
+        gameOver({ isAlive, wonGame, currentSceneScore, level: 'City' })
+      }
+    }, 2000)
+  }
 }
+const platformsLocal = [
+  { x: 1300, y: 680 },
+  { x: 1000, y: 570 },
+  { x: 700, y: 480 },
+  { x: 400, y: 375 },
+  { x: 100, y: 270 }
+]

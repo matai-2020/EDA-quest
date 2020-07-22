@@ -6,19 +6,48 @@
   "highScores": [
 {
  "name": "Jake",
- "score": 130
+ "score": 360
 },
 {
   "name": "Louis",
-  "score": 150
+  "score": 350
  },
  {
   "name": "Isaac",
-  "score": 140
+  "score": 440
  },
  {
-  "name": "Keenen",
-  "score": 160
+  "name": "RocketMan1",
+  "score": 380
+ },
+ {
+  "name": "JumpGod5",
+  "score": 460
+ },
+ {
+  "name": "Lebron",
+  "score": 590
+ },
+ {
+  "name": "Fenton",
+  "score": 340
+ },
+ {
+  "name": "Adrienne",
+  "score": 500
+ },
+ {
+  "name": "Sarah",
+  "score": 390
+ },
+ {
+  "name": "FazeJumps",
+  "score": 260
+ },
+ {
+  "name": "Rufus",
+  "score": 330
  }
+
 ]
 }

@@ -34,14 +34,12 @@ const collectScore = (player, type) => {
     type.disableBody(true, true)
     currentSceneScore += 10
     scoreChanged(currentSceneScore)
-    // console.log(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
   } else {
     type.disableBody(true, true)
     currentSceneScore += 20
     checkAmount += 1
     scoreChanged(currentSceneScore)
-    // console.log(currentSceneScore)
     scoreText.setText('Score: ' + currentSceneScore)
     checkText.setText('Trello: ' + checkAmount + ' / ' + checksToPass)
     if (checkAmount === checksToPass) {
@@ -55,7 +53,7 @@ let noQuestion
 
 const askQuestion = () => {
   if (canAsk) {
-    noQuestion.setText('Congrats, you have \n\ncompleted your trello card!')
+    noQuestion.setText('  Congrats, you have \n\ncompleted your trello card!')
     setTimeout(() => {
       tutLevelComplete = true
     }, 2000)
@@ -74,7 +72,7 @@ let floor
 let wall
 let trigger
 let bump
-const lives = 4
+const lives = 3
 const life = []
 
 let tutLevelComplete = false
@@ -159,6 +157,7 @@ export default class TutLevel extends Phaser.Scene {
 
     createAligned(this, totalWidth, 'mountain', 0.15)
     createAligned(this, totalWidth, 'plateau', 0.5)
+    bump = this.physics.add.staticImage(1400, 620, 'bump')
     createAligned(this, totalWidth, 'ground', 1)
     createAligned(this, totalWidth, 'plants', 1.25)
 
@@ -171,15 +170,13 @@ export default class TutLevel extends Phaser.Scene {
     floor = this.physics.add.staticGroup()
     floor.create(2010, 648, 'base').setScrollFactor(0)
 
-    bump = this.physics.add.staticImage(1400, 620, 'bump')
-
     this.add.image(150, 475, 'arrow-keys').setScale(0.2)
     this.add.image(700, 450, 'reactText').setScale(0.6)
     this.add.image(1400, 400, 'checkText').setScale(0.6)
     this.add.image(1150, 475, 'up-key').setScale(0.2)
 
     // lives
-    for (let i = 1; i < lives; i++) {
+    for (let i = 0; i < lives; i++) {
       let x = 400
       x = x + (i * 80)
       life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)

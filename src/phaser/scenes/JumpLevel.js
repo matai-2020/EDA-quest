@@ -4,9 +4,7 @@ import { scoreChanged, gameOver } from '../score'
 const wonGame = false
 const life = []
 let tornado
-let health = 0
 let isAlive = true
-let healthBar
 let right = true
 let jumpUp = false
 let scoreText
@@ -31,6 +29,7 @@ let checkAmount = 0
 const checksToPass = 2
 let currentSceneScore
 let startingScore
+let explode
 
 const walkFalse = () => {
   right = false
@@ -104,12 +103,12 @@ const collectScore = (player, type) => {
 
 const askQuestion = () => {
   if (canAsk) {
-    noQuestion.setText('Congrats, you have completed your trello card!')
+    noQuestion.setText('  Congrats, you have\n\ncompleted your trello card!')
     setTimeout(() => {
       jumpSceneComplete = true
     }, 2000)
   } else {
-    noQuestion.setText('Please come back with a complete trello card')
+    noQuestion.setText('Please come back with\n\n a complete trello card')
   }
 }
 
@@ -181,10 +180,7 @@ export default class JumpLevel extends Phaser.Scene {
       frameWidth: 57,
       frameHeight: 102
     })
-    this.load.spritesheet('heart', '/assets/Game/Hearts/PNG/animated/border/heart_animated_2.png', {
-      frameHeight: 17,
-      frameWidth: 17
-    })
+
     this.load.spritesheet('explode', '/assets/Game/explosion.png', {
       frameWidth: 125.4,
       frameHeight: 107
@@ -199,6 +195,7 @@ export default class JumpLevel extends Phaser.Scene {
       frameWidth: 99,
       frameHeight: 103
     })
+
     this.cursors = this.input.keyboard.createCursorKeys()
   }
 
@@ -315,62 +312,18 @@ export default class JumpLevel extends Phaser.Scene {
       frameRate: 5,
       repeat: -1
     })
-    // Amount of Lives display
-    for (let i = 1; i < lives; i++) {
-      let x = 400
-      x = x + (i * 80)
-      life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)
-    }
-    // HEALTH BAR
-    healthBar = this.physics.add.sprite(player.body.position.x + 15, player.body.position.y - 40, 'heart')
-    healthBar.setScale(2)
 
     this.anims.create({
-      key: 'health1',
-      frames: this.anims.generateFrameNumbers('heart', {
+      key: 'death',
+      frames: this.anims.generateFrameNumbers('explode', {
         start: 0,
-        end: 1
+        end: 16
       }),
-      frameRate: 10
+      frameRate: 24
 
     })
-
-    this.anims.create({
-      key: 'health2',
-      frames: this.anims.generateFrameNumbers('heart', {
-        start: 1,
-        end: 2
-      }),
-      frameRate: 10
-
-    })
-    this.anims.create({
-      key: 'health3',
-      frames: this.anims.generateFrameNumbers('heart', {
-        start: 2,
-        end: 3
-      }),
-      frameRate: 10
-
-    })
-    this.anims.create({
-      key: 'health4',
-      frames: this.anims.generateFrameNumbers('heart', {
-        start: 3,
-        end: 4
-      }),
-      frameRate: 10
-
-    })
-    this.anims.create({
-      key: 'health5',
-      frames: this.anims.generateFrameNumbers('heart', {
-        start: 4,
-        end: 5
-      }),
-      frameRate: 10
-
-    })
+    // Amount of Lives display
+    this.getLivesCount()
 
     // Explosion animation
 
@@ -384,7 +337,7 @@ export default class JumpLevel extends Phaser.Scene {
     ent.body.checkCollision.left = true
     ent.body.checkCollision.right = true
     // this.physics.add.overlap(ent, player, bounce, null, this)
-    this.physics.add.overlap(ent, player, this.loseHp, null, this)
+    this.physics.add.overlap(ent, player, this.death, null, this)
     // this.physics.add.collider(ent, floor, walk, null, this)
 
     this.anims.create({
@@ -430,8 +383,6 @@ export default class JumpLevel extends Phaser.Scene {
     })
 
     this.physics.add.overlap(player, tornado, bounce, null, this)
-    // this.physics.add.overlap(spring, player, bounce, null, this)
-    // console.log(spring)
 
     // coin and collection
 
@@ -444,7 +395,6 @@ export default class JumpLevel extends Phaser.Scene {
     react.create(536, 350, 'react').setScale(0.05).refreshBody()
     react.create(536, 400, 'react').setScale(0.05).refreshBody()
     react.create(536, 450, 'react').setScale(0.05).refreshBody()
-    // react.create(395, 342, 'react').setScale(0.05).refreshBody()
     react.create(1000, 550, 'react').setScale(0.05).refreshBody()
     react.create(1200, 550, 'react').setScale(0.05).refreshBody()
     react.create(1400, 550, 'react').setScale(0.05).refreshBody()
@@ -487,9 +437,9 @@ export default class JumpLevel extends Phaser.Scene {
       })
       .setScrollFactor(0)
 
-    noQuestion = this.add.text(spot.x - 250, spot.y - 10, '', {
+    noQuestion = this.add.text(spot.x - 200, spot.y - 120, '', {
       fontFamily: "'Press Start 2P', cursive",
-      fontSize: '12px',
+      fontSize: '15px',
       fill: 'white'
     })
 
@@ -572,35 +522,38 @@ export default class JumpLevel extends Phaser.Scene {
       ent.body.velocity.x = 100
       ent.anims.play('entRight', true)
     }
-    // HEALTHBAR ABOVE PLAYER
 
-    healthBar.body.position.x = player.body.position.x + 15
-    healthBar.body.position.y = player.body.position.y - 40
+    // DEATH ANIMATION
+
+    explode = this.add.sprite(player.body.position.x + 50, player.body.position.y + 45, 'explode')
+    explode.setScale(1.4)
   }
 
-      loseHp = () => {
-        health = health + 1
-        healthBar.anims.play(`health${health}`, true)
-        if (health === 4) {
-          this.death()
-        }
+    getLivesCount = () => {
+      for (let i = 0; i < lives; i++) {
+        let x = 400
+        x = x + (i * 80)
+        life[i] = this.add.image(x, 30, 'lives').setScale(0.5).setScrollFactor(0)
       }
+    }
 
     // DEATH
     death = () => {
       lives = lives - 1
       isAlive = false
+      explode.anims.play('death', true)
+      player.disableBody(true, true)
       checkAmount = 0
       setTimeout(() => {
-        player.disableBody(true, true)
-        healthBar.disableBody(true, true)
+        life[lives].destroy()
       }, 100)
       setTimeout(() => {
         if (lives > 0) {
-          health = 0
-          life[lives].destroy()
+          this.getLivesCount()
           this.scene.restart({ currentSceneScore: startingScore, lives })
         } else if (lives === 0) {
+          life[lives].destroy()
+          this.getLivesCount()
           gameOver({ isAlive, wonGame, currentSceneScore, level: 'Jungle' })
         }
       }, 2000)

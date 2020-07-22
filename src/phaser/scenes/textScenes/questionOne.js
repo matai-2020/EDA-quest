@@ -19,8 +19,6 @@ export default class questionOne extends Phaser.Scene {
   }
 
   create (prevLevel) {
-    console.log(prevLevel.lives)
-    console.log(prevLevel.currentSceneScore)
     currentSceneScore = prevLevel.currentSceneScore
     lives = prevLevel.lives
 

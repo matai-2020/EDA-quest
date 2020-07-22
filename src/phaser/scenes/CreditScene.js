@@ -42,7 +42,6 @@ const collectDiploma = (player, type) => {
 const displayCredit = (player, type) => {
   type.disableBody(true, true)
   const axis = type.body.center.x
-  console.log(axis)
   if (axis === 250) credits.setText('\nC\nR\nE\nD\nI\nT\nS\n')
   if (axis === 500) credit1.setText('\nDEVELOPERS:\n\nIsaac Bell\nJake Hurley\nKeenen Leyson\nLouis Fowler')
   if (axis === 800) specialThanks.setText('\nSPECIAL\nTHANKS\nto:')
@@ -115,7 +114,6 @@ export default class CreditScene extends Phaser.Scene {
   create (prevScore) {
     currentSceneScore = prevScore
     const width = this.scale.width
-    console.log(width)
     const height = this.scale.height
 
     // PLAYER ORIENTATION

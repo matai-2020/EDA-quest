@@ -36,7 +36,7 @@ var firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig)
 
-const config = {
+export const config = {
   parent: 'phaser',
   type: Phaser.AUTO,
   width: 1340,
@@ -49,7 +49,6 @@ const config = {
     }
   },
   scene: [title, tutLevel, questionOne, jumpLevel, questionTwo, sky, questionThree, dusk, questionFour, city, victory, credit]
-  // scene: [victory, credit]
 }
 /*eslint-disable */
 const game = new Phaser.Game(config)
