@@ -54,12 +54,12 @@ let skySceneComplete = false
 
 const askQuestion = () => {
   if (canAsk) {
-    noQuestion.setText('Congrats, you have completed your trello card!')
+    noQuestion.setText('Congrats, you have completed\n\nyour trello card!')
     setTimeout(() => {
       skySceneComplete = true
     }, 2000)
   } else {
-    noQuestion.setText('Please come back with a complete trello card')
+    noQuestion.setText('Please come back with\n\na complete trello card')
   }
 }
 
@@ -358,7 +358,7 @@ export default class SkyScene extends Phaser.Scene {
         fill: '#000'
       })
       .setScrollFactor(0)
-    noQuestion = this.add.text(1300, 100, '', {
+    noQuestion = this.add.text(1600, 80, '', {
       fontFamily: "'Press Start 2P', cursive",
       fontSize: '12px',
       fill: '#000'
