@@ -79,7 +79,7 @@ export default class CityScene extends Phaser.Scene {
     // tutor
     this.load.image('don', '/assets/man/don.png')
     // city assets
-    this.load.image('bomb', '/assets/blocksTriggers/triggerBlockC.png')
+    this.load.image('bomb', '/assets/Jungle/bomb.png')
     this.load.image('react', '/assets/reactCoinP.png')
     this.load.image('street', '/assets/City/street.png')
     this.load.image('near-buildings', '/assets/City/near-buildings.png')
@@ -87,19 +87,15 @@ export default class CityScene extends Phaser.Scene {
     // assets
     this.load.image('react', '/assets/react.svg')
     this.load.image('check', '/assets/check.png')
-    this.load.image('platform', '/assets/Jungle/platform.png')
-    this.load.image('platformMed', '/assets/Jungle/platformMed1.png')
-    this.load.image('platformSml', '/assets/Jungle/platformSml1.png')
-    this.load.image('outline', '/assets/Jungle/outline.png')
+    this.load.image('platform', '/assets/Jungle/platformMetal.png')
+    this.load.image('platformMed', '/assets/Jungle/platformMetalMed1.png')
+    this.load.image('platformSml', '/assets/Jungle/platformMetalSml1.png')
+    this.load.image('outline', '/assets/Jungle/outlineMetal.png')
     this.load.image('sky', '/assets/Jungle/sky.png')
     this.load.image('mountain', '/assets/Jungle/mountains.png')
     this.load.image('plateau', '/assets/Jungle/plateau.png')
     this.load.image('ground', '/assets/Jungle/ground.png')
     this.load.image('arrow-keys', '/assets/Jungle/arrow-keys.png')
-    this.load.image(
-      'platform',
-      '/assets/airpack/PNG/Environment/ground_grass.png'
-    )
 
     // player assets
     this.load.spritesheet('jumpRight', '/assets/man/jumpRight.png', {
@@ -267,7 +263,7 @@ export default class CityScene extends Phaser.Scene {
 
     // Bombs
     bombCreate = (x) => {
-      bomb = this.physics.add.image(x, -50, 'bomb')
+      bomb = this.physics.add.image(x, -50, 'bomb').setScale(0.09)
       this.physics.add.overlap(player, bomb, this.death, null, this)
     }
     bombInterval = setInterval(function () {
