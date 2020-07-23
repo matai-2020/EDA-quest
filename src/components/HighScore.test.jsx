@@ -44,8 +44,8 @@ const mockData = [
     score: 590
   },
   {
-    name: 'Fenton',
-    score: 340
+    name: 'Geoff',
+    score: 330
   },
   {
     name: 'Adrienne',
@@ -61,10 +61,10 @@ const mockData = [
   },
   {
     name: 'Rufus',
-    score: 330
+    score: 350
   },
   {
-    name: 'Geoff',
+    name: 'Fenton',
     score: 340
   }
 
