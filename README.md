@@ -13,7 +13,7 @@ Built by Isaac Bell, Jake Hurley, Keenen Leyson and Louis Fowler
 
 | Command | Description |
 |---------|-------------|
-| `npm install or npm i` | Install project dependencies |
+| `npm install` | Install project dependencies |
 | `npm start` | Build project and open web server running project |
 | `npm run build` | Builds code bundle with production settings (minification, uglification, etc..) |
 | `npm run lint` | Run eslint config to find linting errors|
