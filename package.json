@@ -7,7 +7,7 @@
     "cypress": "npx cypress open",
     "cypress:bg": "npx cypress run",
     "format": "npx eslint . --fix --ext .js,.jsx",
-    "lint": "npx eslint . --ext .js,.jsx",
+    "lint": "npx eslint . --ext .js,.jsx --ignore-path .eslintignore",
     "build": "webpack --config webpack/prod.js ",
     "start": "webpack-dev-server --config webpack/base.js",
     "test": "jest"
