@@ -38,9 +38,6 @@ const walkRight = () => {
   setTimeout(walkFalse, 5000)
 }
 
-const walkTrue = () => {
-  right = true
-}
 const walkLeft = () => {
   right = false
 }
@@ -329,7 +326,7 @@ export default class JumpLevel extends Phaser.Scene {
 
     // Enemy Sprites
     ent = this.physics.add.sprite(800, 400, 'walkRight')
-    
+
     ent.setScale(3.7)
     ent.body.setSize(ent.width, ent.height, true)
     ent.body.setGravityY(80)
@@ -456,7 +453,6 @@ export default class JumpLevel extends Phaser.Scene {
 
   // ////////////////////////////////////UPDATE/////////////////////////////////////////////////
   update () {
-   
     const cam = this.cameras.main
     const speed = 15
 
@@ -517,8 +513,8 @@ export default class JumpLevel extends Phaser.Scene {
       this.scene.start('question-two', { currentSceneScore, lives })
     }
     // enemy ENT
-    
-    if (ent.body.position.x < 450 || right ) {
+
+    if (ent.body.position.x < 450 || right) {
       walkRight()
       ent.body.velocity.x = 100
       ent.anims.play('entRight', true)
@@ -526,7 +522,7 @@ export default class JumpLevel extends Phaser.Scene {
     if (ent.body.position.x > 1180) {
       walkLeft()
       ent.body.velocity.x = -100
-      
+
       ent.anims.play('entLeft', true)
     }
 
