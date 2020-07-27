@@ -42,7 +42,7 @@ const walkTrue = () => {
   right = true
 }
 const walkLeft = () => {
-  setTimeout(walkTrue, 5000)
+  right = false
 }
 
 const airUp = () => {
@@ -329,8 +329,12 @@ export default class JumpLevel extends Phaser.Scene {
 
     // Enemy Sprites
     ent = this.physics.add.sprite(800, 400, 'walkRight')
+    
     ent.setScale(3.7)
+    ent.body.setSize(ent.width, ent.height, true)
     ent.body.setGravityY(80)
+    right = true
+    ent.body.velocity.x = 100
     // ent.setCollideWorldBounds(true)
     ent.onWorldBounds = true
     ent.body.checkCollision.up = true
@@ -446,12 +450,13 @@ export default class JumpLevel extends Phaser.Scene {
     // colliders
     this.physics.add.collider(floor, [player, ent, react, tutor, trigger, tornado])
     this.physics.add.collider(player, [platforms, ent, wall, tornado, player])
-    this.physics.add.collider(ent, [platforms, ent, enemyWall, wall])
+    this.physics.add.collider(ent, [platforms, ent, wall])
     this.physics.add.collider(tornado, [platforms, enemyWall, wall, tornado])
   }
 
   // ////////////////////////////////////UPDATE/////////////////////////////////////////////////
   update () {
+   
     const cam = this.cameras.main
     const speed = 15
 
@@ -486,7 +491,7 @@ export default class JumpLevel extends Phaser.Scene {
       player.anims.play('idleRight', true)
     }
     if (this.cursors.up.isDown && player.body.touching.down) {
-      player.setVelocityY(-150)
+      player.setVelocityY(-200)
       if (facing === 'left') {
         player.anims.play('jumpLeft', true)
       } else player.anims.play('jumpRight', true)
@@ -512,15 +517,17 @@ export default class JumpLevel extends Phaser.Scene {
       this.scene.start('question-two', { currentSceneScore, lives })
     }
     // enemy ENT
-    if (ent.body.blocked.right || !right) {
-      walkLeft()
-      ent.body.velocity.x = -100
-      ent.anims.play('entLeft', true)
-    }
-    if (right) {
+    
+    if (ent.body.position.x < 450 || right ) {
       walkRight()
       ent.body.velocity.x = 100
       ent.anims.play('entRight', true)
+    }
+    if (ent.body.position.x > 1180) {
+      walkLeft()
+      ent.body.velocity.x = -100
+      
+      ent.anims.play('entLeft', true)
     }
 
     // DEATH ANIMATION
