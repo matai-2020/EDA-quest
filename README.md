@@ -4,7 +4,7 @@ A multi-level side scrolling platform game built with phaser.
 
 To run locally, run `npm start` and head to http://localhost:8080/
 
-https://eda-quest.netlify.app/
+www.eda-quest.co.nz
 
 Built by Isaac Bell, Jake Hurley, Keenen Leyson and Louis Fowler
 
